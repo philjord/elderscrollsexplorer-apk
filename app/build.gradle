@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.ingenieur.ese.eseandroid"
+        minSdkVersion 23
+        targetSdkVersion 23
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    dexOptions {
+        jumboMode true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    //compile fileTree(include: '*.jar', dir: 'libs')
+    compile files('libs/eseandroid.jar')
+    compile files('libs/vecmath.jar')
+    compile files('libs/jbullet1.1.jar')
+    compile files('libs/gluegen-rt-android.jar')
+    compile files('libs/java3d-utils-and.jar')
+    compile files('libs/jogl-test-android.jar')
+    compile files('libs/java3d-core-and.jar')
+    compile files('libs/jogl-all-android.jar')
+    compile files('libs/3dtools.jar')
+    compile files('libs/tools.jar')
+    compile files('libs/jnif.jar')
+    compile files('libs/esmmanager.jar')
+    compile files('libs/jogamp-armv6.jar')
+    compile files('libs/jnifj3d.jar')
+}
