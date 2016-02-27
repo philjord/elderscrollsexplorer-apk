@@ -45,4 +45,6 @@ dependencies {
     compile files('libs/esmmanager.jar')
     compile files('libs/jogamp-armv6.jar')
     compile files('libs/jnifj3d.jar')
+    compile files('libs/jogl-fonts-p0.jar')
+    compile files('libs/atomic/jogl-fonts-p0.jar')
 }

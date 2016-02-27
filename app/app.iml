@@ -83,6 +83,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="vecmath" level="project" />
     <orderEntry type="library" exported="" name="jogl-all-android" level="project" />
+    <orderEntry type="library" exported="" name="jogl-fonts-p0" level="project" />
+    <orderEntry type="library" exported="" name="1_jogl-fonts-p0" level="project" />
     <orderEntry type="library" exported="" name="tools" level="project" />
     <orderEntry type="library" exported="" name="esmmanager" level="project" />
     <orderEntry type="library" exported="" name="eseandroid" level="project" />

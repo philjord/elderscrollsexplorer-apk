@@ -2,10 +2,13 @@ package com.ingenieur.ese.eseandroid.nifdisplay;
 
 
 import android.os.Environment;
+import android.widget.Toast;
 
+import com.ingenieur.ese.eseandroid.MainActivity;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GL2ES2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLContext;
@@ -45,11 +48,14 @@ import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.J3dNiAVObject;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
+import tools3d.mixed3d2d.Canvas3D2D;
+import tools3d.mixed3d2d.curvehud.elements.HUDFPSCounter;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.Utils3D;
 import tools3d.utils.leafnode.Cube;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
+import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileTextureSource;
 
@@ -84,6 +90,7 @@ public class NifDisplayTester
 	private File nextFileTreeRoot;
 
 	private File currentFileDisplayed;
+	private int currentFileIdx = -1;
 
 	private File nextFileToDisplay;
 
@@ -91,25 +98,40 @@ public class NifDisplayTester
 
 	private Background background = new Background();
 
-	public Canvas3D canvas3D;
+	public Canvas3D2D canvas3D2D;
 
-	//private JFrame win = new JFrame("Nif model");
+	private AndyFPSCounter fpsCounter;
 
-	public NifDisplayTester(GLWindow gl_window)
+
+
+	public NifDisplayTester(GLWindow gl_window )
 	{
+
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
 		//ASTC or DDS
-		FileTextureSource.compressionType = FileTextureSource.CompressionType.ASTC;
+		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
+		File path = Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_DCIM);
+		File path2 = new File(path, "/ese/morrowind/");
+		FileMediaRoots.setMediaRoots(new String[]{path2.getAbsolutePath()});
 
 		//win.setVisible(true);
 		//win.setLocation(400, 0);
 		//win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		canvas3D = new Canvas3D(gl_window);
+		canvas3D2D = new Canvas3D2D(gl_window)
+		{
+			public void postRender()
+			{
+				super.postRender();
 
-		simpleUniverse = new SimpleUniverse(canvas3D);
+			}
+		};
+
+
+		simpleUniverse = new SimpleUniverse(canvas3D2D);
 		/*		GraphicsSettings gs = ScreenResolution.organiseResolution(Preferences.userNodeForPackage(NifDisplayTester.class), win, false, true,
 						true);
 		
@@ -119,6 +141,8 @@ public class NifDisplayTester
 		//TODO: these must come form a new one of those ^
 		//canvas3D.getGLWindow().setFullscreen(true);
 		DDSTextureLoader.setAnisotropicFilterDegree(8);
+
+		fpsCounter = new AndyFPSCounter();
 
 
 		spinTransformGroup.addChild(rotateTransformGroup);
@@ -152,6 +176,9 @@ public class NifDisplayTester
 
 		BranchGroup bg = new BranchGroup();
 
+		bg.addChild(fpsCounter.getBehaviorBranchGroup());
+		fpsCounter.addToCanvas(canvas3D2D);
+
 		bg.addChild(ambLight);
 		//bg.addChild(dirLight);
 
@@ -181,10 +208,8 @@ public class NifDisplayTester
 		//bg.addChild(new Cube(0.01f));
 
 
-
-
 		tg = new TransformGroup();
-	 	t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(10, 0, 0), 1);
+		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(10, 0, 0), 1);
 		tg.setTransform(t);
 		//tg.addChild(new Cube(0.1f));
 		bg.addChild(tg);
@@ -211,7 +236,7 @@ public class NifDisplayTester
 
 
 		tg = new TransformGroup();
-		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 10), 1);
+		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 2), 1);
 		tg.setTransform(t);
 		BranchGroup bgc = new BranchGroup();
 		bgc.addChild(tg);
@@ -222,18 +247,57 @@ public class NifDisplayTester
 
 		simpleUniverse.addBranchGraph(bg);
 
-		simpleUniverse.getViewer().getView().setBackClipDistance(5000);
+		canvas3D2D.getView().setBackClipDistance(5000);
+		canvas3D2D.getView().setFrontClipDistance(0.1f);
+		canvas3D2D.getGLWindow().addKeyListener(new KeyHandler());
 
-		simpleUniverse.getCanvas().getGLWindow().addKeyListener(new KeyHandler());
-
-
-
+		File meshes = new File(path, "/ese/morrowind/meshes/");
+		currentFileTreeRoot = meshes;
 	}
 
 	public void setNextFileTreeRoot(File nextFileTreeRoot)
 	{
 		this.nextFileToDisplay = null;
 		this.nextFileTreeRoot = nextFileTreeRoot;
+	}
+
+	private File getRootAndSub()
+	{
+		if (subdir != ' ')
+		{
+			return new File(currentFileTreeRoot, "" + subdir);
+		} else
+		{
+			return currentFileTreeRoot;
+		}
+	}
+
+	private void nextModel()
+	{
+		if (currentFileTreeRoot != null)
+		{
+			File[] files = getRootAndSub().listFiles(new NifKfFileFilter());
+			if (files != null && files.length > 0 && currentFileIdx < files.length - 1)
+			{
+				currentFileIdx++;
+				currentFileDisplayed = files[currentFileIdx];
+				displayNif(currentFileDisplayed);
+			}
+		}
+	}
+
+	private void prevModel()
+	{
+		if (currentFileTreeRoot != null)
+		{
+			File[] files = getRootAndSub().listFiles(new NifKfFileFilter());
+			if (files != null && files.length > 0 && currentFileIdx > 0)
+			{
+				currentFileIdx--;
+				currentFileDisplayed = files[currentFileIdx];
+				displayNif(currentFileDisplayed);
+			}
+		}
 	}
 
 	public void setNextFileToDisplay(File nextFileToDisplay)
@@ -244,42 +308,17 @@ public class NifDisplayTester
 
 	private void manage()
 	{
-		if (nextFileTreeRoot != null)
-		{
-			if (!nextFileTreeRoot.equals(currentFileTreeRoot))
-			{
-				currentFileTreeRoot = nextFileTreeRoot;
-				currentFileDisplayed = null;
-				currentFileLoadTime = Long.MAX_VALUE;
-			}
-		}
-
 		if (currentFileTreeRoot != null)
 		{
-			if (cycle)
+			File[] files = getRootAndSub().listFiles(new NifKfFileFilter());
+			if (files != null && files.length > 0)
 			{
-				File[] files = currentFileTreeRoot.listFiles(new NifKfFileFilter());
-				if (files!=null && files.length > 0)
+				if (currentFileDisplayed == null)
 				{
-					if (currentFileDisplayed == null)
-					{
-						currentFileDisplayed = files[0];
-					//	displayNif(currentFileDisplayed);
-					}
-					else if (System.currentTimeMillis() - currentFileLoadTime > 10000)
-					{
-
-					}
+					currentFileIdx = 0;
+					currentFileDisplayed = files[currentFileIdx];
+					displayNif(currentFileDisplayed);
 				}
-			}
-		}
-		else if (nextFileToDisplay != null)
-		{
-			if (!nextFileToDisplay.equals(currentFileDisplayed))
-			{
-				currentFileDisplayed = nextFileToDisplay;
-			//	displayNif(currentFileDisplayed);
-				nextFileToDisplay = null;
 			}
 		}
 	}
@@ -316,8 +355,7 @@ public class NifDisplayTester
 		if (background.getApplicationBounds() == null)
 		{
 			background.setApplicationBounds(Utils3D.defaultBounds);
-		}
-		else
+		} else
 		{
 			background.setApplicationBounds(null);
 		}
@@ -346,8 +384,7 @@ public class NifDisplayTester
 			//spinTransform.setEnable(true);
 			//processDir(f);
 			System.out.println("Bad news dir sent into display nif");
-		}
-		else if (f.isFile())
+		} else if (f.isFile())
 		{
 			showNif(f.getAbsolutePath(), new FileMeshSource(), new FileTextureSource());
 		}
@@ -415,20 +452,22 @@ public class NifDisplayTester
 			}
 
 			simpleCameraHandler.viewBounds(nif.getVisualRoot().getBounds());
+			System.out.println("attempt to set bounds to " + nif.getVisualRoot().getBounds());
+
+			//TODO: the bounds was 0.21 (seems good) and eye was set to 0.8 but this this seems too close?
+			if (nif.getVisualRoot().getBounds() instanceof BoundingSphere)
+			{
+				if (((BoundingSphere) nif.getVisualRoot().getBounds()).getRadius() < 1f)
+					simpleCameraHandler.setView(new Point3d(0, 0, 2), new Point3d());
+			}
 
 			spinTransform.setEnable(spin);
-		}
-		else
+		} else
 		{
 			System.out.println("why you give display a null eh?");
 		}
 
 	}
-
-
-
-
-
 
 
 	private class FileManageBehavior extends Behavior
@@ -462,9 +501,11 @@ public class NifDisplayTester
 
 	}
 
+	private boolean nextKeyIsDirName = false;
+	private char subdir = ' ';
+
 	private class KeyHandler extends KeyAdapter
 	{
-
 		public KeyHandler()
 		{
 			System.out.println("H toggle havok display");
@@ -477,30 +518,53 @@ public class NifDisplayTester
 
 		public void keyPressed(KeyEvent e)
 		{
+			if (!nextKeyIsDirName)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+				{
+					toggleCycling();
+				} else if (e.getKeyCode() == KeyEvent.VK_H)
+				{
+					toggleHavok();
+				} else if (e.getKeyCode() == KeyEvent.VK_J)
+				{
+					toggleSpin();
+				} else if (e.getKeyCode() == KeyEvent.VK_K)
+				{
+					toggleAnimateModel();
+				} else if (e.getKeyCode() == KeyEvent.VK_L)
+				{
+					toggleVisual();
+				} else if (e.getKeyCode() == KeyEvent.VK_P)
+				{
+					toggleBackground();
+				} else if (e.getKeyCode() == KeyEvent.VK_N)
+				{
+					nextModel();
+				} else if (e.getKeyCode() == KeyEvent.VK_M)
+				{
+					prevModel();
+				} else if (e.getKeyCode() == KeyEvent.VK_B)
+				{
+					nextKeyIsDirName = true;
+				}
+			} else
+			{
+				char dir = e.getKeyChar();
+				if (dir == 'a' || dir == 'b' || dir == 'c' || dir == 'd' ||
+						dir == 'e' || dir == 'f' || dir == 'i' || dir == 'l' ||
+						dir == 'm' || dir == 'n' || dir == 'o' || dir == 'r' ||
+						dir == 'w' || dir == 'x')
+				{
+					subdir = dir;
+				} else
+				{
+					subdir = ' ';
+				}
+				System.out.println( "Directory now in use: " + getRootAndSub());
 
-			if (e.getKeyCode() == KeyEvent.VK_SPACE)
-			{
-				toggleCycling();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_H)
-			{
-				toggleHavok();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_J)
-			{
-				toggleSpin();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_K)
-			{
-				toggleAnimateModel();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_L)
-			{
-				toggleVisual();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_P)
-			{
-				toggleBackground();
+				nextKeyIsDirName = false;
+
 			}
 		}
 

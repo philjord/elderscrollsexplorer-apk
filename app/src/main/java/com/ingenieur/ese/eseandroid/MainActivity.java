@@ -136,23 +136,21 @@ public class MainActivity extends NewtBaseActivity
 			}
 		});
 
+
 		//final Example example = new Example();
-
-
 		// demo.enableAndroidTrace(true);
 		//gl_window.addGLEventListener(example);
 		//final Animator animator = new Animator(gl_window);
 		//animator.setRunAsFastAsPossible(true);
 		//this.setAnimator(animator);
-
-
-		gl_window.setVisible(true);
 		//animator.setUpdateFPSFrames(60, null);
 		//animator.resetFPSCounter();
 		//gl_window.resetFPSCounter();
 
-		//gl_window.addGLEventListener(Screen3D.getGLEventListenerDelegate());
 
+
+
+		gl_window.setVisible(true);
 
 		gl_window.addGLEventListener(new GLEventListener()
 		{
@@ -161,17 +159,14 @@ public class MainActivity extends NewtBaseActivity
 			{
 				try
 				{
-					//NOTE Canvas3D requires a fully initialzed glWindow (in the android form) so we must call
-					// NifDisplayTester from this inti function
+					//NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
+					//NifDisplayTester from this init function
 
-					nifDisplay = new NifDisplayTester(gl_window);
-					File path2 = Environment.getExternalStoragePublicDirectory(
-							Environment.DIRECTORY_DCIM);
-					File file2 = new File(path2, "/ese/morrowind/meshes/a/");
-					nifDisplay.setNextFileTreeRoot(file2);
+					nifDisplay = new NifDisplayTester(gl_window );
+
 
 					// addNotify will start up the renderer and kick things off
-					nifDisplay.canvas3D.addNotify();
+					nifDisplay.canvas3D2D.addNotify();
 
 				} catch (Exception e)
 				{
