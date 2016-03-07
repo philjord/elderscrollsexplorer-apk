@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="java3d-core-and">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/java3d-core-and.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://E:/Java/git/java3d-core-and/src" />
+    </SOURCES>
+  </library>
+</component>
