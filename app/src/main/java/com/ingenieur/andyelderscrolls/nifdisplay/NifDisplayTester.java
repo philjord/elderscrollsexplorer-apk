@@ -3,10 +3,8 @@ package com.ingenieur.andyelderscrolls.nifdisplay;
 
 import android.app.Activity;
 import android.os.Environment;
-import android.util.Log;
 
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
-import com.ingenieur.andyelderscrolls.utils.ExternalStorage;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
@@ -15,7 +13,6 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import java.io.File;
-import java.util.Map;
 
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Background;
@@ -71,11 +68,6 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 	private boolean spin = false;
 
-	private File currentFileTreeRoot;
-
-	private File currentFileDisplayed;
-	private int currentFileIdx = -1;
-
 	private SimpleUniverse simpleUniverse;
 
 	private Background background = new Background();
@@ -86,14 +78,20 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 	private Activity parentActivity;
 
-	private File startFolder;
+	private File rootDir;
+	private File meshesRootDir;
+
+	private File chooserStartFolder;
+	private File currentFileDisplayed;
 
 	private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
 
-	public NifDisplayTester(Activity parentActivity, GLWindow gl_window)
+	public NifDisplayTester(Activity parentActivity, GLWindow gl_window, File rootDir)
 	{
-
+		this.rootDir = rootDir;
+		meshesRootDir = new File(rootDir, "meshes");
+		chooserStartFolder = meshesRootDir;
 		this.parentActivity = parentActivity;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
 
@@ -101,22 +99,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
 
-		File path = Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_DCIM);
-		File path2 = new File(path, "/ese/morrowind/");
-		FileMediaRoots.setMediaRoots(new String[]{path2.getAbsolutePath()});
-
-		Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
-		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
-		File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
-
-
-		File[] files = externalSdCard.listFiles();
-		if (files != null && files.length > 0 )
-		{
-			for(File f:files)
-			Log.w("TMP", f.getAbsolutePath());
-		}
+		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
 		canvas3D2D = new Canvas3D2D(gl_window);
 
@@ -211,24 +194,8 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 		dragMouseAdapter.setListener(this);
 		canvas3D2D.getGLWindow().addMouseListener(dragMouseAdapter);
-
-
-		File meshes = new File(path, "/ese/morrowind/meshes/");
-		currentFileTreeRoot = meshes;
-		startFolder = meshes;
 	}
 
-	private File getRootAndSub()
-	{
-		if (subdir != ' ')
-		{
-			return new File(currentFileTreeRoot, "" + subdir);
-		}
-		else
-		{
-			return currentFileTreeRoot;
-		}
-	}
 
 	private void setModel(File newFileToDisplay)
 	{
@@ -238,28 +205,56 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 	private void nextModel()
 	{
-		if (currentFileTreeRoot != null)
+		if (currentFileDisplayed != null)
 		{
-			File[] files = getRootAndSub().listFiles(new NifKfFileFilter());
-			if (files != null && files.length > 0 && currentFileIdx < files.length - 1)
+			File parentDir = currentFileDisplayed.getParentFile();
+			File[] files = parentDir.listFiles(new NifKfFileFilter());
+			if (files != null && files.length > 0)
 			{
-				currentFileIdx++;
-				currentFileDisplayed = files[currentFileIdx];
-				displayNif(currentFileDisplayed);
+				// find current as index in parent
+				int idx = -1;
+				for (int i = 0; i < files.length; i++)
+				{
+					if (files[i].equals(currentFileDisplayed))
+					{
+						idx = i;
+						break;
+					}
+				}
+
+				if (idx != -1 && idx < files.length - 1)
+				{
+					currentFileDisplayed = files[idx + 1];
+					displayNif(currentFileDisplayed);
+				}
 			}
 		}
 	}
 
 	private void prevModel()
 	{
-		if (currentFileTreeRoot != null)
+		if (currentFileDisplayed != null)
 		{
-			File[] files = getRootAndSub().listFiles(new NifKfFileFilter());
-			if (files != null && files.length > 0 && currentFileIdx > 0)
+			File parentDir = currentFileDisplayed.getParentFile();
+			File[] files = parentDir.listFiles(new NifKfFileFilter());
+			if (files != null && files.length > 0)
 			{
-				currentFileIdx--;
-				currentFileDisplayed = files[currentFileIdx];
-				displayNif(currentFileDisplayed);
+				// find current as index in parent
+				int idx = -1;
+				for (int i = 0; i < files.length; i++)
+				{
+					if (files[i].equals(currentFileDisplayed))
+					{
+						idx = i;
+						break;
+					}
+				}
+
+				if (idx != -1 && idx > 0)
+				{
+					currentFileDisplayed = files[idx - 1];
+					displayNif(currentFileDisplayed);
+				}
 			}
 		}
 	}
@@ -379,7 +374,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 			vbg = new BranchGroup();
 			vbg.setCapability(BranchGroup.ALLOW_DETACH);
 
-			if (showVisual && nif != null)
+			if (showVisual)
 			{
 				vbg.addChild(nif.getVisualRoot());
 				modelGroup.addChild(vbg);
@@ -405,9 +400,6 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 	}
 
 
-	private boolean nextKeyIsDirName = false;
-	private char subdir = ' ';
-
 	@Override
 	public void dragComplete(final MouseEvent e, DragMouseAdapter.DRAG_TYPE dragType)
 	{
@@ -424,12 +416,12 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 			{
 				public void run()
 				{
-					new FileChooser(parentActivity, startFolder).setFileListener(new FileChooser.FileSelectedListener()
+					new FileChooser(parentActivity, chooserStartFolder).setFileListener(new FileChooser.FileSelectedListener()
 					{
 						@Override
 						public void fileSelected(final File file)
 						{
-							startFolder = file;
+							chooserStartFolder = file;
 							setModel(file);
 						}
 					}).showDialog();
@@ -458,68 +450,41 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 			System.out.println("Space toggle cycle through files");
 		}
 
+
 		public void keyPressed(KeyEvent e)
 		{
-			if (!nextKeyIsDirName)
+			if (e.getKeyCode() == KeyEvent.VK_SPACE)
 			{
-				if (e.getKeyCode() == KeyEvent.VK_SPACE)
-				{
-					toggleCycling();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_H)
-				{
-					toggleHavok();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_J)
-				{
-					toggleSpin();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_K)
-				{
-					toggleAnimateModel();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_L)
-				{
-					toggleVisual();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_P)
-				{
-					toggleBackground();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_N)
-				{
-					nextModel();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_M)
-				{
-					prevModel();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_B)
-				{
-					nextKeyIsDirName = true;
-				}
+				toggleCycling();
 			}
-			else
+			else if (e.getKeyCode() == KeyEvent.VK_H)
 			{
-				char dir = e.getKeyChar();
-				if (dir == 'a' || dir == 'b' || dir == 'c' || dir == 'd' ||
-						dir == 'e' || dir == 'f' || dir == 'i' || dir == 'l' ||
-						dir == 'm' || dir == 'n' || dir == 'o' || dir == 'r' ||
-						dir == 'w' || dir == 'x')
-				{
-					subdir = dir;
-				}
-				else
-				{
-					subdir = ' ';
-				}
-				System.out.println("Directory now in use: " + getRootAndSub());
-
-				nextKeyIsDirName = false;
-
+				toggleHavok();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_J)
+			{
+				toggleSpin();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_K)
+			{
+				toggleAnimateModel();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_L)
+			{
+				toggleVisual();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_P)
+			{
+				toggleBackground();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_N)
+			{
+				nextModel();
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_M)
+			{
+				prevModel();
 			}
 		}
-
 	}
-
 }

@@ -54,8 +54,6 @@ public class FileChooser
 
 	public FileChooser(Activity activity, File startFolder)
 	{
-
-
 		this.activity = activity;
 		dialog = new Dialog(activity);
 		list = new ListView(activity);
