@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">eseandroid</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">Andy Elder Scrolls</string>
+    <string name="button_nif_display">Nif Display</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="esexplorertext">Explore</string>
+    <string name="jbulletdisplaytext">JBullet Display</string>
+    <string name="kfdisplaytext">Kf Display</string>
 </resources>
