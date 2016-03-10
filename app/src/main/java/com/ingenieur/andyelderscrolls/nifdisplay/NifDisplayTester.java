@@ -2,8 +2,9 @@ package com.ingenieur.andyelderscrolls.nifdisplay;
 
 
 import android.app.Activity;
-import android.os.Environment;
+import android.widget.Toast;
 
+import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.jogamp.newt.event.KeyAdapter;
@@ -29,11 +30,15 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import archive.ArchiveFile;
+import archive.BSArchiveSet;
+import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.J3dNiAVObject;
+import nif.shaders.NiGeometryAppearanceShader;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
@@ -78,22 +83,21 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 	private Activity parentActivity;
 
-	private File rootDir;
-	private File meshesRootDir;
-
 	private File chooserStartFolder;
 	private File currentFileDisplayed;
 
 	private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
+	private MeshSource meshSource = null;
+	private TextureSource textureSource = null;
 
 	public NifDisplayTester(Activity parentActivity, GLWindow gl_window, File rootDir)
 	{
-		this.rootDir = rootDir;
-		meshesRootDir = new File(rootDir, "meshes");
-		chooserStartFolder = meshesRootDir;
+		chooserStartFolder = new File(rootDir, "Meshes");
 		this.parentActivity = parentActivity;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
+		NiGeometryAppearanceShader.OUTPUT_BINDINGS = true;
+		ArchiveFile.USE_FILE_MAPS = false;
 
 		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
@@ -101,12 +105,18 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
+		meshSource = new FileMeshSource();
+		//textureSource = new FileTextureSource();
+		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true, false);
+		textureSource = new BsaTextureSource(bsaFileSet);
+
 		canvas3D2D = new Canvas3D2D(gl_window);
 
 		simpleUniverse = new SimpleUniverse(canvas3D2D);
 		DDSTextureLoader.setAnisotropicFilterDegree(8);
 
 		fpsCounter = new AndyFPSCounter();
+
 
 		spinTransformGroup.addChild(rotateTransformGroup);
 		rotateTransformGroup.addChild(modelGroup);
@@ -177,7 +187,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 
 		tg = new TransformGroup();
-		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 2), 1);
+		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0.15f), 1);
 		tg.setTransform(t);
 		BranchGroup bgc = new BranchGroup();
 		bgc.addChild(tg);
@@ -194,6 +204,8 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 		dragMouseAdapter.setListener(this);
 		canvas3D2D.getGLWindow().addMouseListener(dragMouseAdapter);
+
+		showNifFIleChooser();
 	}
 
 
@@ -316,15 +328,23 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		}
 		else if (f.isFile())
 		{
-			showNif(f.getAbsolutePath(), new FileMeshSource(), new FileTextureSource());
+			showNif(f.getAbsolutePath(), meshSource, textureSource);
 		}
 
 		System.out.println("done");
 
 	}
 
-	public void showNif(String filename, MeshSource meshSource, TextureSource textureSource)
+	public void showNif(final String filename, MeshSource meshSource, TextureSource textureSource)
 	{
+		parentActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				Toast.makeText(parentActivity, "Displaying " + filename, Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
 		BgsmSource.setBgsmSource(meshSource);
 		display(NifToJ3d.loadNif(filename, meshSource, textureSource));
 	}
@@ -399,6 +419,25 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 	}
 
+	private void showNifFIleChooser()
+	{
+		// show file chooser
+		parentActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				new FileChooser(parentActivity, chooserStartFolder).setExtension("nif").setFileListener(new FileChooser.FileSelectedListener()
+				{
+					@Override
+					public void fileSelected(final File file)
+					{
+						chooserStartFolder = file;
+						setModel(file);
+					}
+				}).showDialog();
+			}
+		});
+	}
 
 	@Override
 	public void dragComplete(final MouseEvent e, DragMouseAdapter.DRAG_TYPE dragType)
@@ -411,22 +450,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		}
 		else if (dragType == DragMouseAdapter.DRAG_TYPE.DOWN)
 		{
-			// show file chooser
-			parentActivity.runOnUiThread(new Runnable()
-			{
-				public void run()
-				{
-					new FileChooser(parentActivity, chooserStartFolder).setFileListener(new FileChooser.FileSelectedListener()
-					{
-						@Override
-						public void fileSelected(final File file)
-						{
-							chooserStartFolder = file;
-							setModel(file);
-						}
-					}).showDialog();
-				}
-			});
+			showNifFIleChooser();
 		}
 		else if (dragType == DragMouseAdapter.DRAG_TYPE.LEFT)
 		{
@@ -442,12 +466,12 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 	{
 		public KeyHandler()
 		{
-			System.out.println("H toggle havok display");
+			/*System.out.println("H toggle havok display");
 			System.out.println("L toggle visual display");
 			System.out.println("J toggle spin");
 			System.out.println("K toggle animate model");
 			System.out.println("P toggle background color");
-			System.out.println("Space toggle cycle through files");
+			System.out.println("Space toggle cycle through files");*/
 		}
 
 

@@ -14,6 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
+import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
+import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.ExternalStorage;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
@@ -159,10 +162,10 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameDir != null)
 		{
-			//Intent intent = new Intent(this, NifDisplayActivity.class);
-			//intent.putExtra(SELECTED_GAME, gameDir);
-			//intent.putExtra(ANDY_ROOT, andyRoot);
-			//startActivity(intent);
+			Intent intent = new Intent(this, KfDisplayActivity.class);
+			intent.putExtra(SELECTED_GAME, gameDir);
+			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			startActivity(intent);
 		}
 		else
 		{
@@ -175,10 +178,10 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameDir != null)
 		{
-			//Intent intent = new Intent(this, NifDisplayActivity.class);
-			//intent.putExtra(SELECTED_GAME, gameDir);
-			//intent.putExtra(ANDY_ROOT, andyRoot);
-			//startActivity(intent);
+			Intent intent = new Intent(this, JBulletActivity.class);
+			intent.putExtra(SELECTED_GAME, gameDir);
+			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			startActivity(intent);
 		}
 		else
 		{
@@ -191,10 +194,10 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameDir != null)
 		{
-			//Intent intent = new Intent(this, NifDisplayActivity.class);
-			//intent.putExtra(SELECTED_GAME, gameDir);
-			//intent.putExtra(ANDY_ROOT, andyRoot);
-			//startActivity(intent);
+			Intent intent = new Intent(this, AndyESExplorerActivity.class);
+			intent.putExtra(SELECTED_GAME, gameDir);
+			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			startActivity(intent);
 		}
 		else
 		{

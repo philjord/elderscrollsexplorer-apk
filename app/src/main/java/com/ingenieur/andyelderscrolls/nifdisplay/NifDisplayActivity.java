@@ -70,7 +70,7 @@ public class NifDisplayActivity extends NewtBaseActivity
 											 try
 											 {
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
-												 //NifDisplayTester from this init function
+												 //KfDisplayTester from this init function
 												 nifDisplay = new NifDisplayTester(NifDisplayActivity.this, gl_window, new File(andyRoot, gameDir));
 
 												 // addNotify will start up the renderer and kick things off

@@ -11,6 +11,7 @@ android {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
         }
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -21,7 +22,7 @@ android {
     }
 
     dexOptions {
-        jumboMode true
+        javaMaxHeapSize "4g"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -30,6 +31,7 @@ android {
 }
 
 dependencies {
+
     //compile fileTree(include: '*.jar', dir: 'libs')
     compile files('libs/eseandroid.jar')
     compile files('libs/vecmath.jar')
@@ -47,4 +49,12 @@ dependencies {
     compile files('libs/jnifj3d.jar')
     compile files('libs/jogl-fonts-p0.jar')
     compile files('libs/atomic/jogl-fonts-p0.jar')
+    compile files('libs/bsamanager.jar')
+    compile files('libs/esmj3d.jar')
+    compile files('libs/jnifjbullet.jar')
+    compile files('libs/esmj3dtes3.jar')
+    compile files('libs/esmj3dfo3.jar')
+    compile files('libs/esmj3dfo4.jar')
+    compile files('libs/esmj3dtes4.jar')
+    compile files('libs/esmj3dtes5.jar')
 }
