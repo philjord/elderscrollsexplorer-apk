@@ -2,14 +2,16 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.app.Activity;
 
+import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
+import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
+import com.jogamp.newt.event.GestureHandler;
+import com.jogamp.newt.event.GestureHandler.GestureListener;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.WindowAdapter;
-import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.vecmath.Quat4f;
@@ -24,15 +26,13 @@ import esmj3d.j3d.BethRenderSettings;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
-import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import scrollsexplorer.DashboardNewt;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.IDashboard;
 import scrollsexplorer.PropertyLoader;
+import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
-import scrollsexplorer.simpleclient.SimpleWalkSetup;
-import tools.io.ConfigLoader;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -43,20 +43,19 @@ import utils.source.MeshSource;
 import utils.source.SoundSource;
 import utils.source.TextureSource;
 import utils.source.file.FileMediaRoots;
-import utils.source.file.FileTextureSource;
 
 /**
  * Created by phil on 3/10/2016.
  */
 
-public class ScrollsExplorer implements BethRenderSettings.UpdateListener, LocationUpdateListener
+public class ScrollsExplorer implements BethRenderSettings.UpdateListener, LocationUpdateListener, DragMouseAdapter.Listener
 {
 	//I think this auto installs itself
 	public DashboardNewt dashboardNewt = new DashboardNewt();
 
 	private SimpleBethCellManager simpleBethCellManager;
 
-	private SimpleWalkSetup simpleWalkSetup;
+	private AndySimpleWalkSetup simpleWalkSetup;
 
 	private MediaSources mediaSources;
 
@@ -64,7 +63,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 	public BSArchiveSet bsaFileSet;
 
+	private AndyFPSCounter fpsCounter;
+
 	private GameConfig selectedGameConfig = null;
+
+	private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
 	private Activity parentActivity;
 
@@ -87,9 +90,15 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		this.rootDir = rootDir;
 		this.parentActivity = parentActivity2;
 
-		ArchiveFile.USE_FILE_MAPS = false;
+		//only morrowind is small enough to
+		//if (!rootDir.equals("Morrowind"))
+		{
+			ArchiveFile.USE_FILE_MAPS = false;
+			ESMManager.USE_FILE_MAPS = false;
+		}
+		BethRenderSettings.setFarLoadGridCount(0);
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 
-		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
 
@@ -97,9 +106,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 		try
 		{
-			PropertyLoader.load(rootDir.getAbsolutePath());
+			PropertyLoader.load(parentActivity.getFilesDir().getAbsolutePath());
 
-			simpleWalkSetup = new SimpleWalkSetup("SimpleBethCellManager", gl_window);
+			simpleWalkSetup = new AndySimpleWalkSetup("SimpleBethCellManager", gl_window);
 			simpleWalkSetup.setAzerty(false);
 
 			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
@@ -130,12 +139,18 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 					break;
 				}
 			}
+
+
+			dragMouseAdapter.setListener(this);
+
+
 		}
 		catch (Exception e1)
 		{
 			e1.printStackTrace();
 		}
 	}
+
 
 	public void closingTime()
 	{
@@ -243,6 +258,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 						simpleWalkSetup.setEnabled(false);
 
+						simpleWalkSetup.getWindow().addKeyListener(new KeyHandler());
+						simpleWalkSetup.getWindow().addMouseListener(dragMouseAdapter);
+						simpleWalkSetup.setMouseLock(true);// auto press teh tab key
+
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
@@ -280,20 +299,48 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		return simpleBethCellManager;
 	}
 
-	public SimpleWalkSetup getSimpleWalkSetup()
+
+	@Override
+	public void dragComplete(final MouseEvent e, DragMouseAdapter.DRAG_TYPE dragType)
 	{
-		return simpleWalkSetup;
+		if (dragType == DragMouseAdapter.DRAG_TYPE.UP)
+		{
+			// show Keyboard
+			boolean kbVis = ((com.jogamp.newt.Window) e.getSource()).isKeyboardVisible();
+			((com.jogamp.newt.Window) e.getSource()).setKeyboardVisible(!kbVis);
+		}
+		else if (dragType == DragMouseAdapter.DRAG_TYPE.DOWN)
+		{
+
+		}
+		else if (dragType == DragMouseAdapter.DRAG_TYPE.LEFT)
+		{
+
+		}
+		else if (dragType == DragMouseAdapter.DRAG_TYPE.RIGHT)
+		{
+		}
 	}
 
-	private static void setDebug(boolean b)
+	private class KeyHandler extends KeyAdapter
 	{
-		if (b)
+		public KeyHandler()
 		{
-			System.out.println("DEBUG ON");
-			// leave settings alone for optional debug parts
+			/*System.out.println("H toggle havok display");
+			System.out.println("L toggle visual display");
+			System.out.println("J toggle spin");
+			System.out.println("K toggle animate model");
+			System.out.println("P toggle background color");
+			System.out.println("Space toggle cycle through files");*/
 		}
-		else
+
+
+		public void keyPressed(KeyEvent e)
 		{
+			if (e.getKeyCode() == KeyEvent.VK_SPACE)
+			{
+
+			}
 
 		}
 	}

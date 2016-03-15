@@ -3,9 +3,14 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
-import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayTester;
+import com.ingenieur.andyelderscrolls.R;
+import com.ingenieur.andyelderscrolls.utils.JoystickView;
 import com.jogamp.newt.event.MonitorEvent;
 import com.jogamp.newt.event.MonitorModeListener;
 import com.jogamp.newt.opengl.GLWindow;
@@ -25,6 +30,11 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	private String andyRoot;
 	private String gameDir;
 
+	private TextView angleTextView;
+	private TextView powerTextView;
+	private TextView directionTextView;
+	// Importing also other views
+	private JoystickView joystick;
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -37,6 +47,15 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 		final GLCapabilities caps =
 				new GLCapabilities(GLProfile.get(GLProfile.GLES2));
+
+		caps.setDoubleBuffered(true);
+		caps.setDepthBits(16);
+		caps.setStencilBits(8);
+		caps.setHardwareAccelerated(true);
+		caps.setNumSamples(2);
+
+
+
 		gl_window = GLWindow.create(caps);
 		gl_window.setFullscreen(true);
 
@@ -71,7 +90,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 											 {
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
 												 //KfDisplayTester from this init function
-												scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, new File(andyRoot, gameDir));
+												 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, new File(andyRoot, gameDir));
 											 }
 											 catch (Exception e)
 											 {
@@ -97,7 +116,40 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 									 }
 
 		);
+
+
+/*
+		View esexplorer =  View.inflate(getActivity(), R.layout.esexplorer, getView());
+
+
+		angleTextView = (TextView) findViewById(R.id.angleTextView);
+		powerTextView = (TextView) findViewById(R.id.powerTextView);
+		directionTextView = (TextView) findViewById(R.id.directionTextView);
+		//Referencing also other views
+		joystick = (JoystickView) findViewById(R.id.joystickView);
+
+		//Event listener that always returns the variation of the angle in degrees, motion power in percentage and direction of movement
+		joystick.setOnJoystickMoveListener(new JoystickView.OnJoystickMoveListener()
+		{
+
+			@Override
+			public void onValueChanged(int angle, int power, int direction)
+			{
+						angleTextView.setText(" " + String.valueOf(angle) + "°");
+				powerTextView.setText(" " + String.valueOf(power) + "%");
+				switch (direction)
+				{
+					//case JoystickView.FRONT:
+					//	directionTextView.setText(R.string.front_lab);
+					//	break;
+
+				}
+			}
+		}, JoystickView.DEFAULT_LOOP_INTERVAL);*/
+
+
 	}
+
 
 	@Override
 	public void onPause()
@@ -125,4 +177,22 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 		super.onDestroy();
 	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus)
+	{
+		super.onWindowFocusChanged(hasFocus);
+		View decorView = getWindow().getDecorView();
+		if (hasFocus)
+		{
+			decorView.setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		}
+	}
+
 }

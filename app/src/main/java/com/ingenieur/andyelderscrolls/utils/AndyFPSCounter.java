@@ -30,12 +30,6 @@ public class AndyFPSCounter
 	private int numOfFrames;
 	private long timeOfFrames;
 
-	public AndyFPSCounter(Canvas3D2D canvas3d2d)
-	{
-		this();
-		this.addToCanvas(canvas3d2d);
-	}
-
 	public AndyFPSCounter()
 	{
 		this.currtime = 0L;

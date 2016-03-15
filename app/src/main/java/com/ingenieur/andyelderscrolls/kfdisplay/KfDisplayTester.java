@@ -23,6 +23,7 @@ import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
+import javax.media.j3d.Node;
 import javax.media.j3d.PointLight;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
@@ -33,6 +34,9 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import archive.ArchiveFile;
+import archive.BSArchiveSet;
+import bsa.source.BsaTextureSource;
+import nif.BgsmSource;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
@@ -40,12 +44,15 @@ import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
+import nif.shaders.NiGeometryAppearanceShader;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.leafnode.Cube;
 import utils.source.MediaSources;
+import utils.source.MeshSource;
+import utils.source.TextureSource;
 import utils.source.file.FileMediaRoots;
 import utils.source.file.FileMeshSource;
 import utils.source.file.FileSoundSource;
@@ -91,6 +98,8 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 
 	private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
+	private MeshSource meshSource = null;
+	private TextureSource textureSource = null;
 
 	public KfDisplayTester(Activity parentActivity2, GLWindow gl_window, File rootDir)
 	{
@@ -104,6 +113,10 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
+		meshSource = new FileMeshSource();
+		//textureSource = new FileTextureSource();
+		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true, false);
+		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);
 
@@ -323,7 +336,9 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 
 		NifJ3dSkeletonRoot.showBoneMarkers = true;
 		J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
-		MediaSources mediaSources = new MediaSources(new FileMeshSource(), new FileTextureSource(), new FileSoundSource());
+
+		BgsmSource.setBgsmSource(meshSource);
+		MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
 
 		ArrayList<String> idleAnimations = new ArrayList<String>();
 
@@ -334,6 +349,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 
 		// now add the root to the scene so the controller sequence is live
 		NifCharacter nifCharacter = new NifCharacter(skeletonNifFile, skinNifFiles2, mediaSources, idleAnimations);
+		nifCharacter.setCapability(Node.ALLOW_BOUNDS_READ);
 		bg.addChild(nifCharacter);
 
 		modelGroup.addChild(bg);
@@ -356,7 +372,9 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 
 		NifJ3dSkeletonRoot.showBoneMarkers = true;
 		J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
-		MediaSources mediaSources = new MediaSources(new FileMeshSource(), new FileTextureSource(), new FileSoundSource());
+
+		BgsmSource.setBgsmSource(meshSource);
+		MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
 
 		nifCharacterTes3 = new NifCharacterTes3(skeletonNifFile, skinNifFiles2, mediaSources);
 		bg.addChild(nifCharacterTes3);

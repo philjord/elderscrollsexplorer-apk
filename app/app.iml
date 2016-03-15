@@ -91,19 +91,20 @@
     <orderEntry type="library" exported="" name="jogl-fonts-p0" level="project" />
     <orderEntry type="library" exported="" name="1_jogl-fonts-p0" level="project" />
     <orderEntry type="library" exported="" name="bsamanager" level="project" />
+    <orderEntry type="library" exported="" name="joystickview" level="project" />
     <orderEntry type="library" exported="" name="tools" level="project" />
     <orderEntry type="library" exported="" name="esmmanager" level="project" />
     <orderEntry type="library" exported="" name="eseandroid" level="project" />
     <orderEntry type="library" exported="" name="jnif" level="project" />
     <orderEntry type="library" exported="" name="jogamp-armv6" level="project" />
     <orderEntry type="library" exported="" name="3dtools" level="project" />
-    <orderEntry type="library" exported="" name="java3d-core-and" level="project" />
     <orderEntry type="library" exported="" name="gluegen-rt-android" level="project" />
+    <orderEntry type="library" exported="" name="java3d-core-and" level="project" />
     <orderEntry type="library" exported="" name="jnifjbullet" level="project" />
     <orderEntry type="library" exported="" name="jogl-test-android" level="project" />
     <orderEntry type="library" exported="" name="jnifj3d" level="project" />
-    <orderEntry type="library" exported="" name="jbullet1.1" level="project" />
     <orderEntry type="library" exported="" name="esmj3d" level="project" />
+    <orderEntry type="library" exported="" name="jbullet1.1" level="project" />
     <orderEntry type="library" exported="" name="java3d-utils-and" level="project" />
   </component>
 </module>

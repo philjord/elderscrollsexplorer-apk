@@ -21,6 +21,7 @@ import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
+import javax.media.j3d.Node;
 import javax.media.j3d.PointLight;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
@@ -396,6 +397,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 			if (showVisual)
 			{
+				nif.getVisualRoot().setCapability(Node.ALLOW_BOUNDS_READ);
 				vbg.addChild(nif.getVisualRoot());
 				modelGroup.addChild(vbg);
 			}
