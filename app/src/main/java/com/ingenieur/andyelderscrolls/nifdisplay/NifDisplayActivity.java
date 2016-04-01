@@ -37,6 +37,13 @@ public class NifDisplayActivity extends NewtBaseActivity
 
 		final GLCapabilities caps =
 				new GLCapabilities(GLProfile.get(GLProfile.GLES2));
+		caps.setDoubleBuffered(true);
+		caps.setDepthBits(16);
+		caps.setStencilBits(8);
+		caps.setHardwareAccelerated(true);
+		//caps.setSampleBuffers(true);death no touch!
+		//caps.setNumSamples(2);
+
 		gl_window = GLWindow.create(caps);
 		gl_window.setFullscreen(true);
 
@@ -105,18 +112,18 @@ public class NifDisplayActivity extends NewtBaseActivity
 	@Override
 	public void onPause()
 	{
-		//if (nifDisplay != null)
-		//	nifDisplay.canvas3D2D.stopRenderer();
-		//gl_window.setVisible(false);
+		if (nifDisplay != null)
+			nifDisplay.canvas3D2D.stopRenderer();
+		gl_window.setVisible(false);
 		super.onPause();
 	}
 
 	@Override
 	public void onResume()
 	{
-		//gl_window.setVisible(true);
-		//if (nifDisplay != null)
-		//	nifDisplay.canvas3D2D.startRenderer();
+		gl_window.setVisible(true);
+		if (nifDisplay != null)
+			nifDisplay.canvas3D2D.startRenderer();
 		super.onResume();
 	}
 

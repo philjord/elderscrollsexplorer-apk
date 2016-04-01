@@ -99,10 +99,12 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
 		NiGeometryAppearanceShader.OUTPUT_BINDINGS = true;
 		ArchiveFile.USE_FILE_MAPS = false;
+		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
+		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
 		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
-		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
+		ShaderSourceIO.ES_SHADERS = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
@@ -122,7 +124,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		spinTransformGroup.addChild(rotateTransformGroup);
 		rotateTransformGroup.addChild(modelGroup);
 		simpleCameraHandler = new SimpleCameraHandler(simpleUniverse.getViewingPlatform(), simpleUniverse.getCanvas(), modelGroup,
-				rotateTransformGroup, false);
+				rotateTransformGroup, false, true);
 
 		spinTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 		spinTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);

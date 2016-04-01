@@ -4,8 +4,6 @@ import android.app.Activity;
 
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
-import com.jogamp.newt.event.GestureHandler;
-import com.jogamp.newt.event.GestureHandler.GestureListener;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -33,6 +31,8 @@ import scrollsexplorer.IDashboard;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
+import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import tools3d.camera.Camera;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
@@ -90,19 +90,29 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		this.rootDir = rootDir;
 		this.parentActivity = parentActivity2;
 
-		//only morrowind is small enough to
-		//if (!rootDir.equals("Morrowind"))
-		{
-			ArchiveFile.USE_FILE_MAPS = false;
-			ESMManager.USE_FILE_MAPS = false;
-		}
+		Camera.FRONT_CLIP = 0.5f;
+		Camera.BACK_CLIP = 2000f;
+		Camera.MIN_FRAME_CYCLE_TIME = 33;
+
+		ESMManager.USE_FILE_MAPS = false;
+		ESMManager.USE_MINI_CHANNEL_MAPS = true;
+		ESMManager.USE_NON_NATIVE_ZIP = false;
+
+		ArchiveFile.USE_FILE_MAPS = false;
+		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
+		ArchiveFile.USE_NON_NATIVE_ZIP = false;
+
 		BethRenderSettings.setFarLoadGridCount(0);
+		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+		BethRenderSettings.setObjectFade(100);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 
 		NiGeometryAppearanceFactoryShader.setAsDefault();
-		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
+		ShaderSourceIO.ES_SHADERS = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
+
+		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 100;
 
 		try
 		{

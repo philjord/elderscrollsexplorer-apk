@@ -107,10 +107,12 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		this.parentActivity = parentActivity2;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
 		ArchiveFile.USE_FILE_MAPS = false;
+		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
+		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
 		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
-		ShaderSourceIO.SWAP_VER120_TO_VER100 = true;
+		ShaderSourceIO.ES_SHADERS = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 		meshSource = new FileMeshSource();

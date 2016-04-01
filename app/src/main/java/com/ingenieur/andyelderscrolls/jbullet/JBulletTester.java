@@ -53,6 +53,7 @@ public class JBulletTester
 		this.parentActivity = parentActivity2;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
 
+
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
 

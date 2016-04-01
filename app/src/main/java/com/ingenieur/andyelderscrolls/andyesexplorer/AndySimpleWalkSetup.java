@@ -17,6 +17,7 @@ import javax.media.j3d.Light;
 import javax.media.j3d.ShaderError;
 import javax.media.j3d.ShaderErrorListener;
 import javax.vecmath.Color3f;
+import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -32,12 +33,14 @@ import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
+import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputNewtKey;
@@ -57,7 +60,7 @@ import utils.source.MeshSource;
 /**
  * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays,
  * physics display together,
- * <p/>
+ * <p>
  * but no particular way to load nifs, esm, comms or anything else
  *
  * @author philip
@@ -108,6 +111,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	private HUDCrossHair hudCrossHair;
 
 	private AndyHUDPosition hudPos;
+
+	private HUDText loadInfo;
+	private LoadingInfoBehavior loadingInfoBehavior;
 
 	private PhysicsSystem physicsSystem;
 
@@ -214,6 +220,10 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
+		loadInfo = new HUDText(new Point2f(-0.95f, 0f), 18, "Loading...");
+		loadingInfoBehavior = new LoadingInfoBehavior(loadInfo);
+		behaviourBranch.addChild(loadingInfoBehavior);
+
 		avatarLocation.addAvatarLocationListener(hudPos);
 		avatarLocation.addAvatarLocationListener(hudcompass);
 
@@ -229,7 +239,10 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			}
 		});
 
-
+		DDSTextureLoader.setAnisotropicFilterDegree(2);
+		setupGraphicsSetting();
+		cameraPanel.getCanvas3D2D().addNotify();
+		cameraPanel.startRendering();
 	}
 
 	/* (non-Javadoc)
@@ -313,12 +326,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
 
-		setupGraphicsSetting();
-
-		DDSTextureLoader.setAnisotropicFilterDegree(8);
-		cameraPanel.getCanvas3D2D().getGLWindow().setSize(1200, 1000);
-
-		cameraPanel.startRendering();
 	}
 
 	private void setupGraphicsSetting()
@@ -361,6 +368,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			hudPos.addToCanvas(canvas3D2D);
 			hudcompass.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
+			loadInfo.addToCanvas(canvas3D2D);
+
 
 			if (isLive)
 			{
@@ -393,16 +402,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 				cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
 				cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 				physicsSystem.unpause();
-				cameraPanel.startRendering();
-
-				cameraPanel.getCanvas3D2D().addNotify();
+				loadInfo.removeFromCanvas();
+				loadingInfoBehavior.setEnable(false);
 			}
 			else
 			{
 				cameraMouseOver.setConfig(null);
 				cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
-				//cameraPanel.stopRendering();// this kills the J3d stuff like removeNotify did
+				loadInfo.addToCanvas(cameraPanel.getCanvas3D2D());
+				loadingInfoBehavior.setEnable(true);
 			}
 			enabled = enable;
 		}

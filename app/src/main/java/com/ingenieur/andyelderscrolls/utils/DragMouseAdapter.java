@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.opengl.GLWindow;
 
 /**
  * Created by phil on 3/7/2016.
@@ -22,12 +23,26 @@ public class DragMouseAdapter extends MouseAdapter
 
 	private Point startMousePosition = null;
 
+	private boolean bottomHalfOnly = false;
+
 	private Listener listener;
 
 	public Listener getListener()
 	{
 		return listener;
 	}
+
+
+	public DragMouseAdapter()
+	{
+
+	}
+
+	public DragMouseAdapter(boolean bottomHalfOnly)
+	{
+		this.bottomHalfOnly = bottomHalfOnly;
+	}
+
 
 	public void setListener(Listener listener)
 	{
@@ -61,25 +76,27 @@ public class DragMouseAdapter extends MouseAdapter
 
 			int x = e.getX();
 			int y = e.getY();
+			if (!bottomHalfOnly || e.getY() > ((GLWindow)e.getSource()).getHeight() / 2)
+			{
+				int dx = startMousePosition.x - x;
+				int dy = startMousePosition.y - y;
 
-			int dx = startMousePosition.x - x;
-			int dy = startMousePosition.y - y;
-
-			if (draggingDown && dy < -350)
-			{
-				listener.dragComplete(e, DRAG_TYPE.DOWN);
-			}
-			else if (draggingUp && dy > 350)
-			{
-				listener.dragComplete(e, DRAG_TYPE.UP);
-			}
-			else if (draggingLeft && dx < -300)
-			{
-				listener.dragComplete(e, DRAG_TYPE.LEFT);
-			}
-			else if (draggingRight && dx > 300)
-			{
-				listener.dragComplete(e, DRAG_TYPE.RIGHT);
+				if (draggingDown && dy < -300)
+				{
+					listener.dragComplete(e, DRAG_TYPE.DOWN);
+				}
+				else if (draggingUp && dy > 300)
+				{
+					listener.dragComplete(e, DRAG_TYPE.UP);
+				}
+				else if (draggingLeft && dx < -300)
+				{
+					listener.dragComplete(e, DRAG_TYPE.LEFT);
+				}
+				else if (draggingRight && dx > 300)
+				{
+					listener.dragComplete(e, DRAG_TYPE.RIGHT);
+				}
 			}
 		}
 		//clear everything
