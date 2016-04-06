@@ -33,6 +33,7 @@ import javax.vecmath.Vector3f;
 
 import archive.ArchiveFile;
 import archive.BSArchiveSet;
+import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
@@ -109,8 +110,10 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
 		meshSource = new FileMeshSource();
+
 		//textureSource = new FileTextureSource();
-		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true, false);
+		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true);
+		//meshSource = new BsaMeshSource(bsaFileSet);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);
@@ -185,17 +188,17 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		t.rotY(Math.PI / 8);
 		t.setTranslation(new Vector3f(0, 0, -5));
 		tg.setTransform(t);
-		tg.addChild(new Cube(0.1f));
+		tg.addChild(new Cube(0.01f));
 		bg.addChild(tg);
 
 
 		tg = new TransformGroup();
-		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0.15f), 1);
+		t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0.015f), 1);
 		tg.setTransform(t);
 		BranchGroup bgc = new BranchGroup();
 		bgc.addChild(tg);
 		bgc.setCapability(BranchGroup.ALLOW_DETACH);
-		tg.addChild(new Cube(0.02f));
+		tg.addChild(new Cube(0.002f));
 		spinTransformGroup.addChild(bgc);
 		toggleSpin();
 

@@ -47,7 +47,7 @@ public class SpinTransform extends Behavior
 
 		long timeNow = System.currentTimeMillis();
 		long frameDuration = timeNow - previousFrameEndTime;
-		currentRot += frameDuration / 1000d;
+		currentRot += frameDuration / 10000d;
 		Transform3D t = new Transform3D();
 		t.setRotation(new AxisAngle4d(0, 1, 0, currentRot));
 		trans.setTransform(t);

@@ -32,6 +32,7 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
+import scrollsexplorer.simpleclient.mouseover.MouseListenerNewtTap;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
 import tools.compressedtexture.dds.DDSTextureLoader;
@@ -370,14 +371,15 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
 
-
+			mouseListenerNewtTap = new MouseListenerNewtTap();
+			mouseListenerNewtTap. setWindow(canvas3D2D.getGLWindow());
 			if (isLive)
 			{
 				setEnabled(true);
 			}
 		}
 	}
-
+	MouseListenerNewtTap mouseListenerNewtTap;
 	/* (non-Javadoc)
 	 * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#resetGraphicsSetting()
 	 */

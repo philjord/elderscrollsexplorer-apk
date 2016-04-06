@@ -117,7 +117,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 		meshSource = new FileMeshSource();
 		//textureSource = new FileTextureSource();
-		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true, false);
+		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);

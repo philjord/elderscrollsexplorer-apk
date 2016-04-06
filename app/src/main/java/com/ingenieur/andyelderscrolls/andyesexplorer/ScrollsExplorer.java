@@ -25,6 +25,7 @@ import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
+import nif.character.NifCharacter;
 import scrollsexplorer.DashboardNewt;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.IDashboard;
@@ -102,9 +103,12 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-		BethRenderSettings.setFarLoadGridCount(0);
+		BethRenderSettings.setFarLoadGridCount(6);
+		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
 		BethRenderSettings.setObjectFade(100);
+		BethRenderSettings.setItemFade(100);
+		BethRenderSettings.setActorFade(50);// NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 
 		NiGeometryAppearanceFactoryShader.setAsDefault();
@@ -112,7 +116,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
-		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 100;
+		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 20;
+
+		// this definately doesn't help on desktop, but lots of methods calls so maybe?
+		NifCharacter.BULK_BUFFER_UPDATES = false;
 
 		try
 		{
@@ -246,7 +253,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						if (bsaFileSet == null)
 						{
-							bsaFileSet = new BSArchiveSet(new String[]{selectedGameConfig.scrollsFolder}, true, false);
+							bsaFileSet = new BSArchiveSet(new String[]{selectedGameConfig.scrollsFolder}, true);
 						}
 
 						if (bsaFileSet.size() == 0)
