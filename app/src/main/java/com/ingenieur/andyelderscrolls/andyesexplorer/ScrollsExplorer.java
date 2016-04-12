@@ -56,7 +56,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 	private SimpleBethCellManager simpleBethCellManager;
 
-	private AndySimpleWalkSetup simpleWalkSetup;
+	public AndySimpleWalkSetup simpleWalkSetup;
 
 	private MediaSources mediaSources;
 
@@ -91,9 +91,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		this.rootDir = rootDir;
 		this.parentActivity = parentActivity2;
 
-		Camera.FRONT_CLIP = 0.5f;
-		Camera.BACK_CLIP = 2000f;
-		Camera.MIN_FRAME_CYCLE_TIME = 33;
+		Camera.FRONT_CLIP = 0.2f;
+		Camera.BACK_CLIP = 1000f;
+		Camera.MIN_FRAME_CYCLE_TIME = 15;
 
 		ESMManager.USE_FILE_MAPS = false;
 		ESMManager.USE_MINI_CHANNEL_MAPS = true;
@@ -103,20 +103,20 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-		BethRenderSettings.setFarLoadGridCount(6);
+		BethRenderSettings.setFarLoadGridCount(0);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
 		BethRenderSettings.setObjectFade(100);
 		BethRenderSettings.setItemFade(100);
-		BethRenderSettings.setActorFade(50);// NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		BethRenderSettings.setActorFade(40);// NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
-
+		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 25;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.ES_SHADERS = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
-		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 20;
+
 
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = false;

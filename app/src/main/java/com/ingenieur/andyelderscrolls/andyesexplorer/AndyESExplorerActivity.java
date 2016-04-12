@@ -119,6 +119,8 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	@Override
 	public void onPause()
 	{
+		if (scrollsExplorer != null)
+			scrollsExplorer.closingTime();
 		//if (nifDisplay != null)
 		//	nifDisplay.canvas3D2D.stopRenderer();
 		//gl_window.setVisible(false);
@@ -137,8 +139,10 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	@Override
 	public void onDestroy()
 	{
-		scrollsExplorer.closingTime();
-		gl_window.destroy();
+		if (scrollsExplorer != null)
+			scrollsExplorer.closingTime();
+		if (gl_window != null)
+			gl_window.destroy();
 
 		super.onDestroy();
 	}

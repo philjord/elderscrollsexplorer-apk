@@ -61,7 +61,7 @@ import utils.source.MeshSource;
 /**
  * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays,
  * physics display together,
- * <p>
+ * <p/>
  * but no particular way to load nifs, esm, comms or anything else
  *
  * @author philip
@@ -128,7 +128,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 	private DirectionalLight dirLight = null;
 
-	private GLWindow gl_window;
 
 	//Can't use as threading causes massive trouble for scene loading
 	//	private StructureUpdateBehavior structureUpdateBehavior;
@@ -146,7 +145,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	{
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 
-		this.gl_window = gl_window;
 		//kick off with a universe ***************************
 		universe = new VisualPhysicalUniverse();
 
@@ -241,9 +239,10 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		});
 
 		DDSTextureLoader.setAnisotropicFilterDegree(2);
-		setupGraphicsSetting();
-		cameraPanel.getCanvas3D2D().addNotify();
-		cameraPanel.startRendering();
+
+		setupGraphicsSetting(gl_window);
+		this.cameraPanel.getCanvas3D2D().addNotify();
+		this.cameraPanel.startRendering();
 	}
 
 	/* (non-Javadoc)
@@ -329,7 +328,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 	}
 
-	private void setupGraphicsSetting()
+	public void setupGraphicsSetting(GLWindow gl_window)
 	{
 
 		if (cameraPanel == null)
