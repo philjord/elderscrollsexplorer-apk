@@ -33,7 +33,6 @@ import javax.vecmath.Vector3f;
 
 import archive.ArchiveFile;
 import archive.BSArchiveSet;
-import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
@@ -47,6 +46,7 @@ import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.Utils3D;
 import tools3d.utils.leafnode.Cube;
+import tools3d.utils.scenegraph.SpinTransform;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 import utils.source.file.FileMediaRoots;
@@ -172,7 +172,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		bg.addChild(simpleCameraHandler);
 
 		bg.addChild(spinTransformGroup);
-		spinTransform = new SpinTransform(spinTransformGroup);
+		spinTransform = new SpinTransform(spinTransformGroup, 0.2);
 		spinTransform.setEnable(false);
 		bg.addChild(spinTransform);
 

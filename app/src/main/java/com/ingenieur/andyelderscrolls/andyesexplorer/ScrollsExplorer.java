@@ -26,6 +26,8 @@ import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
+import nif.j3d.J3dNiGeometry;
+import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.DashboardNewt;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.IDashboard;
@@ -103,23 +105,32 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-		BethRenderSettings.setFarLoadGridCount(0);
+		BethRenderSettings.setFarLoadGridCount(4);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
 		BethRenderSettings.setObjectFade(100);
 		BethRenderSettings.setItemFade(100);
-		BethRenderSettings.setActorFade(40);// NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
+		BethRenderSettings.setActorFade(40);
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
 		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 25;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.ES_SHADERS = true;
 
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
-
+		J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
 
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = false;
+
+
+		//for big games go low spec
+		if(!rootDir.getName().equals("Morrowind"))
+		{
+			BethRenderSettings.setFarLoadGridCount(0);
+			BethRenderSettings.setNearLoadGridCount(2);
+			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
+		}
 
 		try
 		{

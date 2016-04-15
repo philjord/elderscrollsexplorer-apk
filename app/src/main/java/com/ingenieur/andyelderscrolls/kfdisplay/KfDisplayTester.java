@@ -4,7 +4,6 @@ package com.ingenieur.andyelderscrolls.kfdisplay;
 import android.app.Activity;
 import android.widget.Toast;
 
-import com.ingenieur.andyelderscrolls.nifdisplay.SpinTransform;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
@@ -44,12 +43,12 @@ import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
-import nif.shaders.NiGeometryAppearanceShader;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.leafnode.Cube;
+import tools3d.utils.scenegraph.SpinTransform;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
@@ -175,7 +174,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		bg.addChild(simpleCameraHandler);
 
 		bg.addChild(spinTransformGroup);
-		spinTransform = new SpinTransform(spinTransformGroup);
+		spinTransform = new SpinTransform(spinTransformGroup, 0.2);
 		spinTransform.setEnable(false);
 		bg.addChild(spinTransform);
 

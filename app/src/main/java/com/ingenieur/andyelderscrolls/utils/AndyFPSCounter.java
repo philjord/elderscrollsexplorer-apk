@@ -47,7 +47,7 @@ public class AndyFPSCounter
 
 	public void addToCanvas(Canvas3D2D canvas3d2d)
 	{
-		float pixelSizeFPS = 0.00015F * (float)canvas3d2d.getGLWindow().getSurfaceHeight();
+		float pixelSizeFPS = 0.00015F * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
 		try
 		{
 			this.fpsLabel = new Label(canvas3d2d.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
@@ -56,7 +56,7 @@ public class AndyFPSCounter
 			this.fpsLabel.translate(-0.88F, 0.75F, 0.0F);
 			this.fpsLabel.setColor(1.0F, 1.0F, 0.0F, 1.0F);
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -109,7 +109,10 @@ public class AndyFPSCounter
 		public void processStimulus(Enumeration critera)
 		{
 			double fps = (double) AndyFPSCounter.this.numOfFrames / ((double) AndyFPSCounter.this.timeOfFrames / 1000.0D);
-			AndyFPSCounter.this.fpsLabel.setText("" + (int) Math.rint(fps * 10.0D) / 10);
+			String newText = "" + (int) Math.rint(fps * 10.0D) / 10;
+			if (!newText.equals(fpsLabel.getText()))
+				AndyFPSCounter.this.fpsLabel.setText(newText);
+
 			AndyFPSCounter.this.numOfFrames = 0;
 			AndyFPSCounter.this.timeOfFrames = 0L;
 			this.wakeupOn(this.wakeUp);
