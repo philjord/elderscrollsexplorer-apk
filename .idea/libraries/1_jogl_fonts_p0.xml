@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="1_jogl-fonts-p0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/atomic/jogl-fonts-p0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

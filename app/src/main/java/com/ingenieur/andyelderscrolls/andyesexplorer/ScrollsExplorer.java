@@ -34,7 +34,9 @@ import scrollsexplorer.IDashboard;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
+import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import tools.compressedtexture.CompressedTextureLoader;
 import tools3d.camera.Camera;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.YawPitch;
@@ -108,30 +110,28 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethRenderSettings.setFarLoadGridCount(4);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-		BethRenderSettings.setObjectFade(100);
-		BethRenderSettings.setItemFade(100);
-		BethRenderSettings.setActorFade(40);
-		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;
-		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 25;
+		BethRenderSettings.setObjectFade(150);
+		BethRenderSettings.setItemFade(150);
+		BethRenderSettings.setActorFade(50);
+		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
+		DynamicsEngine.MAX_SUB_STEPS = 2;
+		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
+		CompressedTextureLoader.setAnisotropicFilterDegree(4);
 		ShaderSourceIO.ES_SHADERS = true;
-
-		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
-
 		J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
-
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = false;
 
 
 		//for big games go low spec
-		if(!rootDir.getName().equals("Morrowind"))
+		if (!rootDir.getName().equals("Morrowind"))
 		{
 			BethRenderSettings.setFarLoadGridCount(0);
 			BethRenderSettings.setNearLoadGridCount(2);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
 		}
-
+		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 		try
 		{
 			PropertyLoader.load(parentActivity.getFilesDir().getAbsolutePath());

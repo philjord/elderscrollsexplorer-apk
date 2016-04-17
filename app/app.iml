@@ -61,13 +61,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
@@ -75,6 +68,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
@@ -84,6 +84,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
@@ -100,23 +101,20 @@
     <orderEntry type="library" exported="" name="esmj3dtes5" level="project" />
     <orderEntry type="library" exported="" name="jogl-all-android" level="project" />
     <orderEntry type="library" exported="" name="esmj3dtes3" level="project" />
-    <orderEntry type="library" exported="" name="jogl-fonts-p0" level="project" />
-    <orderEntry type="library" exported="" name="1_jogl-fonts-p0" level="project" />
     <orderEntry type="library" exported="" name="bsamanager" level="project" />
-    <orderEntry type="library" exported="" name="joystickview" level="project" />
     <orderEntry type="library" exported="" name="tools" level="project" />
     <orderEntry type="library" exported="" name="esmmanager" level="project" />
     <orderEntry type="library" exported="" name="eseandroid" level="project" />
     <orderEntry type="library" exported="" name="jnif" level="project" />
     <orderEntry type="library" exported="" name="jogamp-armv6" level="project" />
     <orderEntry type="library" exported="" name="3dtools" level="project" />
-    <orderEntry type="library" exported="" name="gluegen-rt-android" level="project" />
+    <orderEntry type="library" exported="" name="joal-android" level="project" />
     <orderEntry type="library" exported="" name="java3d-core-and" level="project" />
+    <orderEntry type="library" exported="" name="gluegen-rt-android" level="project" />
     <orderEntry type="library" exported="" name="jnifjbullet" level="project" />
-    <orderEntry type="library" exported="" name="jogl-test-android" level="project" />
     <orderEntry type="library" exported="" name="jnifj3d" level="project" />
-    <orderEntry type="library" exported="" name="esmj3d" level="project" />
     <orderEntry type="library" exported="" name="jbullet1.1" level="project" />
+    <orderEntry type="library" exported="" name="esmj3d" level="project" />
     <orderEntry type="library" exported="" name="java3d-utils-and" level="project" />
   </component>
 </module>
