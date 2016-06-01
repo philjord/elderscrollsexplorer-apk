@@ -110,11 +110,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethRenderSettings.setFarLoadGridCount(4);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-		BethRenderSettings.setObjectFade(150);
-		BethRenderSettings.setItemFade(150);
-		BethRenderSettings.setActorFade(50);
+		BethRenderSettings.setObjectFade(120);
+		BethRenderSettings.setItemFade(60);
+		BethRenderSettings.setActorFade(35);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
-		DynamicsEngine.MAX_SUB_STEPS = 2;
+		DynamicsEngine.MAX_SUB_STEPS = 3;
 		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		CompressedTextureLoader.setAnisotropicFilterDegree(4);
@@ -123,6 +123,14 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = false;
 
+
+		//fallout dies from memory
+		if (rootDir.getName().equals("Fallout3"))
+		{
+			BethRenderSettings.setFarLoadGridCount(0);
+			BethRenderSettings.setNearLoadGridCount(1);
+			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
+		}
 
 		//for big games go low spec
 		if (!rootDir.getName().equals("Morrowind"))
@@ -349,6 +357,17 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		{
 		}
 	}
+
+	public void stopRenderer()
+	{
+		simpleWalkSetup.stopRenderer();
+	}
+
+	public void startRenderer(GLWindow gl_window)
+	{
+		simpleWalkSetup.startRenderer(gl_window);
+	}
+
 
 	private class KeyHandler extends KeyAdapter
 	{

@@ -19,6 +19,13 @@
 # if you get warnings that stop proguard building you can swap all -dontwarn below to this catch all statement
 #-ignorewarnings
 
+
+#-optimizationpasses 5
+#-allowaccessmodification
+#-overloadaggressively
+#-repackageclasses ''
+#-dontskipnonpubliclibraryclasses
+
 # my code
 -dontwarn old.**
 -dontwarn tools.swing.**

@@ -3,9 +3,13 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
+import com.jogamp.newt.event.GestureHandler;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseAdapter;
+import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.hudbasics.util.NEWTMouseAdapter;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 import javax.media.j3d.AmbientLight;
@@ -35,7 +39,6 @@ import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.MouseListenerNewtTap;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
-import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
@@ -45,8 +48,6 @@ import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationInputNewtKey;
-import tools3d.navigation.NavigationInputNewtMouseDraggedLocked;
-import tools3d.navigation.NavigationInputNewtMouseLocked;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.navigation.twocircles.NavigationInputNewtLook;
 import tools3d.navigation.twocircles.NavigationInputNewtMove;
@@ -96,6 +97,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 	//private NavigationInputNewtMouseDraggedLocked newtMouseInputListener;
 	private NavigationInputNewtLook newtMouseInputListener;
+
+	//private NavigationInputNewtLookMove newtMouseInputListener;
+
 
 	private NewtJumpKeyListener jumpKeyListener;
 
@@ -187,7 +191,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		lightsBG.addChild(dirLight);
 		universe.addToVisualBranch(lightsBG);
 
-		// add the time keepers to the universe ************************
+		// turn off default gesture handler as drags get lost etc
+		gl_window.setDefaultGesturesEnabled(false);
 
 		//mouse/keyboard
 		navigationTemporalBehaviour = new NavigationTemporalBehaviour();
@@ -207,6 +212,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		//mouseInputListener.setNavigationProcessor(navigationProcessor);
 		newtMouseInputListener = new NavigationInputNewtLook();
 		newtMouseInputListener.setNavigationProcessor(navigationProcessor);
+		NavigationInputNewtMove.VERTICAL_RATE = 50f;
 
 		//add jump key and vis/phy toggle key listeners for fun ************************
 		jumpKeyListener = new NewtJumpKeyListener(nbccProvider);
@@ -238,12 +244,30 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			}
 		});
 
-		DDSTextureLoader.setAnisotropicFilterDegree(2);
-
 		setupGraphicsSetting(gl_window);
+
 		this.cameraPanel.getCanvas3D2D().addNotify();
 		this.cameraPanel.startRendering();
 	}
+
+	public void startRenderer(GLWindow gl_window)
+	{
+		if (!cameraPanel.isRendering())
+		{
+			this.cameraPanel.getCanvas3D2D().setNewGLWindow(gl_window);
+			this.cameraPanel.getCanvas3D2D().addNotify();
+			this.cameraPanel.startRendering();
+		}
+	}
+
+	public void stopRenderer()
+	{
+		if (cameraPanel.isRendering())
+		{
+			cameraPanel.stopRendering();
+		}
+	}
+
 
 	/* (non-Javadoc)
 	 * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#closingTime()
@@ -251,8 +275,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	@Override
 	public void closingTime()
 	{
-		cameraPanel.stopRendering();
-
+		//stopRenderer();
 	}
 
 	/* (non-Javadoc)
@@ -371,14 +394,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			loadInfo.addToCanvas(canvas3D2D);
 
 			mouseListenerNewtTap = new MouseListenerNewtTap();
-			mouseListenerNewtTap. setWindow(canvas3D2D.getGLWindow());
+			mouseListenerNewtTap.setWindow(canvas3D2D.getGLWindow());
 			if (isLive)
 			{
 				setEnabled(true);
 			}
 		}
 	}
+
 	MouseListenerNewtTap mouseListenerNewtTap;
+
 	/* (non-Javadoc)
 	 * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#resetGraphicsSetting()
 	 */
@@ -431,6 +456,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
 		}
 		keyNavigationInputNewt.setAllowVerticalMovement(ff);
+
 	}
 
 	/* (non-Javadoc)

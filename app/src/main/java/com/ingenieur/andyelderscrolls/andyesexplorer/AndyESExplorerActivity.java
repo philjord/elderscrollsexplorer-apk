@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
+import com.jogamp.nativewindow.util.DimensionImmutable;
+import com.jogamp.nativewindow.util.SurfaceSize;
+import com.jogamp.newt.MonitorDevice;
+import com.jogamp.newt.MonitorMode;
+import com.jogamp.newt.Window;
 import com.jogamp.newt.event.MonitorEvent;
 import com.jogamp.newt.event.MonitorModeListener;
 import com.jogamp.newt.opengl.GLWindow;
@@ -16,8 +21,11 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
 import java.io.File;
+import java.util.Set;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
+import jogamp.newt.driver.android.WindowDriver;
+import jogamp.opengl.egl.EGLSurface;
 
 public class AndyESExplorerActivity extends NewtBaseActivity
 {
@@ -36,10 +44,16 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	{
 		super.onCreate(state);
 
+		System.setProperty("newt.debug.Window.MouseEvent","true");
+
 		Intent intent = getIntent();
 		gameDir = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
 		andyRoot = intent.getStringExtra(ElderScrollsActivity.ANDY_ROOT);
+		createGLWindow();
+	}
 
+	private void createGLWindow()
+	{
 		final GLCapabilities caps =
 				new GLCapabilities(GLProfile.get(GLProfile.GLES2));
 
@@ -52,9 +66,27 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 
 		gl_window = GLWindow.create(caps);
+		gl_window.setSurfaceScale(new float[]{0.5f, 0.5f});
+
+		//Alternatively, control scaling through the Android API:
+		// For applications written in Java, configure the fixed-size property of the GLSurfaceView instance (available since API level 1).
+		//	Set the property using the setFixedSize function, which takes two arguments defining the resolution of the final render target.
+		//gl_window.setSize(1280,720);
+
 		gl_window.setFullscreen(true);
 
 		this.setContentView(this.getWindow(), gl_window);
+
+
+		// this is alwasy null how to set the screen resolution
+		if (gl_window.getScreen().getMonitorDevices() != null)
+			for (MonitorDevice monitorDevice : gl_window.getScreen().getMonitorDevices())
+			{
+				for (MonitorMode monitorMode : monitorDevice.getSupportedModes())
+				{
+					System.out.println("MM= " + monitorMode);
+				}
+			}
 
 
 		gl_window.getScreen().addMonitorModeListener(new MonitorModeListener()
@@ -62,6 +94,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 														 @Override
 														 public void monitorModeChangeNotify(MonitorEvent monitorEvent)
 														 {
+															 Log.e("System.err", "monitorModeChanged: " + monitorEvent);
 														 }
 
 														 @Override
@@ -70,7 +103,6 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 															 Log.e("System.err", "monitorModeChanged: " + monitorEvent);
 														 }
 													 }
-
 		);
 
 
@@ -81,11 +113,38 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 										 @Override
 										 public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable)
 										 {
+											 System.err.println("GLEventListenerinit");
+
 											 try
 											 {
+												 float[] fs = new float[2];
+												 gl_window.getCurrentSurfaceScale(fs);
+												 System.out.println("getCurrentSurfaceScale " + fs[0] + " " + fs[1]);
+
+
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
 												 //KfDisplayTester from this init function
-												 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, new File(andyRoot, gameDir));
+
+												 // this is called ona  resume as well, so only inti once
+												 if (scrollsExplorer == null)
+												 {
+													 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, new File(andyRoot, gameDir));
+												 }
+												 else
+												 {
+
+													 System.err.println("Init with a non null explorer");
+
+													 if (pauseRestartRequired)
+													 {
+
+														 System.err.println("pauseRestartRequired is true!");
+
+														 // this is from a resume
+														 scrollsExplorer.startRenderer(gl_window);
+														 pauseRestartRequired = false;
+													 }
+												 }
 											 }
 											 catch (Exception e)
 											 {
@@ -97,16 +156,21 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 										 public void reshape(final GLAutoDrawable drawable, final int x, final int y,
 															 final int w, final int h)
 										 {
+											 System.err.println("GLEventListenerreshape");
+
 										 }
 
 										 @Override
 										 public void display(final GLAutoDrawable drawable)
 										 {
+											 System.err.println("GLEventListenerdisplay");
 										 }
 
 										 @Override
 										 public void dispose(final GLAutoDrawable drawable)
 										 {
+											 System.err.println("GLEventListenerdispose");
+
 										 }
 									 }
 
@@ -115,25 +179,33 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 	}
 
+	private boolean pauseRestartRequired = false;
 
 	@Override
 	public void onPause()
 	{
+		System.err.println("onPause onPause onPause onPause onPause");
 		if (scrollsExplorer != null)
+		{
 			scrollsExplorer.closingTime();
-		//if (nifDisplay != null)
-		//	nifDisplay.canvas3D2D.stopRenderer();
+			scrollsExplorer.stopRenderer();
+		}
 		//gl_window.setVisible(false);
 		super.onPause();
+		pauseRestartRequired = true;
 	}
 
 	@Override
 	public void onResume()
 	{
+
+
 		//gl_window.setVisible(true);
 		//if (nifDisplay != null)
 		//	nifDisplay.canvas3D2D.startRenderer();
 		super.onResume();
+
+
 	}
 
 	@Override
