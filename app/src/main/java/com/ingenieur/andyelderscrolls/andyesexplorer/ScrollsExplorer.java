@@ -34,6 +34,7 @@ import scrollsexplorer.IDashboard;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
+import scrollsexplorer.simpleclient.mouseover.MouseOverHandler;
 import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import tools.compressedtexture.CompressedTextureLoader;
@@ -122,6 +123,12 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = false;
+
+		MouseOverHandler.MIN_TIME_BETWEEN_STEPS_MS = 500;
+		MouseOverHandler.MAX_MOUSE_RAY_DIST = 20;
+
+		BethWorldVisualBranch.FOG_START = 75;
+		BethWorldVisualBranch.FOG_END = 200;
 
 
 		//fallout dies from memory

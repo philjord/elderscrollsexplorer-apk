@@ -44,7 +44,8 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	{
 		super.onCreate(state);
 
-		System.setProperty("newt.debug.Window.MouseEvent","true");
+		//example of how to set properties
+		//System.setProperty("newt.debug.Window.MouseEvent","true");
 
 		Intent intent = getIntent();
 		gameDir = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
@@ -78,34 +79,6 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 		this.setContentView(this.getWindow(), gl_window);
 
 
-		// this is alwasy null how to set the screen resolution
-		if (gl_window.getScreen().getMonitorDevices() != null)
-			for (MonitorDevice monitorDevice : gl_window.getScreen().getMonitorDevices())
-			{
-				for (MonitorMode monitorMode : monitorDevice.getSupportedModes())
-				{
-					System.out.println("MM= " + monitorMode);
-				}
-			}
-
-
-		gl_window.getScreen().addMonitorModeListener(new MonitorModeListener()
-													 {
-														 @Override
-														 public void monitorModeChangeNotify(MonitorEvent monitorEvent)
-														 {
-															 Log.e("System.err", "monitorModeChanged: " + monitorEvent);
-														 }
-
-														 @Override
-														 public void monitorModeChanged(MonitorEvent monitorEvent, boolean b)
-														 {
-															 Log.e("System.err", "monitorModeChanged: " + monitorEvent);
-														 }
-													 }
-		);
-
-
 		gl_window.setVisible(true);
 
 		gl_window.addGLEventListener(new GLEventListener()
@@ -113,13 +86,13 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 										 @Override
 										 public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable)
 										 {
-											 System.err.println("GLEventListenerinit");
+											 //System.err.println("GLEventListenerinit");
 
 											 try
 											 {
 												 float[] fs = new float[2];
 												 gl_window.getCurrentSurfaceScale(fs);
-												 System.out.println("getCurrentSurfaceScale " + fs[0] + " " + fs[1]);
+												 //System.out.println("getCurrentSurfaceScale " + fs[0] + " " + fs[1]);
 
 
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
@@ -133,12 +106,12 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 												 else
 												 {
 
-													 System.err.println("Init with a non null explorer");
+													 //System.err.println("Init with a non null explorer");
 
 													 if (pauseRestartRequired)
 													 {
 
-														 System.err.println("pauseRestartRequired is true!");
+														 //System.err.println("pauseRestartRequired is true!");
 
 														 // this is from a resume
 														 scrollsExplorer.startRenderer(gl_window);
@@ -156,20 +129,20 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 										 public void reshape(final GLAutoDrawable drawable, final int x, final int y,
 															 final int w, final int h)
 										 {
-											 System.err.println("GLEventListenerreshape");
+											 //System.err.println("GLEventListenerreshape");
 
 										 }
 
 										 @Override
 										 public void display(final GLAutoDrawable drawable)
 										 {
-											 System.err.println("GLEventListenerdisplay");
+											 //System.err.println("GLEventListenerdisplay");
 										 }
 
 										 @Override
 										 public void dispose(final GLAutoDrawable drawable)
 										 {
-											 System.err.println("GLEventListenerdispose");
+											 //System.err.println("GLEventListenerdispose");
 
 										 }
 									 }
@@ -184,7 +157,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	@Override
 	public void onPause()
 	{
-		System.err.println("onPause onPause onPause onPause onPause");
+		//System.err.println("onPause onPause onPause onPause onPause");
 		if (scrollsExplorer != null)
 		{
 			scrollsExplorer.closingTime();

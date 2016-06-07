@@ -3,13 +3,10 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
-import com.jogamp.newt.event.GestureHandler;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.opengl.hudbasics.util.NEWTMouseAdapter;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 import javax.media.j3d.AmbientLight;
@@ -36,7 +33,6 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
-import scrollsexplorer.simpleclient.mouseover.MouseListenerNewtTap;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
 import tools3d.camera.CameraPanel;
@@ -47,7 +43,6 @@ import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
 import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
-import tools3d.navigation.NavigationInputNewtKey;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.navigation.twocircles.NavigationInputNewtLook;
 import tools3d.navigation.twocircles.NavigationInputNewtMove;
@@ -345,9 +340,25 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 		IDashboard.dashboard.setPhysicSystem(physicsSystem);
 
-		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem, simpleBethCellManager);
+		cameraMouseOver = new ActionableMouseOverHandler(physicsSystem, simpleBethCellManager, true)
+		{
+			// only allow clicks in top half of screen for interaction
+			public void doMouseReleased(MouseEvent e)
+			{
+				int ex = e.getX();
+				int ey = e.getY();
 
-		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem);
+				//  the top half of screen
+				if (ey < (cameraPanel.getCanvas3D2D().getGLWindow().getHeight() / 2))
+				{
+					super.doMouseReleased(e);
+				}
+			}
+		}
+
+		;
+
+		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem, true);
 
 	}
 
@@ -393,8 +404,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
 
-			mouseListenerNewtTap = new MouseListenerNewtTap();
-			mouseListenerNewtTap.setWindow(canvas3D2D.getGLWindow());
+
 			if (isLive)
 			{
 				setEnabled(true);
@@ -402,7 +412,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		}
 	}
 
-	MouseListenerNewtTap mouseListenerNewtTap;
+
 
 	/* (non-Javadoc)
 	 * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#resetGraphicsSetting()
