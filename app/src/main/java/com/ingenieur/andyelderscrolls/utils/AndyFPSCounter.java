@@ -88,6 +88,7 @@ public class AndyFPSCounter
 			AndyFPSCounter.this.lasttime = System.currentTimeMillis();
 			AndyFPSCounter.this.numOfFrames = AndyFPSCounter.this.numOfFrames + 1;
 			AndyFPSCounter.this.timeOfFrames = AndyFPSCounter.this.timeOfFrames + AndyFPSCounter.this.deltatime;
+
 			this.wakeupOn(this.wakeUp);
 		}
 	}
@@ -115,8 +116,18 @@ public class AndyFPSCounter
 
 			AndyFPSCounter.this.numOfFrames = 0;
 			AndyFPSCounter.this.timeOfFrames = 0L;
+
+			count++;// each 500 milli so 10 = 5sec
+			if (count > 10)
+			{
+				System.out.println("FPS" + ((int) Math.rint(fps * 10) / 10));
+				count = 0;
+			}
+
+
 			this.wakeupOn(this.wakeUp);
 		}
+		private int count = 0;
 	}
 }
 

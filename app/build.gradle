@@ -22,7 +22,7 @@ android {
         }
         debug {
             minifyEnabled false
-            //http://stackoverflow.com/questions/12112514/android-proguard-does-not-inline OMG!
+            //see ${sdk.dir}/tools/proguard/proguard-android-optimize.txt
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules-debug.pro'
             zipAlignEnabled true
         }

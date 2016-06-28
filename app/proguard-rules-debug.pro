@@ -19,12 +19,19 @@
 # if you get warnings that stop proguard building you can swap all -dontwarn below to this catch all statement
 #-ignorewarnings
 
+#http://stackoverflow.com/questions/35321742/android-proguard-most-aggressive-optimizations
+-optimizationpasses 5
+-allowaccessmodification
+-overloadaggressively
+-repackageclasses ''
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+# oddly removing the lines above seems to make thigns slower?
 
-#-optimizationpasses 5
-#-allowaccessmodification
-#-overloadaggressively
-#-repackageclasses ''
-#-dontskipnonpubliclibraryclasses
+#-optimizations code/simplification/arithmetic
+#-optimizations code/simplification/cast
+#-optimizations field/*
+#-optimizations class/merging/*
 
 # my code
 -dontwarn old.**

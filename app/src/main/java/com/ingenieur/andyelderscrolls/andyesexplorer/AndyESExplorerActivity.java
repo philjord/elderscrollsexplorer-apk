@@ -42,6 +42,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	@Override
 	public void onCreate(final Bundle state)
 	{
+		System.setProperty("j3d.cacheAutoComputeBounds", "true");
 		super.onCreate(state);
 
 		//example of how to set properties

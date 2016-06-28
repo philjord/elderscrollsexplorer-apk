@@ -111,9 +111,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethRenderSettings.setFarLoadGridCount(4);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-		BethRenderSettings.setObjectFade(120);
+		BethRenderSettings.setObjectFade(100);
 		BethRenderSettings.setItemFade(60);
 		BethRenderSettings.setActorFade(35);
+		BethRenderSettings.setOutlineFocused(false);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 		DynamicsEngine.MAX_SUB_STEPS = 3;
 		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
@@ -122,13 +123,13 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		ShaderSourceIO.ES_SHADERS = true;
 		J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
 		// this definately doesn't help on desktop, but lots of methods calls so maybe?
-		NifCharacter.BULK_BUFFER_UPDATES = false;
+		NifCharacter.BULK_BUFFER_UPDATES = true;
 
 		MouseOverHandler.MIN_TIME_BETWEEN_STEPS_MS = 500;
 		MouseOverHandler.MAX_MOUSE_RAY_DIST = 20;
 
 		BethWorldVisualBranch.FOG_START = 75;
-		BethWorldVisualBranch.FOG_END = 200;
+		BethWorldVisualBranch.FOG_END = 150;
 
 
 		//fallout dies from memory
@@ -391,9 +392,25 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 		public void keyPressed(KeyEvent e)
 		{
-			if (e.getKeyCode() == KeyEvent.VK_SPACE)
+			if (e.getKeyCode() == KeyEvent.VK_1)
 			{
-
+				BethRenderSettings.setOutlineFocused(!BethRenderSettings.isOutlineFocused());
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_2)
+			{
+				BethRenderSettings.setOutlineChars(!BethRenderSettings.isOutlineChars());
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_3)
+			{
+				BethRenderSettings.setOutlineConts(!BethRenderSettings.isOutlineConts());
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_4)
+			{
+				BethRenderSettings.setOutlineDoors(!BethRenderSettings.isOutlineDoors());
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_5)
+			{
+				BethRenderSettings.setOutlineParts(!BethRenderSettings.isOutlineParts());
 			}
 
 		}

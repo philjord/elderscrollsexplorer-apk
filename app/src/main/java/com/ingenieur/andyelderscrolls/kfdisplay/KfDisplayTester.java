@@ -38,6 +38,7 @@ import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
+import nif.character.AttachedParts;
 import nif.character.NifCharacter;
 import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
@@ -377,7 +378,10 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		BgsmSource.setBgsmSource(meshSource);
 		MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
 
-		nifCharacterTes3 = new NifCharacterTes3(skeletonNifFile, skinNifFiles2, mediaSources);
+		AttachedParts attachFileNames = new AttachedParts();
+		attachFileNames.addPart(AttachedParts.Part.Root, skinNifFiles2.get(0));
+
+		nifCharacterTes3 = new NifCharacterTes3(skeletonNifFile, attachFileNames, mediaSources);
 		bg.addChild(nifCharacterTes3);
 
 		modelGroup.addChild(bg);

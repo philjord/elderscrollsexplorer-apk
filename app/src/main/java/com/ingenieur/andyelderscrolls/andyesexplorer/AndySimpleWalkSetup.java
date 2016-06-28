@@ -436,7 +436,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			if (enable)
 			{
 				cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
-				cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
+				//slow? cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 				physicsSystem.unpause();
 				loadInfo.removeFromCanvas();
 				loadingInfoBehavior.setEnable(false);
@@ -444,7 +444,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			else
 			{
 				cameraMouseOver.setConfig(null);
-				cameraAdminMouseOverHandler.setConfig(null);
+				//cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
 				loadInfo.addToCanvas(cameraPanel.getCanvas3D2D());
 				loadingInfoBehavior.setEnable(true);
