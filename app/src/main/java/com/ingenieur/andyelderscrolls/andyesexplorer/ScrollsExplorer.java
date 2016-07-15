@@ -7,6 +7,8 @@ import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
 import java.io.File;
@@ -28,6 +30,7 @@ import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
 import nif.j3d.J3dNiGeometry;
 import nif.j3d.J3dNiTriBasedGeom;
+import nif.j3d.particles.tes3.J3dNiParticles;
 import scrollsexplorer.DashboardNewt;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.IDashboard;
@@ -37,6 +40,7 @@ import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.mouseover.MouseOverHandler;
 import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
+import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
 import tools.compressedtexture.CompressedTextureLoader;
 import tools3d.camera.Camera;
 import tools3d.utils.ShaderSourceIO;
@@ -78,6 +82,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	private Activity parentActivity;
 
 	private File rootDir;
+
+	private Tes3Extensions tes3Extensions;
 
 	private static HashMap<String, String> rootToGameName = new HashMap<String, String>();
 
@@ -304,10 +310,27 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						simpleWalkSetup.getWindow().addKeyListener(new KeyHandler());
 						simpleWalkSetup.getWindow().addMouseListener(dragMouseAdapter);
+						simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter()
+						{
+							@Override
+							public void windowResized(final WindowEvent e)
+							{
+								J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
+							}
+
+						});
+						J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 						simpleWalkSetup.setMouseLock(true);// auto press teh tab key
 
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
+
+						if (selectedGameConfig == GameConfig.allGameConfigs.get(0))
+						{
+							System.out.println("Adding Tes3 extensions");
+							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources, simpleWalkSetup,
+									simpleBethCellManager);
+						}
 
 						display(prevCellformid);
 
