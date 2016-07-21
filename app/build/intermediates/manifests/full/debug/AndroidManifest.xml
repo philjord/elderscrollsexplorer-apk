@@ -12,13 +12,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/tools"
         android:label="@string/app_name"
         android:largeHeap="true" >
         <activity
             android:name="com.ingenieur.andyelderscrolls.ElderScrollsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name" >
+            android:label="ES Tools" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,8 @@
         <activity
             android:name="com.ingenieur.andyelderscrolls.MorrowindActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name" >
+            android:icon="@drawable/ic_launcher"
+            android:label="Call of Morrowind" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

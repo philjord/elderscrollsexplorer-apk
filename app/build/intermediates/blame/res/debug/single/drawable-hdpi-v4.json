@@ -2,5 +2,9 @@
     {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\tools.png",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\drawable-hdpi\\tools.png"
     }
 ]

@@ -23,6 +23,7 @@ import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 import esmj3d.j3d.BethRenderSettings;
+import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
@@ -103,7 +104,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		this.parentActivity = parentActivity2;
 
 		Camera.FRONT_CLIP = 0.2f;
-		Camera.BACK_CLIP = 1000f;
+		Camera.BACK_CLIP = 300f;
 		Camera.MIN_FRAME_CYCLE_TIME = 15;
 
 		ESMManager.USE_FILE_MAPS = false;
@@ -137,21 +138,25 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethWorldVisualBranch.FOG_START = 75;
 		BethWorldVisualBranch.FOG_END = 150;
 
-
-		//fallout dies from memory
-		if (rootDir.getName().equals("Fallout3"))
+		if (rootDir.getName().equals("Morrowind"))
 		{
+			J3dLAND.setTes3();
+			BethRenderSettings.setTes3(true);
+		}
+		else if (rootDir.getName().equals("Fallout3"))
+		{//fallout dies from memory
 			BethRenderSettings.setFarLoadGridCount(0);
 			BethRenderSettings.setNearLoadGridCount(1);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
 		}
+		else
+		{//for big games go low spec
 
-		//for big games go low spec
-		if (!rootDir.getName().equals("Morrowind"))
-		{
 			BethRenderSettings.setFarLoadGridCount(0);
 			BethRenderSettings.setNearLoadGridCount(2);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
+
+
 		}
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 		try
