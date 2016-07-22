@@ -39,8 +39,9 @@ import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
+import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiAVObject;
-import nif.j3d.particles.tes3.J3dNiParticles;
+import nif.j3d.J3dNiSkinInstance;
 import nif.shaders.NiGeometryAppearanceShader;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
@@ -49,6 +50,7 @@ import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.Utils3D;
 import tools3d.utils.leafnode.Cube;
 import tools3d.utils.scenegraph.SpinTransform;
+import utils.PerFrameUpdateBehavior;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 import utils.source.file.FileMediaRoots;
@@ -374,6 +376,9 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		}
 	}
 
+	private ArrayList<J3dNiSkinInstance> allSkins;
+	private NifJ3dSkeletonRoot inputSkeleton;
+
 	private void display(NifJ3dVisPhysRoot nif)
 	{
 		if (nif != null)
@@ -401,48 +406,65 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 
 			vbg = new BranchGroup();
 			vbg.setCapability(BranchGroup.ALLOW_DETACH);
+			vbg.setCapability(Node.ALLOW_BOUNDS_READ);
 
 			if (showVisual)
 			{
-				nif.getVisualRoot().setCapability(Node.ALLOW_BOUNDS_READ);
-				vbg.addChild(nif.getVisualRoot());
-				modelGroup.addChild(vbg);
+				// check for skins!
+				if (NifJ3dSkeletonRoot.isSkeleton(nif.getNiToJ3dData()))
+				{
+					inputSkeleton = new NifJ3dSkeletonRoot(nif.getVisualRoot(), nif.getNiToJ3dData());
+					// create skins from the skeleton and skin nif
+					allSkins = J3dNiSkinInstance.createSkins(nif.getNiToJ3dData(), inputSkeleton);
+
+					if (allSkins.size() > 0)
+					{
+						// add the skins to the scene
+						for (J3dNiSkinInstance j3dNiSkinInstance : allSkins)
+						{
+							vbg.addChild(j3dNiSkinInstance);
+						}
+
+						PerFrameUpdateBehavior pub = new PerFrameUpdateBehavior(new PerFrameUpdateBehavior.CallBack() {
+							@Override
+							public void update()
+							{
+								// must be called to update the accum transform
+								inputSkeleton.updateBones();
+								for (J3dNiSkinInstance j3dNiSkinInstance : allSkins)
+								{
+									j3dNiSkinInstance.processSkinInstance();
+								}
+							}
+
+						});
+						vbg.addChild(inputSkeleton);
+						vbg.addChild(pub);
+						modelGroup.addChild(vbg);
+					}
+				}
+				else
+				{
+					vbg.addChild(nif.getVisualRoot());
+
+					//vbg.outputTraversal();
+					vbg.compile();// oddly this does NOT get called automatically
+					modelGroup.addChild(vbg);
+				}
 			}
 
-			simpleCameraHandler.viewBounds(nif.getVisualRoot().getBounds());
-			System.out.println("attempt to set bounds to " + nif.getVisualRoot().getBounds());
+			System.out.println("vbg.getBounds() " + vbg.getBounds());
+			simpleCameraHandler.viewBounds(vbg.getBounds());
 
 			//TODO: the bounds was 0.21 (seems good) and eye was set to 0.8 but this this seems too close?
-			if (nif.getVisualRoot().getBounds() instanceof BoundingSphere)
+			if (vbg.getBounds() instanceof BoundingSphere)
 			{
-				if (((BoundingSphere) nif.getVisualRoot().getBounds()).getRadius() < 1f)
+				if (((BoundingSphere) vbg.getBounds()).getRadius() < 1f)
 					simpleCameraHandler.setView(new Point3d(0, 0, 2), new Point3d());
 			}
 
 			spinTransform.setEnable(spin);
 
-
-			// should be auto firing now
-
-			// if a j3dparticlesystem exists fire it off
-	/*		ArrayList<J3dNiParticles> j3dNiParticless = new ArrayList<J3dNiParticles>();
-			for (J3dNiAVObject j3dNiAVObject : nif.getNiToJ3dData().j3dNiAVObjectValues())
-			{
-				if (j3dNiAVObject instanceof J3dNiParticles)
-				{
-					j3dNiParticless.add((J3dNiParticles) j3dNiAVObject);
-
-				}
-			}
-
-			if (j3dNiParticless.size() > 0)
-			{
-				System.out.println("Adding controller thread");
-				//note self cleaning uping
-				ControllerInvokerThread controllerInvokerThread = new ControllerInvokerThread(nif.getVisualRoot().getName(),
-						j3dNiParticless);
-				controllerInvokerThread.start();
-			}*/
 		}
 		else
 		{

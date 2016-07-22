@@ -138,25 +138,17 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethWorldVisualBranch.FOG_START = 75;
 		BethWorldVisualBranch.FOG_END = 150;
 
+
 		if (rootDir.getName().equals("Morrowind"))
 		{
 			J3dLAND.setTes3();
 			BethRenderSettings.setTes3(true);
 		}
-		else if (rootDir.getName().equals("Fallout3"))
-		{//fallout dies from memory
-			BethRenderSettings.setFarLoadGridCount(0);
-			BethRenderSettings.setNearLoadGridCount(1);
-			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
-		}
 		else
-		{//for big games go low spec
-
+		{
 			BethRenderSettings.setFarLoadGridCount(0);
 			BethRenderSettings.setNearLoadGridCount(2);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
-
-
 		}
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 		try
@@ -176,12 +168,33 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 			String gameToLoad = rootToGameName.get(rootDir.getName());
 
+			//Android TESIV: Oblivion = 143176?, (425,43,-912)
+			GameConfig.allGameConfigs.get(1).startCellId = 180488;
+			GameConfig.allGameConfigs.get(1).startLocation = new Vector3f(425, 43, -912);
+
+			//Android FO3: Fallout 3 = 2676, (-37, 165, 281)
+			GameConfig.allGameConfigs.get(2).startCellId = 2676;
+			GameConfig.allGameConfigs.get(2).startLocation = new Vector3f(-37, 165, 281);
+
+			//Android FONV: Fallout New Vegas = 1064441, (23, 94, -24)
+			GameConfig.allGameConfigs.get(3).startCellId = 1064441;
+			GameConfig.allGameConfigs.get(3).startLocation = new Vector3f(23, 94, -24);
+
+			//Android TESV: Skyrim = 107119, (251, -44, 94)
+			GameConfig.allGameConfigs.get(4).startCellId = 107119;
+			GameConfig.allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
+
+			//Android FO4: Fallout 4 = 7768, (19, 1, 5)
+			GameConfig.allGameConfigs.get(5).startCellId = 7768;
+			GameConfig.allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+
 			for (GameConfig gameConfig : GameConfig.allGameConfigs)
 			{
 				System.out.println("checking against " + gameConfig.gameName);
 				if (gameConfig.gameName.equals(gameToLoad))
 				{
 					System.out.println("Found game to load! " + gameConfig.gameName);
+
 					gameConfig.scrollsFolder = rootDir.getAbsolutePath();
 					if (hasESMAndBSAFiles(gameConfig))
 					{
@@ -274,14 +287,18 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 					{
 						YawPitch yp = YawPitch
 								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
-						Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
-								selectedGameConfig.startLocation.toString()));
+						//Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+						//		selectedGameConfig.startLocation.toString()));
+						Vector3f trans = selectedGameConfig.startLocation;
+
 						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
-						if (prevCellformid == -1)
+						//FIXME: in order to allow me to jump wherever I want, I ignore the properties gear
+						//if (prevCellformid == -1)
 						{
 							prevCellformid = selectedGameConfig.startCellId;
+
 						}
 
 						new EsmSoundKeyToName(esmManager);

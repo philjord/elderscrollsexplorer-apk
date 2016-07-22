@@ -47,6 +47,7 @@
 
 #jbullet (lwjgl)
 -dontwarn cz.advel.stack.instrument.**
+-dontwarn cz.advel.stack.**
 -dontwarn net.java.games.**
 -dontwarn org.lwjgl.**
 
