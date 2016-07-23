@@ -24,6 +24,7 @@ import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3dtes3.j3d.cell.J3dCELL;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
@@ -143,6 +144,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		{
 			J3dLAND.setTes3();
 			BethRenderSettings.setTes3(true);
+
+			// for syda neen performance
+			J3dCELL.DO_DUMP = true;
+			BethRenderSettings.setFarLoadGridCount(0);
 		}
 		else
 		{

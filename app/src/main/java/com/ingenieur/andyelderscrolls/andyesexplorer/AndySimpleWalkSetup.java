@@ -1,5 +1,6 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
+import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
@@ -21,6 +22,7 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import esmj3d.j3d.BethRenderSettings;
@@ -38,6 +40,7 @@ import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
+import tools3d.camera.TrailerCamDolly;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
 import tools3d.mixed3d2d.curvehud.elements.HUDText;
@@ -64,7 +67,7 @@ import utils.source.MeshSource;
  */
 public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 {
-
+	public static boolean TRAILER_CAM = true;
 	private boolean enabled = false;
 
 	public VisualPhysicalUniverse universe;
@@ -385,8 +388,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 					cameraPanel = new CameraPanel(universe, gl_window);
 
 				// and the dolly it rides on
-				HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
-				cameraPanel.setDolly(headCamDolly);
+				if (TRAILER_CAM)
+				{
+					TrailerCamDolly trailerCamDolly = new TrailerCamDolly(avatarCollisionInfo, new WalkTrailorCamCollider());
+					cameraPanel.setDolly(trailerCamDolly);
+				}
+				else
+				{
+					HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
+					cameraPanel.setDolly(headCamDolly);
+				}
 			}
 
 
@@ -642,6 +653,32 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 		}
 	}
+	private class WalkTrailorCamCollider implements TrailerCamDolly.TrailorCamCollider
+	{
+		private Vector3f rayFrom = new Vector3f();
 
+		private Vector3f rayTo = new Vector3f();
+
+		@Override
+		public float getCollisionFraction(Point3d lookAt, Vector3d cameraVector)
+		{
+			rayFrom.set(lookAt);
+			//CAREFUL!!! 3d and 3f conversion requires non-trivial container usage!!!only the set method takes a 3d,
+			//the add doesn't, so rayFrom is being used as a temp holder
+			rayTo.set(cameraVector);
+			rayTo.add(rayFrom, rayTo);
+
+			if (physicsSystem != null)
+			{
+				CollisionWorld.ClosestRayResultCallback crrc = physicsSystem.findRayIntersect(rayFrom, rayTo, -1);
+				if (crrc != null)
+				{
+					return crrc.closestHitFraction;
+				}
+			}
+
+			return 1f;
+		}
+	}
 }
 
