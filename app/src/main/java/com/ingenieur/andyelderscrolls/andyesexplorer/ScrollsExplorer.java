@@ -1,8 +1,9 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
+import android.net.Uri;
 
-import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
@@ -12,6 +13,7 @@ import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.vecmath.Quat4f;
@@ -30,7 +32,6 @@ import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
-import nif.j3d.J3dNiGeometry;
 import nif.j3d.J3dNiTriBasedGeom;
 import nif.j3d.particles.tes3.J3dNiParticles;
 import scrollsexplorer.DashboardNewt;
@@ -75,8 +76,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 	public BSArchiveSet bsaFileSet;
 
-	private AndyFPSCounter fpsCounter;
-
 	private GameConfig selectedGameConfig = null;
 
 	private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
@@ -88,6 +87,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	private Tes3Extensions tes3Extensions;
 
 	private static HashMap<String, String> rootToGameName = new HashMap<String, String>();
+
+
+	private MediaPlayer musicMediaPlayer;
 
 	static
 	{
@@ -123,6 +125,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethRenderSettings.setItemFade(60);
 		BethRenderSettings.setActorFade(35);
 		BethRenderSettings.setOutlineFocused(false);
+		BethRenderSettings.setEnablePlacedLights(false);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 		DynamicsEngine.MAX_SUB_STEPS = 3;
 		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
@@ -130,7 +133,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		CompressedTextureLoader.setAnisotropicFilterDegree(4);
 		ShaderSourceIO.ES_SHADERS = true;
 		J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
-		// this definately doesn't help on desktop, but lots of methods calls so maybe?
 		NifCharacter.BULK_BUFFER_UPDATES = true;
 
 		MouseOverHandler.MIN_TIME_BETWEEN_STEPS_MS = 500;
@@ -325,7 +327,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						meshSource = new BsaMeshSource(bsaFileSet);
 						textureSource = new BsaTextureSource(bsaFileSet);
-						soundSource = new BsaSoundSource(bsaFileSet, new EsmSoundKeyToName(esmManager));
+						soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
 
 						//Just for the crazy new fallout 4 system
 						BgsmSource.setBgsmSource(meshSource);
@@ -360,6 +362,15 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						}
 
 						display(prevCellformid);
+
+
+						// this is how you play a mp3  file. the setDataSource
+						// version doesn't seem to work, possibly the activity is the key
+						musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Explore/mx_explore_1.mp3")));
+						musicMediaPlayer.setVolume(0.20f,0.20f);
+						musicMediaPlayer.start();
+
+
 
 					}
 					else

@@ -67,7 +67,7 @@ import utils.source.MeshSource;
  */
 public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 {
-	public static boolean TRAILER_CAM = true;
+	public static boolean TRAILER_CAM = false;
 	private boolean enabled = false;
 
 	public VisualPhysicalUniverse universe;

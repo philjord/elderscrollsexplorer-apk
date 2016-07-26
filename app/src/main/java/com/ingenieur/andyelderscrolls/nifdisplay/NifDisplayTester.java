@@ -10,6 +10,8 @@ import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
@@ -42,6 +44,7 @@ import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiAVObject;
 import nif.j3d.J3dNiSkinInstance;
+import nif.j3d.particles.tes3.J3dNiParticles;
 import nif.shaders.NiGeometryAppearanceShader;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
@@ -121,6 +124,15 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);
+
+		canvas3D2D.getGLWindow().addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowResized(final WindowEvent e)
+			{
+				J3dNiParticles.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
+			}
+		});
+		J3dNiParticles.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
 
 		simpleUniverse = new SimpleUniverse(canvas3D2D);
 		DDSTextureLoader.setAnisotropicFilterDegree(8);
@@ -425,7 +437,8 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 							vbg.addChild(j3dNiSkinInstance);
 						}
 
-						PerFrameUpdateBehavior pub = new PerFrameUpdateBehavior(new PerFrameUpdateBehavior.CallBack() {
+						PerFrameUpdateBehavior pub = new PerFrameUpdateBehavior(new PerFrameUpdateBehavior.CallBack()
+						{
 							@Override
 							public void update()
 							{
@@ -462,6 +475,9 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 				if (((BoundingSphere) vbg.getBounds()).getRadius() < 1f)
 					simpleCameraHandler.setView(new Point3d(0, 0, 2), new Point3d());
 			}
+
+			//FOR forcing a center distance
+			simpleCameraHandler.setView(new Point3d(0, 1, 4), new Point3d(0, 1, 0));
 
 			spinTransform.setEnable(spin);
 
