@@ -149,7 +149,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 			// for syda neen performance
 			J3dCELL.DO_DUMP = true;
-			BethRenderSettings.setFarLoadGridCount(0);
+			BethRenderSettings.setFarLoadGridCount(1);
 		}
 		else
 		{
@@ -363,13 +363,14 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						display(prevCellformid);
 
-
-						// this is how you play a mp3  file. the setDataSource
-						// version doesn't seem to work, possibly the activity is the key
-						musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Explore/mx_explore_1.mp3")));
-						musicMediaPlayer.setVolume(0.20f,0.20f);
-						musicMediaPlayer.start();
-
+						if (rootDir.getName().equals("Morrowind"))
+						{
+							// this is how you play a mp3  file. the setDataSource
+							// version doesn't seem to work, possibly the activity is the key
+							musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Explore/mx_explore_1.mp3")));
+							musicMediaPlayer.setVolume(0.20f, 0.20f);
+							musicMediaPlayer.start();
+						}
 
 
 					}

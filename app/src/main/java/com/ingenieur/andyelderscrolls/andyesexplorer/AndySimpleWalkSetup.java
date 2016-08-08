@@ -446,16 +446,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			navigationProcessor.setActive(enable);
 			if (enable)
 			{
-				cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
-				//slow? cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
+				//cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
+				cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 				physicsSystem.unpause();
 				loadInfo.removeFromCanvas();
 				loadingInfoBehavior.setEnable(false);
 			}
 			else
 			{
-				cameraMouseOver.setConfig(null);
-				//cameraAdminMouseOverHandler.setConfig(null);
+				//cameraMouseOver.setConfig(null);
+				cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
 				loadInfo.addToCanvas(cameraPanel.getCanvas3D2D());
 				loadingInfoBehavior.setEnable(true);
@@ -622,6 +622,12 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
 			keyNavigationInputNewt.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
 		}
+	}
+
+	@Override
+	public boolean isTrailorCam()
+	{
+		return TRAILER_CAM;
 	}
 
 	private class NewtMiscKeyHandler implements KeyListener
