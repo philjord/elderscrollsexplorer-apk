@@ -26,6 +26,7 @@ import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3dtes3.ai.Tes3AICREA;
 import esmj3dtes3.j3d.cell.J3dCELL;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
@@ -45,6 +46,7 @@ import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
 import tools.compressedtexture.CompressedTextureLoader;
+import tools3d.audio.SimpleSounds;
 import tools3d.camera.Camera;
 import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.YawPitch;
@@ -149,7 +151,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 			// for syda neen performance
 			J3dCELL.DO_DUMP = true;
-			BethRenderSettings.setFarLoadGridCount(1);
+			BethRenderSettings.setFarLoadGridCount(4);
+
+			//long distance view
+			//BethRenderSettings.setFarLoadGridCount(16);
+			//BethRenderSettings.setFogEnabled(false);
 		}
 		else
 		{
@@ -162,18 +168,120 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		{
 			PropertyLoader.load(parentActivity.getFilesDir().getAbsolutePath());
 
-			simpleWalkSetup = new AndySimpleWalkSetup("SimpleBethCellManager", gl_window);
-			simpleWalkSetup.setAzerty(false);
-
-			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
-
-			BethRenderSettings.addUpdateListener(this);
-
-
-			simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
-
 
 			String gameToLoad = rootToGameName.get(rootDir.getName());
+
+
+			int startConfig = 1;
+			// 0 inside boat
+			// 1 outside boat
+			// 2 combat
+			// 3 vivec, third
+			// 4 ald rhun,
+			// 5 tel mora, cast spell in third
+			// 6 inside cavern with azura, lots of people
+			// 7 ghost gate, look at gate, turn walk along gully, transition to next
+			// 8 nice green land walk along a road, transition to next
+			// 9 dwarf ruins outside  along a bridge walk up behind crea
+
+
+
+			if (startConfig == 0)
+			{
+				//scene  Imperial prison ship id 22668
+				GameConfig.allGameConfigs.get(0).startCellId = 22668;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(1, -0.3f, 2);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI / 4, 0);
+				musicToPlay = 1;//explore
+				Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+			}
+			else if (startConfig == 1)
+			{
+				// deck of start ship
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-108, 3, 936);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				musicToPlay = 1;//explore
+				Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+
+			}
+			else if (startConfig == 2)
+			{
+				//dwarwen ruin for combat but odd sound issue
+				// need to have axe and spell casting hands out and ready
+				GameConfig.allGameConfigs.get(0).startCellId = 23903;//23042;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(2, -1, 18);//(57, 0, -17);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI/8, 0);//TODO:
+				musicToPlay = 2;//battle
+				Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
+				Tes3AICREA.combatDemo = true;
+			}
+			else if (startConfig == 3)
+			{
+				//vivec for third person view
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(423, 8, 1079);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				musicToPlay = 1;//explore
+				Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+				AndySimpleWalkSetup.TRAILER_CAM = true;
+			}
+			else if (startConfig == 4)
+			{
+				// ald rhun
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-152, 31, -682);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				musicToPlay = 1;//explore
+				Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
+			}
+			else if (startConfig == 5)
+			{
+				//tel mora  , cast spell in third
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(1387, 18, -1438);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI / 8, 0);//TODO:
+				musicToPlay = 1;//explore
+				Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
+				AndySimpleWalkSetup.TRAILER_CAM = true;
+			}
+			else if (startConfig == 6)
+			{
+				//inside cavern with azura
+				GameConfig.allGameConfigs.get(0).startCellId = 22087;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(0, 0, 16);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+				musicToPlay = 1;//explore
+			}
+			else if (startConfig == 7)
+			{
+				//  ghost gate, look the walk down gully
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(256, 11, -460);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
+				musicToPlay = 1;//explore
+			}
+			else if (startConfig == 8)
+			{
+				//nice green land walk along a road, transition to next
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(896, 12, -1472);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+				musicToPlay = 1;//explore
+			}
+			else if (startConfig == 9)
+			{
+				//   dwarf ruins outside along a bridge walk up behind crea
+				GameConfig.allGameConfigs.get(0).startCellId = 0;
+				GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-183, 49, -1059);
+				GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+				Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
+				musicToPlay = 2;//battle
+			}
+
 
 			//Android TESIV: Oblivion = 143176?, (425,43,-912)
 			GameConfig.allGameConfigs.get(1).startCellId = 180488;
@@ -194,6 +302,18 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 			//Android FO4: Fallout 4 = 7768, (19, 1, 5)
 			GameConfig.allGameConfigs.get(5).startCellId = 7768;
 			GameConfig.allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+
+
+			simpleWalkSetup = new AndySimpleWalkSetup("SimpleBethCellManager", gl_window);
+			simpleWalkSetup.setAzerty(false);
+
+			simpleBethCellManager = new SimpleBethCellManager(simpleWalkSetup);
+
+			BethRenderSettings.addUpdateListener(this);
+
+
+			simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(this);
+
 
 			for (GameConfig gameConfig : GameConfig.allGameConfigs)
 			{
@@ -292,10 +412,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
-						YawPitch yp = YawPitch
-								.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), new YawPitch().toString()));
+						//YawPitch yp = YawPitch
+						//		.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
 						//Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
 						//		selectedGameConfig.startLocation.toString()));
+						YawPitch yp = selectedGameConfig.startYP;
 						Vector3f trans = selectedGameConfig.startLocation;
 
 						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
@@ -367,9 +488,48 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						{
 							// this is how you play a mp3  file. the setDataSource
 							// version doesn't seem to work, possibly the activity is the key
-							musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Explore/mx_explore_1.mp3")));
-							musicMediaPlayer.setVolume(0.20f, 0.20f);
-							musicMediaPlayer.start();
+							if (musicToPlay > 0)
+							{
+								if (musicToPlay == 1)
+								{
+									//1-7
+									int piece = (int) (Math.random() * 7) + 1;
+									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Explore/mx_explore_" + piece + ".mp3")));
+								}
+								else if (musicToPlay == 2)
+								{
+									// notice extra spaces in some battle mp3 names
+									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + "/Music/Battle/MW battle1.mp3")));
+								}
+								musicMediaPlayer.setVolume(0.15f, 0.15f);
+								musicMediaPlayer.start();
+							}
+
+							SimpleSounds.mp3SystemMediaPlayer = new
+									SimpleSounds.Mp3SystemMediaPlayer()
+									{
+										MediaPlayer musicMediaPlayer2;
+
+										@Override
+										public void playAnMp3(String s, float v)
+										{
+
+											s = s.replace("\\", "/");
+											if (!s.startsWith("/"))
+												s = "/" + s;
+
+											File f = new File(rootDir.getPath() + s);
+											System.out.println("does mp3 exist? " + f.exists() + " " + f);
+
+
+											musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(new File(rootDir.getPath() + s)));
+
+											musicMediaPlayer2.setVolume(v, v);
+											musicMediaPlayer2.setLooping(false);
+											musicMediaPlayer2.start();
+										}
+									};
+
 						}
 
 
@@ -386,6 +546,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		};
 		t.start();
 	}
+
+
+	private int musicToPlay = 0;//0=none,1=explore,2=battle
 
 	@Override
 	public void locationUpdated(Quat4f rot, Vector3f trans)

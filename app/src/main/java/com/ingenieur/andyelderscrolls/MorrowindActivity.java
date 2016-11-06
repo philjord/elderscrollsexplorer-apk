@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,19 +47,24 @@ public class MorrowindActivity extends Activity
 		System.setOut(interceptor);
 		PrintStream interceptor2 = new SopInterceptor(System.err, "syserr");
 		System.setErr(interceptor2);
-
-		int hasWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-		if (hasWriteExternalStorage != PackageManager.PERMISSION_GRANTED)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
-			requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-					REQUEST_CODE_ASK_PERMISSIONS);
+			int hasWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+			if (hasWriteExternalStorage != PackageManager.PERMISSION_GRANTED)
+			{
+				requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+						REQUEST_CODE_ASK_PERMISSIONS);
+			}
+			else
+			{
+				permissionGranted();
+			}
 		}
 		else
 		{
 			permissionGranted();
 		}
 	}
-
 
 	private void permissionGranted()
 	{

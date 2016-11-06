@@ -221,14 +221,14 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		hudcompass = new AndyHUDCompass();
 		hudCrossHair = new HUDCrossHair();
 
-		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
+	//	behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
 		loadInfo = new HUDText(new Point2f(-0.95f, 0f), 18, "Loading...");
 		loadingInfoBehavior = new LoadingInfoBehavior(loadInfo);
 		behaviourBranch.addChild(loadingInfoBehavior);
 
-		avatarLocation.addAvatarLocationListener(hudPos);
-		avatarLocation.addAvatarLocationListener(hudcompass);
+	//	avatarLocation.addAvatarLocationListener(hudPos);
+	//	avatarLocation.addAvatarLocationListener(hudcompass);
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
@@ -409,9 +409,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			canvas3D2D.getGLWindow().addKeyListener(jumpKeyListener);
 			canvas3D2D.getGLWindow().addKeyListener(newtMiscKeyHandler);
 
-			fpsCounter.addToCanvas(canvas3D2D);
-			hudPos.addToCanvas(canvas3D2D);
-			hudcompass.addToCanvas(canvas3D2D);
+			//fpsCounter.addToCanvas(canvas3D2D);
+			//hudPos.addToCanvas(canvas3D2D);
+			//hudcompass.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
 
@@ -446,16 +446,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			navigationProcessor.setActive(enable);
 			if (enable)
 			{
-				//cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
-				cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
+				cameraMouseOver.setConfig(cameraPanel.getCanvas3D2D());
+				//cameraAdminMouseOverHandler.setConfig(cameraPanel.getCanvas3D2D());
 				physicsSystem.unpause();
 				loadInfo.removeFromCanvas();
 				loadingInfoBehavior.setEnable(false);
 			}
 			else
 			{
-				//cameraMouseOver.setConfig(null);
-				cameraAdminMouseOverHandler.setConfig(null);
+				cameraMouseOver.setConfig(null);
+				//cameraAdminMouseOverHandler.setConfig(null);
 				physicsSystem.pause();
 				loadInfo.addToCanvas(cameraPanel.getCanvas3D2D());
 				loadingInfoBehavior.setEnable(true);

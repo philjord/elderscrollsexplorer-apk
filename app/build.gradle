@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.ingenieur.ese.eseandroid"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 23
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7

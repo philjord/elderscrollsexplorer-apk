@@ -43,6 +43,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	public void onCreate(final Bundle state)
 	{
 		System.setProperty("j3d.cacheAutoComputeBounds", "true");
+		System.setProperty("j3d.defaultReadCapability", "false");
 		super.onCreate(state);
 
 		//example of how to set properties

@@ -4,6 +4,7 @@ import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -59,12 +60,18 @@ public class ElderScrollsActivity extends Activity
 		System.setOut(interceptor);
 		PrintStream interceptor2 = new SopInterceptor(System.err, "syserr");
 		System.setErr(interceptor2);
-
-		int hasWriteExternalStorage = checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE);
-		if (hasWriteExternalStorage != PackageManager.PERMISSION_GRANTED)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
-			requestPermissions(new String[]{permission.WRITE_EXTERNAL_STORAGE},
-					REQUEST_CODE_ASK_PERMISSIONS);
+			int hasWriteExternalStorage = checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE);
+			if (hasWriteExternalStorage != PackageManager.PERMISSION_GRANTED)
+			{
+				requestPermissions(new String[]{permission.WRITE_EXTERNAL_STORAGE},
+						REQUEST_CODE_ASK_PERMISSIONS);
+			}
+			else
+			{
+				permissionGranted();
+			}
 		}
 		else
 		{
@@ -88,7 +95,30 @@ public class ElderScrollsActivity extends Activity
 			}
 		});
 
-		Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
+		String extStore = System.getenv("EXTERNAL_STORAGE");
+		File f_exts = new File(extStore);
+		String secStore = System.getenv("SECONDARY_STORAGE");
+		File f_secs = new File(secStore);
+		//extStore = "/storage/emulated/legacy"
+		//secStore = "/storage/extSdCarcd"
+		if (f_exts != null && andyRoot == null)
+		{
+			File andyRootTest = new File(f_exts, ROOT_FOLDER_NAME);
+			if (andyRootTest.exists())
+			{
+				andyRoot = andyRootTest;
+			}
+		}
+		if (f_secs != null && andyRoot == null)
+		{
+			File andyRootTest = new File(f_secs, ROOT_FOLDER_NAME);
+			if (andyRootTest.exists())
+			{
+				andyRoot = andyRootTest;
+			}
+		}
+
+		/*Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
 		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
 		File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
 
@@ -107,7 +137,7 @@ public class ElderScrollsActivity extends Activity
 			{
 				andyRoot = andyRootTest;
 			}
-		}
+		}*/
 
 
 		if (andyRoot != null)
