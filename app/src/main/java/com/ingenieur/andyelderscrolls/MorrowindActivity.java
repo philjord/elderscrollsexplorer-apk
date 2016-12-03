@@ -15,13 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.utils.ExternalStorage;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.PrintStream;
-import java.util.Map;
 
 /**
  * Created by phil on 7/15/2016.
@@ -81,7 +79,7 @@ public class MorrowindActivity extends Activity
 			}
 		});
 
-		Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
+			/*Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
 		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
 		File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
 
@@ -100,6 +98,35 @@ public class MorrowindActivity extends Activity
 			{
 				andyRoot = andyRootTest;
 			}
+		}*/
+
+
+		if (andyRoot != null)
+		{
+			File[] files = andyRoot.listFiles(new FileFilter()
+			{
+				@Override
+				public boolean accept(File file)
+				{
+					return file.isDirectory();
+				}
+			});
+			String[] fileList = new String[files.length];
+			int i = 0;
+			for (File dir : files)
+			{
+				fileList[i++] = dir.getName();
+			}
+			gameSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileList)
+			{
+				@Override
+				public View getView(int pos, View view, ViewGroup parent)
+				{
+					view = super.getView(pos, view, parent);
+					((TextView) view).setSingleLine(true);
+					return view;
+				}
+			});
 		}
 
 

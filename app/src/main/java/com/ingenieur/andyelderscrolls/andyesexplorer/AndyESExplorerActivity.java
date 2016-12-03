@@ -20,6 +20,8 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
+import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
+
 import java.io.File;
 import java.util.Set;
 
@@ -34,20 +36,18 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	private String andyRoot;
 	private String gameDir;
 
-	private TextView angleTextView;
-	private TextView powerTextView;
-	private TextView directionTextView;
-
 
 	@Override
 	public void onCreate(final Bundle state)
 	{
 		System.setProperty("j3d.cacheAutoComputeBounds", "true");
 		System.setProperty("j3d.defaultReadCapability", "false");
-		super.onCreate(state);
+		System.setProperty("j3d.defaultNodePickable", "false");
+		System.setProperty("j3d.defaultNodeCollidable", "false");
 
-		//example of how to set properties
-		//System.setProperty("newt.debug.Window.MouseEvent","true");
+		SimpleShaderAppearance.setVersionES300();
+
+		super.onCreate(state);
 
 		Intent intent = getIntent();
 		gameDir = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);

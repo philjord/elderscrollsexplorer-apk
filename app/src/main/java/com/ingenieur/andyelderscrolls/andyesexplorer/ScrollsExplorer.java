@@ -12,12 +12,11 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import org.jogamp.vecmath.Quat4f;
+import org.jogamp.vecmath.Vector3f;
 
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
+import java.io.File;
+import java.util.HashMap;
 
 import archive.ArchiveFile;
 import archive.BSArchiveSet;

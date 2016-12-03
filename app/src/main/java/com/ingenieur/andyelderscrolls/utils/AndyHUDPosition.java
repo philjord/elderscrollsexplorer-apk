@@ -3,10 +3,10 @@ package com.ingenieur.andyelderscrolls.utils;
 import com.jogamp.graph.font.FontFactory;
 import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
 
-import java.io.IOException;
+import org.jogamp.vecmath.Quat4f;
+import org.jogamp.vecmath.Vector3f;
 
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
+import java.io.IOException;
 
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.scenegraph.LocationUpdateListener;

@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\values\\values.xml",
+        "outputFile": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
         "map": [
             {
                 "to": {
@@ -45,8 +45,27 @@
                     "startLine": 4,
                     "startColumn": 4,
                     "startOffset": 164,
+                    "endColumn": 45,
+                    "endOffset": 205
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 519,
+                        "endColumn": 45,
+                        "endOffset": 560
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 210,
                     "endColumn": 58,
-                    "endOffset": 218
+                    "endOffset": 264
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
@@ -61,11 +80,30 @@
             },
             {
                 "to": {
-                    "startLine": 5,
+                    "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 223,
+                    "startOffset": 269,
+                    "endColumn": 71,
+                    "endOffset": 336
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 447,
+                        "endColumn": 71,
+                        "endOffset": 514
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 341,
                     "endColumn": 56,
-                    "endOffset": 275
+                    "endOffset": 393
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
@@ -80,11 +118,11 @@
             },
             {
                 "to": {
-                    "startLine": 6,
+                    "startLine": 8,
                     "startColumn": 4,
-                    "startOffset": 280,
+                    "startOffset": 398,
                     "endColumn": 50,
-                    "endOffset": 326
+                    "endOffset": 444
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
@@ -99,11 +137,11 @@
             },
             {
                 "to": {
-                    "startLine": 7,
+                    "startLine": 9,
                     "startColumn": 4,
-                    "startOffset": 331,
+                    "startOffset": 449,
                     "endColumn": 62,
-                    "endOffset": 389
+                    "endOffset": 507
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
@@ -118,11 +156,11 @@
             },
             {
                 "to": {
-                    "startLine": 8,
+                    "startLine": 10,
                     "startColumn": 4,
-                    "startOffset": 394,
+                    "startOffset": 512,
                     "endColumn": 52,
-                    "endOffset": 442
+                    "endOffset": 560
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
@@ -132,6 +170,25 @@
                         "startOffset": 280,
                         "endColumn": 52,
                         "endOffset": 328
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 565,
+                    "endColumn": 37,
+                    "endOffset": 598
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 565,
+                        "endColumn": 37,
+                        "endOffset": 598
                     }
                 }
             }

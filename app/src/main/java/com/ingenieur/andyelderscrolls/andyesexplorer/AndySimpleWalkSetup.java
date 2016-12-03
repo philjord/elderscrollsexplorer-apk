@@ -8,22 +8,23 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.sun.j3d.utils.universe.ViewingPlatform;
 
-import javax.media.j3d.AmbientLight;
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.DirectionalLight;
-import javax.media.j3d.Group;
-import javax.media.j3d.Light;
-import javax.media.j3d.ShaderError;
-import javax.media.j3d.ShaderErrorListener;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point2f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
+import org.jogamp.java3d.AmbientLight;
+import org.jogamp.java3d.BoundingSphere;
+import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.DirectionalLight;
+import org.jogamp.java3d.Group;
+import org.jogamp.java3d.Light;
+import org.jogamp.java3d.ShaderError;
+import org.jogamp.java3d.ShaderErrorListener;
+import org.jogamp.java3d.utils.universe.ViewingPlatform;
+import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Point2f;
+import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Quat4f;
+import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Vector3f;
+
 
 import esmj3d.j3d.BethRenderSettings;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
@@ -164,6 +165,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		visualGroup.setCapability(BranchGroup.ALLOW_DETACH);
 		visualGroup.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 		visualGroup.setCapability(Group.ALLOW_CHILDREN_WRITE);
+		visualGroup.setCapability(Group.ALLOW_PARENT_READ);
 		modelGroup.addChild(visualGroup);
 
 		universe.addToVisualBranch(modelGroup);
@@ -221,14 +223,14 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		hudcompass = new AndyHUDCompass();
 		hudCrossHair = new HUDCrossHair();
 
-	//	behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
+		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
 		loadInfo = new HUDText(new Point2f(-0.95f, 0f), 18, "Loading...");
 		loadingInfoBehavior = new LoadingInfoBehavior(loadInfo);
 		behaviourBranch.addChild(loadingInfoBehavior);
 
-	//	avatarLocation.addAvatarLocationListener(hudPos);
-	//	avatarLocation.addAvatarLocationListener(hudcompass);
+		avatarLocation.addAvatarLocationListener(hudPos);
+		avatarLocation.addAvatarLocationListener(hudcompass);
 
 		universe.addToBehaviorBranch(behaviourBranch);
 
@@ -409,9 +411,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			canvas3D2D.getGLWindow().addKeyListener(jumpKeyListener);
 			canvas3D2D.getGLWindow().addKeyListener(newtMiscKeyHandler);
 
-			//fpsCounter.addToCanvas(canvas3D2D);
-			//hudPos.addToCanvas(canvas3D2D);
-			//hudcompass.addToCanvas(canvas3D2D);
+			fpsCounter.addToCanvas(canvas3D2D);
+			hudPos.addToCanvas(canvas3D2D);
+			hudcompass.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
 

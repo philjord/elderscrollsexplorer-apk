@@ -13,26 +13,26 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.sun.j3d.utils.universe.SimpleUniverse;
+
+import org.jogamp.java3d.AmbientLight;
+import org.jogamp.java3d.Background;
+import org.jogamp.java3d.BoundingSphere;
+import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.Group;
+import org.jogamp.java3d.Light;
+import org.jogamp.java3d.Node;
+import org.jogamp.java3d.PointLight;
+import org.jogamp.java3d.Transform3D;
+import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Point3f;
+import org.jogamp.vecmath.Quat4f;
+import org.jogamp.vecmath.Vector3f;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Background;
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Group;
-import javax.media.j3d.Light;
-import javax.media.j3d.Node;
-import javax.media.j3d.PointLight;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
 
 import archive.ArchiveFile;
 import archive.BSArchiveSet;
@@ -503,6 +503,11 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 					{
 						chooserStartFolder = file;
 						setModel(file);
+					}
+					@Override
+					public void folderSelected(final File file)
+					{
+
 					}
 				}).showDialog();
 			}

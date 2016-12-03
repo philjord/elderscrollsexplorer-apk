@@ -3,13 +3,13 @@ package com.ingenieur.andyelderscrolls.utils;
 import com.jogamp.graph.font.FontFactory;
 import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
 
+import org.jogamp.java3d.Behavior;
+import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.WakeupOnElapsedFrames;
+import org.jogamp.java3d.WakeupOnElapsedTime;
+
 import java.io.IOException;
 import java.util.Enumeration;
-
-import javax.media.j3d.Behavior;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.WakeupOnElapsedFrames;
-import javax.media.j3d.WakeupOnElapsedTime;
 
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
@@ -120,7 +120,7 @@ public class AndyFPSCounter
 			count++;// each 500 milli so 10 = 5sec
 			if (count > 10)
 			{
-				System.out.println("FPS" + ((int) Math.rint(fps * 10) / 10));
+				//System.out.println("FPS" + ((int) Math.rint(fps * 10) / 10));
 				count = 0;
 			}
 

@@ -7,4 +7,7 @@
     <string name="kfdisplaytext">Kf Display</string>
     <string name="jbulletdisplaytext">JBullet Display</string>
     <string name="esexplorertext">Explore</string>
+    <string name="directory_selected_label">selected directory</string>
+    <string name="btn_choose">Choose</string>
+    <string name="none">none</string>
 </resources>

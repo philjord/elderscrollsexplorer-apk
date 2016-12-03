@@ -14,6 +14,8 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
+import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
+
 import java.io.File;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
@@ -29,6 +31,14 @@ public class NifDisplayActivity extends NewtBaseActivity
 	@Override
 	public void onCreate(final Bundle state)
 	{
+
+		System.setProperty("j3d.cacheAutoComputeBounds", "true");
+		System.setProperty("j3d.defaultReadCapability", "false");
+		System.setProperty("j3d.defaultNodePickable", "false");
+		System.setProperty("j3d.defaultNodeCollidable", "false");
+
+		SimpleShaderAppearance.setVersionES300();
+
 		super.onCreate(state);
 
 		Intent intent = getIntent();

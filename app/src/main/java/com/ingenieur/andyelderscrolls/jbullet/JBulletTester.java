@@ -12,12 +12,11 @@ import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
-
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 
-import java.io.File;
+import org.jogamp.vecmath.Vector3f;
 
-import javax.vecmath.Vector3f;
+import java.io.File;
 
 import nif.NifToJ3d;
 import nifbullet.BulletNifModelClassifier;
@@ -44,7 +43,6 @@ public class JBulletTester
 	private Activity parentActivity;
 
 	private File chooserStartFolder;
-
 
 
 	public JBulletTester(Activity parentActivity2, File rootDir)
@@ -92,6 +90,12 @@ public class JBulletTester
 						BulletNifModelClassifier.testNif(file.getAbsolutePath(), new FileMeshSource());
 						BulletNifModelClassifier.createNifBullet(file.getAbsolutePath(), new FileMeshSource(), 0).addToDynamicsWorld(
 								dynamicsWorld);
+					}
+
+					@Override
+					public void folderSelected(final File file)
+					{
+
 					}
 				}).showDialog();
 			}

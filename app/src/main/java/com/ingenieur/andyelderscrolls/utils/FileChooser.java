@@ -2,6 +2,7 @@ package com.ingenieur.andyelderscrolls.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
 
-public class FileChooser
+import static android.R.attr.path;
+
+public class FileChooser implements DialogInterface.OnDismissListener
 {
 	private static final String PARENT_DIR = "..";
 
@@ -38,6 +41,8 @@ public class FileChooser
 	public interface FileSelectedListener
 	{
 		void fileSelected(File file);
+
+		void folderSelected(File file);
 	}
 
 	public FileChooser setFileListener(FileSelectedListener fileListener)
@@ -57,6 +62,9 @@ public class FileChooser
 	{
 		this.activity = activity;
 		dialog = new Dialog(activity);
+
+		dialog.setOnDismissListener(this);
+
 		list = new ListView(activity);
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener()
 		{
@@ -68,6 +76,8 @@ public class FileChooser
 				if (chosenFile.isDirectory())
 				{
 					refresh(chosenFile);
+					fileListener.folderSelected(chosenFile);
+					//TODO: must make a button for "select" but for now just click away will do
 				}
 				else
 				{
@@ -98,7 +108,15 @@ public class FileChooser
 		dialog.show();
 	}
 
+	/**
+	 * Override to listen for dismissal
+	 * @param dialogInterface
+	 */
+	@Override
+	public void onDismiss(DialogInterface dialogInterface)
+	{
 
+	}
 	/**
 	 * Sort, filter and display the files for the given path.
 	 */

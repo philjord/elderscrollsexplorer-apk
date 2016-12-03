@@ -2,7 +2,9 @@ package com.ingenieur.andyelderscrolls;
 
 import android.Manifest.permission;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +21,7 @@ import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
 import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
-import com.ingenieur.andyelderscrolls.utils.ExternalStorage;
+import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import java.io.File;
@@ -27,7 +29,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.zip.DataFormatException;
 
 import esmmanager.common.PluginException;
@@ -39,6 +40,9 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class ElderScrollsActivity extends Activity
 {
+
+	public static final String PREFS_NAME = "ElderScrollsActivityDefault";
+
 	public final static String SELECTED_GAME = "SELECTED_GAME";
 	public final static String ANDY_ROOT = "ANDY_ROOT";
 	public final static String ROOT_FOLDER_NAME = "AndyElderScrolls";
@@ -49,6 +53,8 @@ public class ElderScrollsActivity extends Activity
 
 	ArrayList<String> listItems = new ArrayList<String>();
 	ArrayAdapter<String> adapter;
+
+
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -84,18 +90,70 @@ public class ElderScrollsActivity extends Activity
 	{
 		setContentView(R.layout.main);
 
-		final ListView gameSelectorList = (ListView) findViewById(R.id.gameSelectView);
 
-		gameSelectorList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-			{
-				gameDir = (String) gameSelectorList.getItemAtPosition(which);
-			}
-		});
+
 
 		String extStore = System.getenv("EXTERNAL_STORAGE");
+
+		// Restore preferences
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String prefRoot = settings.getString("andyRoot", extStore);
+
+		chooserStartFolder = new File(prefRoot);
+
+		showRootFolderChooser();
+	}
+
+
+	private File chooserStartFolder;
+	private File folderClicked;
+	private FileChooser rootFileChooser;
+
+	private void showRootFolderChooser()
+	{
+		// in case of dismissal without any clicks
+		folderClicked = chooserStartFolder;
+
+		rootFileChooser = new FileChooser(ElderScrollsActivity.this, chooserStartFolder)
+		{
+			@Override
+			public void onDismiss(DialogInterface dialogInterface)
+			{
+				setRootFolder(folderClicked);
+			}
+		};
+		rootFileChooser.setFileListener(
+				new FileChooser.FileSelectedListener()
+				{
+					@Override
+					public void fileSelected(final File file)
+					{//ignore
+					}
+
+					public void folderSelected(final File file)
+					{
+						System.out.println("floder= " + file);
+						folderClicked = file;
+					}
+				}
+		);
+
+		// show file chooser
+		this.runOnUiThread(new Runnable()
+						   {
+							   public void run()
+							   {
+								   rootFileChooser.showDialog();
+							   }
+						   }
+
+		);
+	}
+
+
+	private void setRootFolder(File root)
+	{
+	/*	String extStore = System.getenv("EXTERNAL_STORAGE");
 		File f_exts = new File(extStore);
 		String secStore = System.getenv("SECONDARY_STORAGE");
 		File f_secs = new File(secStore);
@@ -116,7 +174,17 @@ public class ElderScrollsActivity extends Activity
 			{
 				andyRoot = andyRootTest;
 			}
-		}
+		}*/
+
+		System.out.println("root= " + root);
+
+		andyRoot = root;
+
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("andyRoot", andyRoot.getAbsolutePath());
+		editor.commit();
+
 
 		/*Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
 		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
@@ -139,6 +207,21 @@ public class ElderScrollsActivity extends Activity
 			}
 		}*/
 
+
+		//ok so the externalsd card and the root file name should
+		// both gathered and saved by the file selector interface thing I have
+		// showing /storage/extSdCard/AndyElderScrolls as location which is perfect!
+
+		final ListView gameSelectorList = (ListView) findViewById(R.id.gameSelectView);
+
+		gameSelectorList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+			{
+				gameDir = (String) gameSelectorList.getItemAtPosition(which);
+			}
+		});
 
 		if (andyRoot != null)
 		{

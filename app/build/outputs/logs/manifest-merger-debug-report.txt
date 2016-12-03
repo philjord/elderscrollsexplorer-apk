@@ -42,7 +42,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 	android:largeHeap
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:12:80-104
 activity#com.ingenieur.andyelderscrolls.ElderScrollsActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:13:7-23:18
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:13:7-22:18
 	android:label
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:14:17-41
 	android:configChanges
@@ -50,7 +50,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:13:17-83
 intent-filter#android.intent.action.MAIN+android.intent.category.DEFAULT+android.intent.category.LAUNCHER
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:17:11-22:27
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:17:11-21:27
 action#android.intent.action.MAIN
 ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:18:15-67
 	android:name
@@ -64,17 +64,17 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:20:25-71
 activity#com.ingenieur.andyelderscrolls.MorrowindActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:24:7-33:18
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:23:7-33:18
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:25:17-50
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:24:17-50
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:27:17-67
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:26:17-67
 	android:icon
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:26:17-53
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:25:17-53
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:24:17-80
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:23:17-80
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:29:11-32:27
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:28:11-32:27
 activity#com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity
 ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:34:7-43:18
 	android:label
