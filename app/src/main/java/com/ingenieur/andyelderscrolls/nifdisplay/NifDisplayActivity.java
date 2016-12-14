@@ -2,7 +2,6 @@ package com.ingenieur.andyelderscrolls.nifdisplay;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
@@ -19,14 +18,14 @@ import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 import java.io.File;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
+import scrollsexplorer.GameConfig;
+
 
 public class NifDisplayActivity extends NewtBaseActivity
 {
 	private NifDisplayTester nifDisplay;
 	private GLWindow gl_window;
-	private String andyRoot;
-	private String gameDir;
-
+	private GameConfig gameConfigToLoad;
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -42,8 +41,8 @@ public class NifDisplayActivity extends NewtBaseActivity
 		super.onCreate(state);
 
 		Intent intent = getIntent();
-		gameDir = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
-		andyRoot = intent.getStringExtra(ElderScrollsActivity.ANDY_ROOT);
+		String gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
+		gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
 
 		final GLCapabilities caps =
 				new GLCapabilities(GLProfile.get(GLProfile.GLES2));
@@ -88,7 +87,7 @@ public class NifDisplayActivity extends NewtBaseActivity
 											 {
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
 												 //KfDisplayTester from this init function
-												 nifDisplay = new NifDisplayTester(NifDisplayActivity.this, gl_window, new File(andyRoot, gameDir));
+												 nifDisplay = new NifDisplayTester(NifDisplayActivity.this, gl_window, new File(gameConfigToLoad.scrollsFolder));
 
 												 // addNotify will start up the renderer and kick things off
 												 nifDisplay.canvas3D2D.addNotify();

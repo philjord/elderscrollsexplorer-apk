@@ -10,4 +10,5 @@
     <string name="jbulletdisplaytext">JBullet Display</string>
     <string name="kfdisplaytext">Kf Display</string>
     <string name="none">none</string>
+    <string name="setgameesmfile">Set Game Data File</string>
 </resources>

@@ -10,4 +10,5 @@
     <string name="directory_selected_label">selected directory</string>
     <string name="btn_choose">Choose</string>
     <string name="none">none</string>
+    <string name="setgameesmfile">Set Game Data File</string>
 </resources>

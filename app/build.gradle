@@ -23,7 +23,7 @@ android {
         debug {
             minifyEnabled false
             //see ${sdk.dir}/tools/proguard/proguard-android-optimize.txt
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules-debug.pro'
+            proguardFiles 'proguard-rules-debug.pro'
             zipAlignEnabled true
         }
     }
@@ -54,17 +54,9 @@ dependencies {
     compile files('libs/jogamp-armv6.jar')
     compile files('libs/jnifj3d.jar')
     compile files('libs/bsamanager.jar')
-    compile files('libs/esmj3d.jar')
     compile files('libs/jnifjbullet.jar')
-    compile files('libs/esmj3dtes3.jar')
-    compile files('libs/esmj3dfo3.jar')
-    compile files('libs/esmj3dfo4.jar')
-    compile files('libs/esmj3dtes4.jar')
-    compile files('libs/esmj3dtes5.jar')
     compile files('libs/joal-android.jar')
     compile files('libs/tritonus_share.jar')
     compile files('libs/mp3spi1.9.5.jar')
     compile files('libs/jl1.0.1.jar')
-
-
 }

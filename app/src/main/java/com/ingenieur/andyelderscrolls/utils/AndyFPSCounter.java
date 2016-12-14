@@ -5,11 +5,12 @@ import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
 
 import org.jogamp.java3d.Behavior;
 import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.WakeupCriterion;
 import org.jogamp.java3d.WakeupOnElapsedFrames;
 import org.jogamp.java3d.WakeupOnElapsedTime;
 
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.Iterator;
 
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
@@ -81,7 +82,7 @@ public class AndyFPSCounter
 			this.wakeupOn(this.wakeUp);
 		}
 
-		public void processStimulus(Enumeration critera)
+		public void processStimulus(Iterator<WakeupCriterion> critera)
 		{
 			AndyFPSCounter.this.currtime = System.currentTimeMillis();
 			AndyFPSCounter.this.deltatime = AndyFPSCounter.this.currtime - AndyFPSCounter.this.lasttime;
@@ -107,7 +108,7 @@ public class AndyFPSCounter
 			this.wakeupOn(this.wakeUp);
 		}
 
-		public void processStimulus(Enumeration critera)
+		public void processStimulus(Iterator<WakeupCriterion> critera)
 		{
 			double fps = (double) AndyFPSCounter.this.numOfFrames / ((double) AndyFPSCounter.this.timeOfFrames / 1000.0D);
 			String newText = "" + (int) Math.rint(fps * 10.0D) / 10;

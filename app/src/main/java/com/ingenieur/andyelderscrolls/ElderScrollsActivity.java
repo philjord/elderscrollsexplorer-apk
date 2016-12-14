@@ -2,13 +2,11 @@ package com.ingenieur.andyelderscrolls;
 
 import android.Manifest.permission;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,35 +23,36 @@ import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.zip.DataFormatException;
 
-import esmmanager.common.PluginException;
-import esmmanager.common.data.plugin.PluginRecord;
-import esmmanager.loader.ESMManager;
-import esmmanager.loader.IESMManager;
+import scrollsexplorer.GameConfig;
+import scrollsexplorer.PropertyLoader;
 
 import static android.widget.Toast.LENGTH_LONG;
 
 public class ElderScrollsActivity extends Activity
 {
 
+	/**
+	 * Ok no more single root folder, all games must be added by selecting there esm file
+	 * bsa files MUST be sibling files or possibly an obb file with teh game name in it
+	 * esm files will be identified by filename these are fixed
+	 * Tools will ahve an add button to add as many as you like, if a different location
+	 * is selected for a current folder it is simply overwritten
+	 * Morrowind will look for it's folder and ask for it if not found, tools is how you change this if needed
+	 * the esm names that are stored come from the gameconfig list key is folderKey esm name is mainESMFile
+	 * So note Andy root must disappear totally? yes I think that's right
+	 */
 	public static final String PREFS_NAME = "ElderScrollsActivityDefault";
 
 	public final static String SELECTED_GAME = "SELECTED_GAME";
-	public final static String ANDY_ROOT = "ANDY_ROOT";
-	public final static String ROOT_FOLDER_NAME = "AndyElderScrolls";
 
-	public static File andyRoot;
-	private String gameDir;
+	public static final String LAST_SELECTED_FILE = "LastSelectedFile";
+	public static final String GAME_FOLDER = "GAME_FOLDER";
 
-
-	ArrayList<String> listItems = new ArrayList<String>();
-	ArrayAdapter<String> adapter;
-
+	private GameConfig gameSelected;
 
 
 	@Override
@@ -89,51 +88,57 @@ public class ElderScrollsActivity extends Activity
 	private void permissionGranted()
 	{
 		setContentView(R.layout.main);
+		try
+		{
+			PropertyLoader.load(getFilesDir().getAbsolutePath());
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
 
+		// for testing this code will blank out the prefs
+		//SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		//SharedPreferences.Editor editor = settings.edit();
+		//for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		//		editor.remove(GAME_FOLDER + gameConfig.folderKey);
+		//editor.apply();
 
-
-
-		String extStore = System.getenv("EXTERNAL_STORAGE");
-
-		// Restore preferences
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		String prefRoot = settings.getString("andyRoot", extStore);
-
-		chooserStartFolder = new File(prefRoot);
-
-		showRootFolderChooser();
+		fillGameList();
 	}
 
 
-	private File chooserStartFolder;
-	private File folderClicked;
-	private FileChooser rootFileChooser;
-
-	private void showRootFolderChooser()
+	public void setGameESMFile(View view)
 	{
-		// in case of dismissal without any clicks
-		folderClicked = chooserStartFolder;
+		String extStore = System.getenv("EXTERNAL_STORAGE");
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String prefRoot = settings.getString(LAST_SELECTED_FILE, extStore);
 
-		rootFileChooser = new FileChooser(ElderScrollsActivity.this, chooserStartFolder)
-		{
-			@Override
-			public void onDismiss(DialogInterface dialogInterface)
-			{
-				setRootFolder(folderClicked);
-			}
-		};
-		rootFileChooser.setFileListener(
+		File chooserStartFolder = new File(prefRoot);
+		if (!chooserStartFolder.isDirectory())
+			chooserStartFolder = chooserStartFolder.getParentFile();
+
+		final FileChooser esmFileChooser = new FileChooser(ElderScrollsActivity.this, chooserStartFolder);
+		esmFileChooser.setExtension("esm");
+		esmFileChooser.setFileListener(
 				new FileChooser.FileSelectedListener()
 				{
 					@Override
 					public void fileSelected(final File file)
-					{//ignore
+					{
+						setGameESMFileSelect(file);
+
+						SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+						SharedPreferences.Editor editor = settings.edit();
+						editor.putString(LAST_SELECTED_FILE, file.getAbsolutePath());
+						editor.apply();
+
+						// note the dialog will be dismissed now by itself
 					}
 
 					public void folderSelected(final File file)
 					{
-						System.out.println("floder= " + file);
-						folderClicked = file;
+						//ignore
 					}
 				}
 		);
@@ -143,125 +148,113 @@ public class ElderScrollsActivity extends Activity
 						   {
 							   public void run()
 							   {
-								   rootFileChooser.showDialog();
+								   esmFileChooser.showDialog();
 							   }
 						   }
-
 		);
 	}
 
-
-	private void setRootFolder(File root)
+	private void setGameESMFileSelect(File file)
 	{
-	/*	String extStore = System.getenv("EXTERNAL_STORAGE");
-		File f_exts = new File(extStore);
-		String secStore = System.getenv("SECONDARY_STORAGE");
-		File f_secs = new File(secStore);
-		//extStore = "/storage/emulated/legacy"
-		//secStore = "/storage/extSdCarcd"
-		if (f_exts != null && andyRoot == null)
+		// let's see if this guy is one of our game configs
+		String fileName = file.getName();
+		boolean validESM = false;
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			File andyRootTest = new File(f_exts, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
+			System.out.println("checking against " + gameConfig.gameName);
+			if (gameConfig.mainESMFile.equals(fileName))
 			{
-				andyRoot = andyRootTest;
+				System.out.println("Matched esm file name! " + gameConfig.gameName);
+
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString(GAME_FOLDER + gameConfig.folderKey, file.getParentFile().getAbsolutePath());
+				editor.apply();
+
+				validESM = true;
+
+				break;
 			}
 		}
-		if (f_secs != null && andyRoot == null)
+
+		if (!validESM)
 		{
-			File andyRootTest = new File(f_secs, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
-			{
-				andyRoot = andyRootTest;
-			}
-		}*/
-
-		System.out.println("root= " + root);
-
-		andyRoot = root;
-
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("andyRoot", andyRoot.getAbsolutePath());
-		editor.commit();
-
-
-		/*Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
-		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
-		File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
-
-		if (sdCard != null && andyRoot == null)
-		{
-			File andyRootTest = new File(sdCard, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
-			{
-				andyRoot = andyRootTest;
-			}
+			Toast.makeText(ElderScrollsActivity.this, "Selected file not a valid game esm", LENGTH_LONG).show();
 		}
-		if (externalSdCard != null && andyRoot == null)
-		{
-			File andyRootTest = new File(externalSdCard, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
-			{
-				andyRoot = andyRootTest;
-			}
-		}*/
+
+		// update the game list
+		fillGameList();
+	}
 
 
-		//ok so the externalsd card and the root file name should
-		// both gathered and saved by the file selector interface thing I have
-		// showing /storage/extSdCard/AndyElderScrolls as location which is perfect!
-
+	private void fillGameList()
+	{
 		final ListView gameSelectorList = (ListView) findViewById(R.id.gameSelectView);
+
+		final ArrayList<GameConfig> gamesWithFoldersSet = new ArrayList<GameConfig>();
+		//TODO: by list of game configs see if prefs has a folder value and is it valid file location and has the esm in it
+		// if so add it to teh game list thingy
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			System.out.println("looking for game folder of " + gameConfig.folderKey);
+
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			String gameFolder = settings.getString(GAME_FOLDER + gameConfig.folderKey, "");
+			if (gameFolder.length() > 0)
+			{
+				System.out.println("has game folder " + gameFolder);
+
+				gameConfig.scrollsFolder = gameFolder;
+				gamesWithFoldersSet.add(gameConfig);
+			}
+
+		}
+
+
+		String[] gameNames = new String[gamesWithFoldersSet.size()];
+		int i = 0;
+		for (GameConfig gameConfig : gamesWithFoldersSet)
+		{
+			gameNames[i++] = gameConfig.gameName;
+		}
+		gameSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, gameNames)
+		{
+			@Override
+			public View getView(int pos, View view, ViewGroup parent)
+			{
+				view = super.getView(pos, view, parent);
+				((TextView) view).setSingleLine(true);
+				return view;
+			}
+		});
+
 
 		gameSelectorList.setOnItemClickListener(new AdapterView.OnItemClickListener()
 		{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int which, long id)
 			{
-				gameDir = (String) gameSelectorList.getItemAtPosition(which);
+				String selection = (String) gameSelectorList.getItemAtPosition(which);
+				for (GameConfig gameConfig : gamesWithFoldersSet)
+				{
+					if (selection.equals(gameConfig.gameName))
+					{
+						gameSelected = gameConfig;
+						break;
+					}
+				}
 			}
 		});
-
-		if (andyRoot != null)
-		{
-			File[] files = andyRoot.listFiles(new FileFilter()
-			{
-				@Override
-				public boolean accept(File file)
-				{
-					return file.isDirectory();
-				}
-			});
-			String[] fileList = new String[files.length];
-			int i = 0;
-			for (File dir : files)
-			{
-				fileList[i++] = dir.getName();
-			}
-			gameSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileList)
-			{
-				@Override
-				public View getView(int pos, View view, ViewGroup parent)
-				{
-					view = super.getView(pos, view, parent);
-					((TextView) view).setSingleLine(true);
-					return view;
-				}
-			});
-		}
-
 
 		// now await clicky clicky
 	}
 
 	public void showNifDisplay(View view)
 	{
-		if (gameDir != null)
+		if (gameSelected != null)
 		{
 			Intent intent = new Intent(this, NifDisplayActivity.class);
-			intent.putExtra(SELECTED_GAME, gameDir);
-			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
 		}
 		else
@@ -273,11 +266,10 @@ public class ElderScrollsActivity extends Activity
 
 	public void showKfDisplay(View view)
 	{
-		if (gameDir != null)
+		if (gameSelected != null)
 		{
 			Intent intent = new Intent(this, KfDisplayActivity.class);
-			intent.putExtra(SELECTED_GAME, gameDir);
-			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
 		}
 		else
@@ -289,11 +281,10 @@ public class ElderScrollsActivity extends Activity
 
 	public void showJBulletDisplay(View view)
 	{
-		if (gameDir != null)
+		if (gameSelected != null)
 		{
 			Intent intent = new Intent(this, JBulletActivity.class);
-			intent.putExtra(SELECTED_GAME, gameDir);
-			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
 		}
 		else
@@ -305,11 +296,10 @@ public class ElderScrollsActivity extends Activity
 
 	public void showESExplorer(View view)
 	{
-		if (gameDir != null)
+		if (gameSelected != null)
 		{
 			Intent intent = new Intent(this, AndyESExplorerActivity.class);
-			intent.putExtra(SELECTED_GAME, gameDir);
-			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
 		}
 		else
@@ -344,35 +334,21 @@ public class ElderScrollsActivity extends Activity
 		}
 	}
 
-
-	void readExternalStoragePublicDcimESE()
+	public static GameConfig getGameConfig(String gameName)
 	{
-		File path = Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_DCIM);
-		File file = new File(path, "/ese/morrowind/morrowind.esm");
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			System.out.println("checking " + gameName + " against " + gameConfig.gameName);
+			if (gameConfig.gameName.equals(gameName))
+			{
+				System.out.println("Found game to load! " + gameConfig.gameName);
 
-
-		IESMManager esmManager = ESMManager.getESMManager(file.getAbsolutePath());
-		try
-		{
-			PluginRecord pr = esmManager.getWRLD(0);
-
-			Toast.makeText(ElderScrollsActivity.this, "ESMManger loaded up", LENGTH_LONG).show();
-		}
-		catch (DataFormatException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (PluginException e)
-		{
-			e.printStackTrace();
+				return gameConfig;
+			}
 		}
 
+		System.out.println("No game found for! " + gameName);
+		return null;
 	}
-
 
 }

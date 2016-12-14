@@ -3,6 +3,7 @@ package com.ingenieur.andyelderscrolls;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,24 +16,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
+import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+
+import scrollsexplorer.GameConfig;
+import scrollsexplorer.PropertyLoader;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_FILE;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
 
 /**
  * Created by phil on 7/15/2016.
  */
 public class MorrowindActivity extends Activity
 {
-
-	public final static String SELECTED_GAME = "SELECTED_GAME";
-	public final static String ANDY_ROOT = "ANDY_ROOT";
-	public final static String ROOT_FOLDER_NAME = "AndyElderScrolls";
-
-	public static File andyRoot;
-	private String gameDir;
+	private GameConfig gameSelected;
 
 
 	@Override
@@ -68,78 +75,143 @@ public class MorrowindActivity extends Activity
 	{
 		setContentView(R.layout.main);
 
-		final ListView gameSelectorList = (ListView) findViewById(R.id.gameSelectView);
-
-		gameSelectorList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+		try
 		{
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-			{
-				gameDir = (String) gameSelectorList.getItemAtPosition(which);
-			}
-		});
-
-			/*Map<String, File> externalLocations = ExternalStorage.getAllStorageLocations();
-		File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
-		File externalSdCard = externalLocations.get(ExternalStorage.EXTERNAL_SD_CARD);
-
-		if (sdCard != null && andyRoot == null)
-		{
-			File andyRootTest = new File(sdCard, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
-			{
-				andyRoot = andyRootTest;
-			}
+			PropertyLoader.load(getFilesDir().getAbsolutePath());
 		}
-		if (externalSdCard != null && andyRoot == null)
+		catch (IOException e1)
 		{
-			File andyRootTest = new File(externalSdCard, ROOT_FOLDER_NAME);
-			if (andyRootTest.exists())
-			{
-				andyRoot = andyRootTest;
-			}
-		}*/
+			e1.printStackTrace();
+		}
+		attemptLaunchMorrowind();
+	}
+
+	private void attemptLaunchMorrowind()
+	{
 
 
-		if (andyRoot != null)
+		final ArrayList<GameConfig> gamesWithFoldersSet = new ArrayList<GameConfig>();
+		//TODO: by list of game configs see if prefs has a folder value and is it valid file location and has the esm in it
+		// if so add it to teh game list thingy
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			File[] files = andyRoot.listFiles(new FileFilter()
+			System.out.println("looking for game folder " + gameConfig.folderKey);
+
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			String gameFolder = settings.getString(GAME_FOLDER + gameConfig.folderKey, "");
+			if (gameFolder.length() > 0)
 			{
-				@Override
-				public boolean accept(File file)
-				{
-					return file.isDirectory();
-				}
-			});
-			String[] fileList = new String[files.length];
-			int i = 0;
-			for (File dir : files)
-			{
-				fileList[i++] = dir.getName();
+				gameConfig.scrollsFolder = gameFolder;
+				gamesWithFoldersSet.add(gameConfig);
 			}
-			gameSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fileList)
-			{
-				@Override
-				public View getView(int pos, View view, ViewGroup parent)
-				{
-					view = super.getView(pos, view, parent);
-					((TextView) view).setSingleLine(true);
-					return view;
-				}
-			});
+
 		}
 
 
-		if (andyRoot != null)
-		{
-			gameDir = "Morrowind";
 
+
+		for (GameConfig gameConfig : gamesWithFoldersSet)
+		{
+			if ("MorrowindFolder".equals(gameConfig.folderKey))
+			{
+				gameSelected = gameConfig;
+				break;
+			}
+		}
+
+
+
+
+		if (gameSelected != null)
+		{
 			Intent intent = new Intent(this, AndyESExplorerActivity.class);
-			intent.putExtra(SELECTED_GAME, gameDir);
-			intent.putExtra(ANDY_ROOT, andyRoot.getAbsolutePath());
+			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
-
 		}
+		else
+		{
+			Toast.makeText(this, "Please select the morrowind game esm file", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
+
+	public void setGameESMFile(View view)
+	{
+		String extStore = System.getenv("EXTERNAL_STORAGE");
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String prefRoot = settings.getString(LAST_SELECTED_FILE, extStore);
+
+		File chooserStartFolder = new File(prefRoot);
+		if (!chooserStartFolder.isDirectory())
+			chooserStartFolder = chooserStartFolder.getParentFile();
+
+		final FileChooser esmFileChooser = new FileChooser(this, chooserStartFolder);
+		esmFileChooser.setExtension("esm");
+		esmFileChooser.setFileListener(
+				new FileChooser.FileSelectedListener()
+				{
+					@Override
+					public void fileSelected(final File file)
+					{
+						setGameESMFileSelect(file);
+
+						SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+						SharedPreferences.Editor editor = settings.edit();
+						editor.putString(LAST_SELECTED_FILE, file.getAbsolutePath());
+						editor.apply();
+
+						// note the dialog will be dismissed now by itself
+					}
+
+					public void folderSelected(final File file)
+					{
+						//ignore
+					}
+				}
+		);
+
+		// show file chooser
+		this.runOnUiThread(new Runnable()
+						   {
+							   public void run()
+							   {
+								   esmFileChooser.showDialog();
+							   }
+						   }
+		);
+	}
+
+	private void setGameESMFileSelect(File file)
+	{
+		// let's see if this guy is one of our game configs
+		String fileName = file.getName();
+		boolean validESM = false;
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			System.out.println("checking against " + gameConfig.gameName);
+			if (gameConfig.mainESMFile.equals(fileName))
+			{
+				System.out.println("Matched esm file name! " + gameConfig.gameName);
+
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString(GAME_FOLDER + gameConfig.folderKey, file.getParentFile().getAbsolutePath());
+				editor.apply();
+
+				validESM = true;
+
+				break;
+			}
+		}
+
+		if (!validESM)
+		{
+			Toast.makeText(this, "Selected file not a valid game esm", LENGTH_LONG).show();
+		}
+
+
+		attemptLaunchMorrowind();
 	}
 
 	final private int REQUEST_CODE_ASK_PERMISSIONS = 123;//just has to match from request to response below

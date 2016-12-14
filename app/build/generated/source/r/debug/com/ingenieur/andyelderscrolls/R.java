@@ -23,6 +23,7 @@ public final class R {
         public static final int kfButton=0x7f050006;
         public static final int nifButton=0x7f050004;
         public static final int powerTextView=0x7f050001;
+        public static final int setgameesmfile=0x7f050008;
     }
     public static final class layout {
         public static final int esexplorer=0x7f030000;
@@ -39,5 +40,6 @@ public final class R {
         public static final int jbulletdisplaytext=0x7f040007;
         public static final int kfdisplaytext=0x7f040008;
         public static final int none=0x7f040009;
+        public static final int setgameesmfile=0x7f04000a;
     }
 }

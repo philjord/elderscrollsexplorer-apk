@@ -2,18 +2,9 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
-import com.jogamp.nativewindow.util.DimensionImmutable;
-import com.jogamp.nativewindow.util.SurfaceSize;
-import com.jogamp.newt.MonitorDevice;
-import com.jogamp.newt.MonitorMode;
-import com.jogamp.newt.Window;
-import com.jogamp.newt.event.MonitorEvent;
-import com.jogamp.newt.event.MonitorModeListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -23,18 +14,15 @@ import com.jogamp.opengl.GLProfile;
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 
 import java.io.File;
-import java.util.Set;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
-import jogamp.newt.driver.android.WindowDriver;
-import jogamp.opengl.egl.EGLSurface;
+
 
 public class AndyESExplorerActivity extends NewtBaseActivity
 {
 	private ScrollsExplorer scrollsExplorer;
 	private GLWindow gl_window;
-	private String andyRoot;
-	private String gameDir;
+	private String gameName;
 
 
 	@Override
@@ -50,8 +38,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 		super.onCreate(state);
 
 		Intent intent = getIntent();
-		gameDir = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
-		andyRoot = intent.getStringExtra(ElderScrollsActivity.ANDY_ROOT);
+		gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
 		createGLWindow();
 	}
 
@@ -103,7 +90,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 												 // this is called ona  resume as well, so only inti once
 												 if (scrollsExplorer == null)
 												 {
-													 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, new File(andyRoot, gameDir));
+													 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, gameName);
 												 }
 												 else
 												 {

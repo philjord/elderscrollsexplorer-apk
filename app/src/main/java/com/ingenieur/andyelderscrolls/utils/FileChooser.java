@@ -34,6 +34,7 @@ public class FileChooser implements DialogInterface.OnDismissListener
 	{
 		this.extension = (extension == null) ? null :
 				extension.toLowerCase();
+		refresh(currentPath);
 		return this;
 	}
 
@@ -99,17 +100,19 @@ public class FileChooser implements DialogInterface.OnDismissListener
 		{
 			startFolder = startFolder.getParentFile();
 		}
-		refresh(startFolder);
+		currentPath = startFolder;
 	}
 
 
 	public void showDialog()
 	{
+		refresh(currentPath);
 		dialog.show();
 	}
 
 	/**
 	 * Override to listen for dismissal
+	 *
 	 * @param dialogInterface
 	 */
 	@Override
@@ -117,6 +120,7 @@ public class FileChooser implements DialogInterface.OnDismissListener
 	{
 
 	}
+
 	/**
 	 * Sort, filter and display the files for the given path.
 	 */
