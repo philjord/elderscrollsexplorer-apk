@@ -17,18 +17,18 @@
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
-              <category android:name="android.intent.category.DEFAULT" />
+
           </intent-filter>
       </activity>
       <activity android:name="com.ingenieur.andyelderscrolls.MorrowindActivity"
-                android:label="Call of Morrowind"
+                android:label="Call of Red Mountain"
                 android:icon="@drawable/ic_launcher"
                 android:configChanges="keyboardHidden|orientation"
           >
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
-
+              <category android:name="android.intent.category.DEFAULT" />
           </intent-filter>
       </activity>
       <activity

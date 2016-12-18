@@ -48,6 +48,7 @@ public class ElderScrollsActivity extends Activity
 	public static final String PREFS_NAME = "ElderScrollsActivityDefault";
 
 	public final static String SELECTED_GAME = "SELECTED_GAME";
+	public static final String SELECTED_START_CONFIG = "SELECTED_START_CONFIG";
 
 	public static final String LAST_SELECTED_FILE = "LastSelectedFile";
 	public static final String GAME_FOLDER = "GAME_FOLDER";

@@ -80,7 +80,7 @@ public class KfDisplayActivity extends NewtBaseActivity
 											 {
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
 												 //KfDisplayTester from this init function
-												 kfDisplay = new KfDisplayTester(KfDisplayActivity.this, gl_window, new File(gameConfigToLoad.scrollsFolder));
+												 kfDisplay = new KfDisplayTester(KfDisplayActivity.this, gl_window, gameConfigToLoad);
 
 												 // addNotify will start up the renderer and kick things off
 												 kfDisplay.canvas3D2D.addNotify();

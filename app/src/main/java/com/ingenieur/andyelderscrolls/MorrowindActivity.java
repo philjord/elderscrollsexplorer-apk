@@ -2,6 +2,8 @@ package com.ingenieur.andyelderscrolls;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,7 +22,6 @@ import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -33,12 +34,16 @@ import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_FILE;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START_CONFIG;
+
 
 /**
  * Created by phil on 7/15/2016.
  */
 public class MorrowindActivity extends Activity
 {
+
+	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
 	private GameConfig gameSelected;
 
 
@@ -73,7 +78,7 @@ public class MorrowindActivity extends Activity
 
 	private void permissionGranted()
 	{
-		setContentView(R.layout.main);
+		setContentView(R.layout.morrowind);
 
 		try
 		{
@@ -83,16 +88,11 @@ public class MorrowindActivity extends Activity
 		{
 			e1.printStackTrace();
 		}
-		attemptLaunchMorrowind();
+		possiblyShowWelcomeScreen();
 	}
 
 	private void attemptLaunchMorrowind()
 	{
-
-
-		final ArrayList<GameConfig> gamesWithFoldersSet = new ArrayList<GameConfig>();
-		//TODO: by list of game configs see if prefs has a folder value and is it valid file location and has the esm in it
-		// if so add it to teh game list thingy
 		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
 			System.out.println("looking for game folder " + gameConfig.folderKey);
@@ -102,41 +102,133 @@ public class MorrowindActivity extends Activity
 			if (gameFolder.length() > 0)
 			{
 				gameConfig.scrollsFolder = gameFolder;
-				gamesWithFoldersSet.add(gameConfig);
+
+				// id this key the morrowind one?
+				if ("MorrowindFolder".equals(gameConfig.folderKey))
+				{
+					// does it in fact contain the esm file (perhaps the data has been deleted for example)
+					File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
+
+					if (!checkEsm.exists())
+					{
+						// if no esm clear this settings so we don't waste time with it
+						SharedPreferences.Editor editor = settings.edit();
+						editor.remove(GAME_FOLDER + gameConfig.folderKey);
+						editor.apply();
+					}
+					else
+					{
+						gameSelected = gameConfig;
+						break;
+					}
+				}
 			}
 
 		}
-
-
-
-
-		for (GameConfig gameConfig : gamesWithFoldersSet)
-		{
-			if ("MorrowindFolder".equals(gameConfig.folderKey))
-			{
-				gameSelected = gameConfig;
-				break;
-			}
-		}
-
-
 
 
 		if (gameSelected != null)
 		{
-			Intent intent = new Intent(this, AndyESExplorerActivity.class);
-			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
-			startActivity(intent);
+			showStartConfigPicker();
 		}
 		else
 		{
-			Toast.makeText(this, "Please select the morrowind game esm file", Toast.LENGTH_LONG)
+			Toast.makeText(this, "Please select the morrowind.esm file", Toast.LENGTH_LONG)
 					.show();
+			setGameESMFile();
 		}
 
 	}
 
-	public void setGameESMFile(View view)
+	private void possiblyShowWelcomeScreen()
+	{
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		boolean welcomeScreenUnwanted = settings.getBoolean(WELCOME_SCREEN_UNWANTED, false);
+
+		if (welcomeScreenUnwanted)
+		{
+			attemptLaunchMorrowind();
+		}
+		else
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			// Add the buttons
+			builder.setPositiveButton(R.string.welcometextyes, new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					// do remind again so no prefs
+					attemptLaunchMorrowind();
+				}
+			});
+			builder.setNegativeButton(R.string.welcometextno, new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					// don't remind again
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putBoolean(WELCOME_SCREEN_UNWANTED, true);
+					editor.apply();
+					attemptLaunchMorrowind();
+				}
+			});
+			builder.setMessage(R.string.welcometext);
+
+			// Create the AlertDialog
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+	}
+
+
+	private void showStartConfigPicker()
+	{
+		final ListView gameConfigSelectorList = (ListView) findViewById(R.id.gameConfigSelectView);
+
+
+		String[] configNames = new String[]
+				{
+						"inside boat",
+						"outside boat",
+						"combat",
+						"vivec",
+						"ald rhun",
+						"tel mora",
+						"inside cavern with azura",
+						"ghost gate",
+						"nice green land",
+						"dwarf ruins"
+				};
+
+		gameConfigSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, configNames)
+		{
+			@Override
+			public View getView(int pos, View view, ViewGroup parent)
+			{
+				view = super.getView(pos, view, parent);
+				((TextView) view).setSingleLine(true);
+				return view;
+			}
+		});
+
+
+		gameConfigSelectorList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+			{
+				// send the which through and hope they match up
+
+				Intent intent = new Intent(MorrowindActivity.this, AndyESExplorerActivity.class);
+				intent.putExtra(SELECTED_GAME, gameSelected.gameName);
+				intent.putExtra(SELECTED_START_CONFIG, which);
+				startActivity(intent);
+			}
+		});
+	}
+
+	public void setGameESMFile()
 	{
 		String extStore = System.getenv("EXTERNAL_STORAGE");
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -147,7 +239,7 @@ public class MorrowindActivity extends Activity
 			chooserStartFolder = chooserStartFolder.getParentFile();
 
 		final FileChooser esmFileChooser = new FileChooser(this, chooserStartFolder);
-		esmFileChooser.setExtension("esm");
+		esmFileChooser.setExtension("morrowind.esm");// note extension is whole file name
 		esmFileChooser.setFileListener(
 				new FileChooser.FileSelectedListener()
 				{

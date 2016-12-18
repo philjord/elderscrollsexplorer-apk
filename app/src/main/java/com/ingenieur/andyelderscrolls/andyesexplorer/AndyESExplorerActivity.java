@@ -23,6 +23,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	private ScrollsExplorer scrollsExplorer;
 	private GLWindow gl_window;
 	private String gameName;
+	private int gameConfigId = 1;
 
 
 	@Override
@@ -39,6 +40,8 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 		Intent intent = getIntent();
 		gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
+		gameConfigId = intent.getIntExtra(ElderScrollsActivity.SELECTED_START_CONFIG, 1);
+
 		createGLWindow();
 	}
 
@@ -90,7 +93,14 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 												 // this is called ona  resume as well, so only inti once
 												 if (scrollsExplorer == null)
 												 {
-													 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, gameName);
+													 AndyESExplorerActivity.this.runOnUiThread(new Runnable()
+													 {
+														 @Override
+														 public void run()
+														 {
+															 scrollsExplorer = new ScrollsExplorer(AndyESExplorerActivity.this, gl_window, gameName, gameConfigId);
+														 }
+													 });
 												 }
 												 else
 												 {

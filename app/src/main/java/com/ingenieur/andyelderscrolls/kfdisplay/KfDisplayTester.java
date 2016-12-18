@@ -45,6 +45,7 @@ import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
+import scrollsexplorer.GameConfig;
 import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
@@ -101,8 +102,12 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 	private MeshSource meshSource = null;
 	private TextureSource textureSource = null;
 
-	public KfDisplayTester(Activity parentActivity2, GLWindow gl_window, File rootDir)
+	private GameConfig gameConfigToLoad;
+
+	public KfDisplayTester(Activity parentActivity2, GLWindow gl_window, GameConfig gameConfigToLoad)
 	{
+		this.gameConfigToLoad = gameConfigToLoad;
+		File rootDir = new File(gameConfigToLoad.scrollsFolder);
 		chooserStartFolder = new File(rootDir, "Meshes");
 		this.parentActivity = parentActivity2;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
@@ -287,7 +292,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 
 	private void selectKfFile()
 	{
-		if (!skeletonNifModelFile.toLowerCase().contains("morrowind"))
+		if (!gameConfigToLoad.folderKey.equals("MorrowindFolder"))
 		{
 			parentActivity.runOnUiThread(new Runnable()
 			{

@@ -18,6 +18,7 @@ public final class R {
         public static final int angleTextView=0x7f050000;
         public static final int directionTextView=0x7f050002;
         public static final int esexplorerButton=0x7f050005;
+        public static final int gameConfigSelectView=0x7f050009;
         public static final int gameSelectView=0x7f050003;
         public static final int jbulletButton=0x7f050007;
         public static final int kfButton=0x7f050006;
@@ -28,6 +29,7 @@ public final class R {
     public static final class layout {
         public static final int esexplorer=0x7f030000;
         public static final int main=0x7f030001;
+        public static final int morrowind=0x7f030002;
     }
     public static final class string {
         public static final int action_settings=0x7f040000;
@@ -41,5 +43,8 @@ public final class R {
         public static final int kfdisplaytext=0x7f040008;
         public static final int none=0x7f040009;
         public static final int setgameesmfile=0x7f04000a;
+        public static final int welcometext=0x7f04000b;
+        public static final int welcometextno=0x7f04000c;
+        public static final int welcometextyes=0x7f04000d;
     }
 }

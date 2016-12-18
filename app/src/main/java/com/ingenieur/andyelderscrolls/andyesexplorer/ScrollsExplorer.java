@@ -3,6 +3,7 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
@@ -91,7 +92,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	private MediaPlayer musicMediaPlayer;
 
 
-	public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName)
+	public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId)
 	{
 
 		this.parentActivity = parentActivity2;
@@ -154,7 +155,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		}
 		FileMediaRoots.setFixedRoot(gameConfigToLoad.scrollsFolder);
 
-		int startConfig = 1;
+		int startConfig = gameConfigId;
 		// 0 inside boat
 		// 1 outside boat
 		// 2 combat
@@ -327,6 +328,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	{
 		// check to ensure the esm file and at least one bsa file are in the folder
 		File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
+
 		if (!checkEsm.exists())
 		{
 			return false;
@@ -398,7 +400,16 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						if (bsaFileSet == null)
 						{
-							bsaFileSet = new BSArchiveSet(new String[]{selectedGameConfig.scrollsFolder}, true);
+
+							//The specific location for your expansion files is:
+							//<shared-storage>/Android/obb/<package-name>/
+							//<shared-storage> is the path to the shared storage space, available from getExternalStorageDirectory().
+							//	<package-name> is your application's Java-style package name, available from getPackageName().
+							String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
+							String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
+
+
+							bsaFileSet = new BSArchiveSet(BSARoots, true);
 						}
 
 						if (bsaFileSet.size() == 0)

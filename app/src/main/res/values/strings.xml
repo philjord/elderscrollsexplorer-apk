@@ -11,4 +11,22 @@
     <string name="btn_choose">Choose</string>
     <string name="none">none</string>
     <string name="setgameesmfile">Set Game Data File</string>
+    <string name="welcometext">
+Call of Red Mountain uses the media assets from Morrowind by Bethesda Game Studios (2002).\n
+In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.\n
+Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.\n
+You can copy it to any location that is accessible from your computer\'s file explorer.\n
+When you first start up Call of Red Mountian you will be asked to select the Morrowind.esm file that is located in that game installation folder
+on your device. From there the game engine will locate the other assets files relative to that esm file. \n
+\n
+The controls of Call of Red Mountain are not refined and so may take a little getting used to.
+The screen of your device is divided into 4 squares, in half horizontally and in half vertically\n
+The lower left is the walk controls, similar to W S A D on a keyboard, so your character will walk forward when you press in the
+upper portion of the lower left square, backward when touched in the lower portion and strafe side to side when touched on either side.\n
+The lower right square acts similarly to the mouse on a computer, so dragging around in this area will make the view rotate.\n
+Either of the upper squares simply activates whatever is in front of you (and highlighted), so gates will open and travel doors will be activated.\n
+On each start up there are several pre-set start locations and configurations.
+    </string>
+    <string name="welcometextyes">Remind me later</string>
+    <string name="welcometextno">Don\'t remind me</string>
 </resources>
