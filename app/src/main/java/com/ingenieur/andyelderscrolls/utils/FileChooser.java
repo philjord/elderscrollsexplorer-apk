@@ -94,7 +94,10 @@ public class FileChooser implements DialogInterface.OnDismissListener
 		dialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		if (startFolder == null)
 		{
-			startFolder = Environment.getExternalStorageDirectory();
+			//this doesn't work no navigate from here
+			//startFolder = Environment.getExternalStorageDirectory();
+
+			File chooserStartFolder = new File( System.getenv("EXTERNAL_STORAGE"));
 		}
 		else if (startFolder.isFile())
 		{

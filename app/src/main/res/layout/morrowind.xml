@@ -6,6 +6,43 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+    <!-- DOWNLOAD PROGRESS -->
+    <RelativeLayout
+        android:id="@+id/downloadViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/downloadTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lines="2"
+            android:padding="10dp"
+            android:text="@string/wait_file_download" />
+
+        <ProgressBar
+            android:id="@+id/downloadProgressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/downloadTextView"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/downloadProgressPercentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/downloadProgressBar"
+            android:layout_centerHorizontal="true"
+            android:lines="2"
+            android:padding="10dp"
+            tools:text="10%" />
+    </RelativeLayout>
+
+
     <ListView
         android:layout_width="match_parent"
         android:layout_weight="0.62"

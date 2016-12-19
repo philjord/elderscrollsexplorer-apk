@@ -28,7 +28,6 @@ import bsa.source.BsaTextureSource;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3dtes3.ai.Tes3AICREA;
-import esmj3dtes3.j3d.cell.J3dCELL;
 import esmmanager.loader.ESMManager;
 import esmmanager.loader.IESMManager;
 import nif.BgsmSource;
@@ -400,11 +399,12 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 						if (bsaFileSet == null)
 						{
-
 							//The specific location for your expansion files is:
 							//<shared-storage>/Android/obb/<package-name>/
 							//<shared-storage> is the path to the shared storage space, available from getExternalStorageDirectory().
 							//	<package-name> is your application's Java-style package name, available from getPackageName().
+							//eg obbRoot= /storage/emulated/0/Android/obb/com.example.phil.proguardtesty
+							//http://stackoverflow.com/questions/19453824/where-to-i-place-the-obb-file-to-test-android-expansion-pack-files-obb-on-my-n
 							String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
 							String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
 

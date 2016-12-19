@@ -13,8 +13,6 @@ import com.jogamp.opengl.GLProfile;
 
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 
-import java.io.File;
-
 import jogamp.newt.driver.android.NewtBaseActivity;
 
 

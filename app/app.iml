@@ -90,6 +90,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-safeguard" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
@@ -119,5 +120,6 @@
     <orderEntry type="library" exported="" name="jbullet1.1" level="project" />
     <orderEntry type="library" exported="" name="java3d-utils-and" level="project" />
     <orderEntry type="library" exported="" name="mp3spi1.9.5" level="project" />
+    <orderEntry type="module" module-name="downloader_library" exported="" />
   </component>
 </module>

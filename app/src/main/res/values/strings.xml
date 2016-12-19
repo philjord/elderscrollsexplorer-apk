@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Andy Elder Scrolls</string>
+    <string name="app_name">Call of Red Moutain</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_nif_display">Nif Display</string>
     <string name="action_settings">Settings</string>
@@ -12,12 +12,12 @@
     <string name="none">none</string>
     <string name="setgameesmfile">Set Game Data File</string>
     <string name="welcometext">
-Call of Red Mountain uses the media assets from Morrowind by Bethesda Game Studios (2002).\n
+Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (2002).\n
 In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.\n
 Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.\n
 You can copy it to any location that is accessible from your computer\'s file explorer.\n
-When you first start up Call of Red Mountian you will be asked to select the Morrowind.esm file that is located in that game installation folder
-on your device. From there the game engine will locate the other assets files relative to that esm file. \n
+When you first start up Call of Red Mountain you will be asked to select the Morrowind.esm file that is located in that game installation folder
+on your device. From there the game engine will locate the other asset files relative to that esm file. \n
 \n
 The controls of Call of Red Mountain are not refined and so may take a little getting used to.
 The screen of your device is divided into 4 squares, in half horizontally and in half vertically\n
@@ -29,4 +29,5 @@ On each start up there are several pre-set start locations and configurations.
     </string>
     <string name="welcometextyes">Remind me later</string>
     <string name="welcometextno">Don\'t remind me</string>
+    <string name="wait_file_download">file downloading</string>
 </resources>

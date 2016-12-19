@@ -12,39 +12,84 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
-        public static final int tools=0x7f020001;
+        public static final int notify_panel_notification_icon_bg=0x7f020001;
+        public static final int tools=0x7f020002;
     }
     public static final class id {
-        public static final int angleTextView=0x7f050000;
-        public static final int directionTextView=0x7f050002;
-        public static final int esexplorerButton=0x7f050005;
-        public static final int gameConfigSelectView=0x7f050009;
-        public static final int gameSelectView=0x7f050003;
-        public static final int jbulletButton=0x7f050007;
-        public static final int kfButton=0x7f050006;
-        public static final int nifButton=0x7f050004;
-        public static final int powerTextView=0x7f050001;
-        public static final int setgameesmfile=0x7f050008;
+        public static final int angleTextView=0x7f060000;
+        public static final int appIcon=0x7f06000f;
+        public static final int description=0x7f060015;
+        public static final int directionTextView=0x7f060002;
+        public static final int downloadProgressBar=0x7f06000b;
+        public static final int downloadProgressPercentTextView=0x7f06000c;
+        public static final int downloadTextView=0x7f06000a;
+        public static final int downloadViewGroup=0x7f060009;
+        public static final int esexplorerButton=0x7f060005;
+        public static final int gameConfigSelectView=0x7f06000d;
+        public static final int gameSelectView=0x7f060003;
+        public static final int jbulletButton=0x7f060007;
+        public static final int kfButton=0x7f060006;
+        public static final int nifButton=0x7f060004;
+        public static final int notificationLayout=0x7f06000e;
+        public static final int powerTextView=0x7f060001;
+        public static final int progress_bar=0x7f060014;
+        public static final int progress_bar_frame=0x7f060013;
+        public static final int progress_text=0x7f060010;
+        public static final int setgameesmfile=0x7f060008;
+        public static final int time_remaining=0x7f060012;
+        public static final int title=0x7f060011;
     }
     public static final class layout {
         public static final int esexplorer=0x7f030000;
         public static final int main=0x7f030001;
         public static final int morrowind=0x7f030002;
+        public static final int status_bar_ongoing_event_progress_bar=0x7f030003;
     }
     public static final class string {
-        public static final int action_settings=0x7f040000;
-        public static final int app_name=0x7f040001;
-        public static final int btn_choose=0x7f040002;
-        public static final int button_nif_display=0x7f040003;
-        public static final int directory_selected_label=0x7f040004;
-        public static final int edit_message=0x7f040005;
-        public static final int esexplorertext=0x7f040006;
-        public static final int jbulletdisplaytext=0x7f040007;
-        public static final int kfdisplaytext=0x7f040008;
-        public static final int none=0x7f040009;
-        public static final int setgameesmfile=0x7f04000a;
-        public static final int welcometext=0x7f04000b;
-        public static final int welcometextno=0x7f04000c;
-        public static final int welcometextyes=0x7f04000d;
+        public static final int action_settings=0x7f050000;
+        public static final int app_name=0x7f050001;
+        public static final int btn_choose=0x7f050002;
+        public static final int button_nif_display=0x7f050003;
+        public static final int directory_selected_label=0x7f050004;
+        public static final int edit_message=0x7f050005;
+        public static final int esexplorertext=0x7f050006;
+        public static final int jbulletdisplaytext=0x7f050007;
+        public static final int kfdisplaytext=0x7f050008;
+        public static final int kilobytes_per_second=0x7f050009;
+        public static final int none=0x7f05000a;
+        public static final int notification_download_complete=0x7f05000b;
+        public static final int notification_download_failed=0x7f05000c;
+        public static final int setgameesmfile=0x7f05000d;
+        public static final int state_completed=0x7f05000e;
+        public static final int state_connecting=0x7f05000f;
+        public static final int state_downloading=0x7f050010;
+        public static final int state_failed=0x7f050011;
+        public static final int state_failed_cancelled=0x7f050012;
+        public static final int state_failed_fetching_url=0x7f050013;
+        public static final int state_failed_sdcard_full=0x7f050014;
+        public static final int state_failed_unlicensed=0x7f050015;
+        public static final int state_fetching_url=0x7f050016;
+        public static final int state_idle=0x7f050017;
+        public static final int state_paused_by_request=0x7f050018;
+        public static final int state_paused_network_setup_failure=0x7f050019;
+        public static final int state_paused_network_unavailable=0x7f05001a;
+        public static final int state_paused_roaming=0x7f05001b;
+        public static final int state_paused_sdcard_unavailable=0x7f05001c;
+        public static final int state_paused_wifi_disabled=0x7f05001d;
+        public static final int state_paused_wifi_unavailable=0x7f05001e;
+        public static final int state_unknown=0x7f05001f;
+        public static final int time_remaining=0x7f050020;
+        public static final int time_remaining_notification=0x7f050021;
+        public static final int wait_file_download=0x7f050022;
+        public static final int welcometext=0x7f050023;
+        public static final int welcometextno=0x7f050024;
+        public static final int welcometextyes=0x7f050025;
+    }
+    public static final class style {
+        public static final int ButtonBackground=0x7f040003;
+        public static final int NotificationText=0x7f040001;
+        public static final int NotificationTextSecondary=0x7f040000;
+        public static final int NotificationTextShadow=0x7f040004;
+        public static final int NotificationTitle=0x7f040002;
     }
 }

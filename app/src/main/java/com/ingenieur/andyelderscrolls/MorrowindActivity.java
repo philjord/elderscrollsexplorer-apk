@@ -3,28 +3,38 @@ package com.ingenieur.andyelderscrolls;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Messenger;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
+import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
+import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
+import com.google.android.vending.expansion.downloader.Helpers;
+import com.google.android.vending.expansion.downloader.IDownloaderClient;
+import com.google.android.vending.expansion.downloader.IDownloaderService;
+import com.google.android.vending.expansion.downloader.IStub;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
+import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
@@ -40,10 +50,11 @@ import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START
 /**
  * Created by phil on 7/15/2016.
  */
-public class MorrowindActivity extends Activity
+public class MorrowindActivity extends Activity implements IDownloaderClient
 {
 
 	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
+	private static final String OBB_FILE_NAMES = "OBB_FILE_NAMES";
 	private GameConfig gameSelected;
 
 
@@ -76,9 +87,179 @@ public class MorrowindActivity extends Activity
 		}
 	}
 
+	private ProgressBar mDownloadProgressBar;
+	private TextView mProgressPercentTextView;
+	private View mDownloadViewGroup;
+
+	private View mainLayout;
+
 	private void permissionGranted()
 	{
+
 		setContentView(R.layout.morrowind);
+		mainLayout = findViewById(R.id.gameConfigSelectView);;
+
+		mDownloadProgressBar = (ProgressBar) findViewById(R.id.downloadProgressBar);
+		mProgressPercentTextView = (TextView) findViewById(R.id.downloadTextView);
+		mDownloadViewGroup = findViewById(R.id.downloadViewGroup);
+
+
+		//see here for smaple that has a download progressbar
+		//C:\Users\phil\AppData\Local\Android\sdk\extras\google\market_apk_expansion\downloader_sample\src\com\example\expansion\downloader
+
+		// Check if expansion files are available before going any further
+		if (!expansionFilesDelivered())
+		{
+			// Build an Intent to start this activity from the Notification
+			Intent notifierIntent = new Intent(this, this.getClass());
+			notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+					Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+			PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+					notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+			// Start the download service (if required)
+
+			try
+			{
+				int startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+						pendingIntent, ObbDownloaderService.class);
+
+				// If download has started, initialize this activity to show
+				// download progress
+				if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
+				{
+					// Instantiate a member instance of IStub
+					mDownloaderClientStub = DownloaderClientMarshaller.CreateStub(this,
+							ObbDownloaderService.class);
+
+					return;
+
+				} // If the download wasn't necessary, fall through to start the app
+			}
+			catch (PackageManager.NameNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		startApp(); // Expansion files are available, start the app
+	}
+
+	private IDownloaderService mRemoteService;
+	private IStub mDownloaderClientStub;
+	private int mState;
+
+	@Override
+	public void onServiceConnected(Messenger m)
+	{
+		mRemoteService = DownloaderServiceMarshaller.CreateProxy(m);
+		mRemoteService.onClientUpdated(mDownloaderClientStub.getMessenger());
+	}
+
+
+	@Override
+	public void onDownloadStateChanged(int newState)
+	{
+		setState(newState);
+		boolean showDashboard = true;
+		boolean indeterminate;
+		switch (newState)
+		{
+			case IDownloaderClient.STATE_IDLE:
+				// STATE_IDLE means the service is listening, so it's
+				// safe to start making calls via mRemoteService.
+				indeterminate = true;
+				break;
+			case IDownloaderClient.STATE_CONNECTING:
+			case IDownloaderClient.STATE_FETCHING_URL:
+				showDashboard = true;
+				indeterminate = true;
+				break;
+			case IDownloaderClient.STATE_DOWNLOADING:
+				showDashboard = true;
+				indeterminate = false;
+				break;
+
+			case IDownloaderClient.STATE_FAILED_CANCELED:
+			case IDownloaderClient.STATE_FAILED:
+			case IDownloaderClient.STATE_FAILED_FETCHING_URL:
+			case IDownloaderClient.STATE_FAILED_UNLICENSED:
+				showDashboard = false;
+				indeterminate = false;
+				break;
+			case IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION:
+			case IDownloaderClient.STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION:
+				showDashboard = false;
+				indeterminate = false;
+				break;
+
+			case IDownloaderClient.STATE_PAUSED_BY_REQUEST:
+				indeterminate = false;
+				break;
+			case IDownloaderClient.STATE_PAUSED_ROAMING:
+			case IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE:
+				indeterminate = false;
+				break;
+			case IDownloaderClient.STATE_COMPLETED:
+				showDashboard = false;
+				indeterminate = false;
+				break;
+			default:
+				indeterminate = true;
+				showDashboard = true;
+		}
+		int newDashboardVisibility = showDashboard ? View.VISIBLE : View.GONE;
+		if (mDownloadViewGroup.getVisibility() != newDashboardVisibility)
+		{
+			mDownloadViewGroup.setVisibility(newDashboardVisibility);
+		}
+		mDownloadProgressBar.setIndeterminate(indeterminate);
+
+		if(newDashboardVisibility == View.GONE)
+		{
+			startApp();
+		}
+	}
+
+	@Override
+	public void onDownloadProgress(DownloadProgressInfo progress)
+	{
+		mDownloadProgressBar.setMax((int) (progress.mOverallTotal >> 8));
+		mDownloadProgressBar.setProgress((int) (progress.mOverallProgress >> 8));
+		mProgressPercentTextView.setText(Long.toString(progress.mOverallProgress * 100 / progress.mOverallTotal) + "%");
+	}
+
+	private void setState(int newState)
+	{
+		if (mState != newState)
+		{
+			mState = newState;
+		}
+	}
+
+
+	@Override
+	protected void onResume()
+	{
+		if (null != mDownloaderClientStub)
+		{
+			mDownloaderClientStub.connect(this);
+		}
+		super.onResume();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		if (null != mDownloaderClientStub)
+		{
+			mDownloaderClientStub.disconnect(this);
+		}
+		super.onStop();
+	}
+
+	private void startApp()
+	{
 
 		try
 		{
@@ -181,6 +362,8 @@ public class MorrowindActivity extends Activity
 		}
 	}
 
+	// just publicly static can't ever vary really
+	public static String[] obbFileNames = null;
 
 	private void showStartConfigPicker()
 	{
@@ -331,5 +514,78 @@ public class MorrowindActivity extends Activity
 		}
 	}
 
+	boolean expansionFilesDelivered()
+	{
+		for (XAPKFile xf : xAPKS)
+		{
+			String fileName = Helpers.getExpansionAPKFileName(this, xf.mIsMain,
+					xf.mFileVersion);
+			if (!Helpers.doesFileExist(this, fileName, xf.mFileSize, false))
+				return false;
+		}
+		return true;
+	}
 
+
+
+
+
+	/**
+	 * This is a little helper class that demonstrates simple testing of an
+	 * Expansion APK file delivered by Market. You may not wish to hard-code
+	 * things such as file lengths into your executable... and you may wish to
+	 * turn this code off during application development.
+	 */
+
+	private static class XAPKFile
+	{
+		public final boolean mIsMain;
+		public final int mFileVersion;
+		public final long mFileSize;
+
+		XAPKFile(boolean isMain, int fileVersion, long fileSize)
+		{
+			mIsMain = isMain;
+			mFileVersion = fileVersion;
+			mFileSize = fileSize;
+		}
+	}
+
+	/**
+	 * Here is where you place the data that the validator will use to determine
+	 * if the file was delivered correctly. This is encoded in the source code
+	 * so the application can easily determine whether the file has been
+	 * properly delivered without having to talk to the server. If the
+	 * application is using LVL for licensing, it may make sense to eliminate
+	 * these checks and to just rely on the server.
+	 * main.3.com.ingenieur.ese.eseandroid.obb (87.7 MB)
+	 * DEAR GOD! that number there HAS to match the manifest versionCode! has to! so
+	 * wait I just get unlicensed from my dev machine when versionCode goes forward one step, so perhaps it's still ok on the live system???
+	 *
+	 * If this works then I can debug and get te obb file if I keep my versionCode equals to the current on play store
+	 * and just add one when new apk is ready for upload, meaning my versionCode gets the ok from license server whilst I debug and develop
+	 * because on upload I leave teh apk expansion file alone and it points at the number below's worths
+	 *
+	 * On top of all this, I just got a download failed note because of license failure
+	 * possibly I ahve to download the current version from store, then replace with debugging version so I'm considered licnesed?
+	 *
+	 * on a new versionCode for upload I have to upload a new apk expansion file, no options no fall back system
+	 * because an uninstall removes the file but doesn't find the older file.
+	 * I presume people who installed the prior ersion will keep the file so a pure apk update wouldn't need this
+	 * but then it doesn't work for new installs
+	 * so people will always have to take a new apk expansion until I can get teh "older apkversion" to work with updated apks
+	 * when they are mismatched I don't get teh problem in the AEKExpansionPolicy code
+	 */
+	private static final XAPKFile[] xAPKS = {
+			new XAPKFile(
+					true, // true signifies a main file
+					3, // the version of the APK that the file was uploaded against
+					91969003L // the length of the file in bytes
+			),
+		/*	new XAPKFile(
+					false, // false signifies a patch file
+					2, // the version of the APK that the patch file was uploaded against
+					0L // the length of the patch file in bytes
+			)*/
+	};
 }
