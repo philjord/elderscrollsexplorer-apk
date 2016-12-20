@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <integer name="google_play_services_version">10084000</integer>
     <string name="action_settings">Settings</string>
-    <string name="app_name">Andy Elder Scrolls</string>
+    <string name="app_name">Call of Red Mountain</string>
     <string name="btn_choose">Choose</string>
     <string name="button_nif_display">Nif Display</string>
+    <string name="common_google_play_services_unknown_issue"><ns1:g id="app_name">%1$s</ns1:g> is having trouble with Google Play services. Please try again.</string>
+    <string name="default_web_client_id" translatable="false">702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com</string>
     <string name="directory_selected_label">selected directory</string>
     <string name="edit_message">Enter a message</string>
     <string name="esexplorertext">Explore</string>
+    <string name="firebase_database_url" translatable="false">https://call-of-red-mountain.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">702485706049</string>
+    <string name="google_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string>
+    <string name="google_app_id" translatable="false">1:702485706049:android:b03ecb0045344a46</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string>
+    <string name="google_storage_bucket" translatable="false">call-of-red-mountain.appspot.com</string>
     <string name="jbulletdisplaytext">JBullet Display</string>
     <string name="kfdisplaytext">Kf Display</string>
     <string name="kilobytes_per_second">%1$s KB/s</string>

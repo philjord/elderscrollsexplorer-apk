@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.ingenieur.ese.eseandroid"
-        minSdkVersion 21
+        minSdkVersion 18
         targetSdkVersion 23
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
@@ -60,6 +60,8 @@ dependencies {
     compile files('libs/mp3spi1.9.5.jar')
     compile files('libs/jl1.0.1.jar')
     compile project(path: ':downloader_library')
+    compile 'com.google.firebase:firebase-core:10.0.1'
 }
 repositories {
 }
+apply plugin: 'com.google.gms.google-services'

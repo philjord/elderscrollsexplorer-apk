@@ -90,6 +90,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 	private MediaPlayer musicMediaPlayer;
 
+	private boolean freeFormConfig = false;
 
 	public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId)
 	{
@@ -108,14 +109,16 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
+		BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+
 		BethRenderSettings.setFarLoadGridCount(4);
 		BethRenderSettings.setNearLoadGridCount(2);
 		BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
 		BethRenderSettings.setObjectFade(100);
 		BethRenderSettings.setItemFade(60);
 		BethRenderSettings.setActorFade(35);
-		BethRenderSettings.setOutlineFocused(false);
-		BethRenderSettings.setEnablePlacedLights(false);
+		BethRenderSettings.setOutlineFocused(true);
+		BethRenderSettings.setEnablePlacedLights(true);
 		BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
 		DynamicsEngine.MAX_SUB_STEPS = 3;
 		PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
@@ -132,6 +135,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		BethWorldVisualBranch.FOG_END = 150;
 
 		gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
+		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = true;
+		FileMediaRoots.setFixedRoot(gameConfigToLoad.scrollsFolder);
+
 
 		if (gameConfigToLoad.folderKey.equals("MorrowindFolder"))
 		{
@@ -152,7 +158,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 			BethRenderSettings.setNearLoadGridCount(2);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
 		}
-		FileMediaRoots.setFixedRoot(gameConfigToLoad.scrollsFolder);
+
 
 		int startConfig = gameConfigId;
 		// 0 inside boat
@@ -261,6 +267,15 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
 			Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
 			musicToPlay = 2;//battle
+		}
+		else if (startConfig == 10)//Freeform
+		{
+			freeFormConfig = true;
+			GameConfig.allGameConfigs.get(0).startCellId = 0;
+			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-108, 3, 936);
+			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+			musicToPlay = 0;//none
+			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
 		}
 
 
@@ -375,22 +390,20 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 					bsaFileSet = null;
 					if (esmManager != null)
 					{
-						//YawPitch yp = YawPitch
-						//		.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
-						//Vector3f trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
-						//		selectedGameConfig.startLocation.toString()));
+
 						YawPitch yp = selectedGameConfig.startYP;
 						Vector3f trans = selectedGameConfig.startLocation;
-
-						int prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
-						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-
-						//FIXME: in order to allow me to jump wherever I want, I ignore the properties gear
-						//if (prevCellformid == -1)
+						int prevCellformid = selectedGameConfig.startCellId;
+						if (freeFormConfig)//Freeform so load the recorded values
 						{
-							prevCellformid = selectedGameConfig.startCellId;
+							yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
+							trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+									selectedGameConfig.startLocation.toString()));
 
+							prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						}
+
+						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 
 						new EsmSoundKeyToName(esmManager);
 						MeshSource meshSource;
@@ -408,8 +421,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 							String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
 							String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
 
-
 							bsaFileSet = new BSArchiveSet(BSARoots, true);
+
+
+							// lets also set up the scrolls folder as a file bae source as well
 						}
 
 						if (bsaFileSet.size() == 0)

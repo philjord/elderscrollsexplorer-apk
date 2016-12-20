@@ -2,6 +2,7 @@ package com.ingenieur.andyelderscrolls.nifdisplay;
 
 
 import android.app.Activity;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 
 import archive.ArchiveFile;
 import archive.BSArchiveSet;
+import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
@@ -114,13 +116,15 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.ES_SHADERS = true;
 
+		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = true;
 		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
 		meshSource = new FileMeshSource();
 
-		//textureSource = new FileTextureSource();
-		BSArchiveSet bsaFileSet = new BSArchiveSet(new String[]{rootDir.getAbsolutePath()}, true);
-		//meshSource = new BsaMeshSource(bsaFileSet);
+		String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
+		String[] BSARoots = new String[]{rootDir.getAbsolutePath(), obbRoot};
+
+		BSArchiveSet bsaFileSet = new BSArchiveSet(BSARoots, true);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);
