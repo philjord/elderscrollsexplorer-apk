@@ -10,7 +10,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml
 	android:versionCode
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:5:5-29
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:5:5-30
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml
 	xmlns:android
