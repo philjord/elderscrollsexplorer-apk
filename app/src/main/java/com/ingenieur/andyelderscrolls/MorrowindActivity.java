@@ -46,6 +46,7 @@ import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START_CONFIG;
+import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.configNames;
 
 
 /**
@@ -88,33 +89,6 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		}
 	}
 
-	private void setGameESMFileSelect(File file)
-	{
-		// let's see if this guy is one of our game configs
-		String fileName = file.getName();
-		boolean validESM = false;
-		for (GameConfig gameConfig : GameConfig.allGameConfigs)
-		{
-			if (gameConfig.mainESMFile.equals(fileName))
-			{
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString(GAME_FOLDER + gameConfig.folderKey, file.getParentFile().getAbsolutePath());
-				editor.apply();
-
-				validESM = true;
-				break;
-			}
-		}
-
-		if (!validESM)
-		{
-			Toast.makeText(this, "Selected file not a valid game esm", LENGTH_LONG).show();
-		}
-
-		attemptLaunchMorrowind();
-	}
-
 	private void startApp()
 	{
 		try
@@ -126,55 +100,6 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 			e1.printStackTrace();
 		}
 		possiblyShowWelcomeScreen();
-	}
-
-	private void attemptLaunchMorrowind()
-	{
-		for (GameConfig gameConfig : GameConfig.allGameConfigs)
-		{
-			System.out.println("looking for game folder " + gameConfig.folderKey);
-
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-			String gameFolder = settings.getString(GAME_FOLDER + gameConfig.folderKey, "");
-			if (gameFolder.length() > 0)
-			{
-				gameConfig.scrollsFolder = gameFolder;
-
-				// id this key the morrowind one?
-				if ("MorrowindFolder".equals(gameConfig.folderKey))
-				{
-					// does it in fact contain the esm file (perhaps the data has been deleted for example)
-					File checkEsm = new File(gameConfig.scrollsFolder, gameConfig.mainESMFile);
-
-					if (!checkEsm.exists())
-					{
-						// if no esm clear this settings so we don't waste time with it
-						SharedPreferences.Editor editor = settings.edit();
-						editor.remove(GAME_FOLDER + gameConfig.folderKey);
-						editor.apply();
-					}
-					else
-					{
-						gameSelected = gameConfig;
-						break;
-					}
-				}
-			}
-
-		}
-
-
-		if (gameSelected != null)
-		{
-			showStartConfigPicker();
-		}
-		else
-		{
-			Toast.makeText(this, "Please select the morrowind.esm file", Toast.LENGTH_LONG)
-					.show();
-			setGameESMFile();
-		}
-
 	}
 
 	private void possiblyShowWelcomeScreen()
@@ -218,24 +143,87 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		}
 	}
 
+	private void setGameESMFileSelect(File file)
+	{
+		// let's see if this guy is one of our game configs
+		String fileName = file.getName();
+		boolean validESM = false;
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			if (gameConfig.mainESMFile.equals(fileName))
+			{
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString(GAME_FOLDER + gameConfig.folderKey, file.getParentFile().getAbsolutePath());
+				editor.apply();
+
+				validESM = true;
+				break;
+			}
+		}
+
+		if (!validESM)
+		{
+			Toast.makeText(this, "Selected file not a valid game esm", LENGTH_LONG).show();
+		}
+
+		attemptLaunchMorrowind();
+	}
+
+	private void attemptLaunchMorrowind()
+	{
+		for (GameConfig gameConfig : GameConfig.allGameConfigs)
+		{
+			System.out.println("looking for game folder " + gameConfig.folderKey);
+
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			String gameFolder = settings.getString(GAME_FOLDER + gameConfig.folderKey, "");
+			if (gameFolder.length() > 0)
+			{
+				// id this key the morrowind one?
+				if ("MorrowindFolder".equals(gameConfig.folderKey))
+				{
+					// does it in fact contain the esm file (perhaps the data has been deleted for example)
+					File checkEsm = new File(gameFolder, gameConfig.mainESMFile);
+
+					if (!checkEsm.exists())
+					{
+						// if no esm clear this settings so we don't waste time with it
+						SharedPreferences.Editor editor = settings.edit();
+						editor.remove(GAME_FOLDER + gameConfig.folderKey);
+						editor.apply();
+					}
+					else
+					{
+						gameConfig.scrollsFolder = gameFolder;
+						gameSelected = gameConfig;
+						break;
+					}
+				}
+			}
+
+		}
+
+
+		if (gameSelected != null)
+		{
+			showStartConfigPicker();
+		}
+		else
+		{
+			Toast.makeText(this, "Please select the morrowind.esm file", Toast.LENGTH_LONG)
+					.show();
+			setGameESMFile();
+		}
+
+	}
+
+
+
 	private void showStartConfigPicker()
 	{
 		final ListView gameConfigSelectorList = (ListView) findViewById(R.id.gameConfigSelectView);
 
-		final String[] configNames = new String[]
-				{
-						"inside boat",
-						"outside boat",
-						"combat",
-						"vivec",
-						"ald rhun",
-						"tel mora",
-						"inside cavern with azura",
-						"ghost gate",
-						"nice green land",
-						"dwarf ruins",
-						"from last session"
-				};
 
 		gameConfigSelectorList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, configNames)
 		{

@@ -59,6 +59,8 @@ import utils.source.SoundSource;
 import utils.source.TextureSource;
 import utils.source.file.FileMediaRoots;
 
+import static scrollsexplorer.GameConfig.allGameConfigs;
+
 /**
  * Created by phil on 3/10/2016.
  */
@@ -90,7 +92,27 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 	private MediaPlayer musicMediaPlayer;
 
-	private boolean freeFormConfig = false;
+	private boolean saveLoadConfig = false;
+	public static final String[] configNames = new String[]
+			{
+					"Inside starting ship",
+					"Seyda Neen on ship deck",
+					"Last session",
+					"Combat in a cave",
+					"Vivec",
+					"Ald Rhun",
+					"Tel Mora",
+					"Azura's cave",
+					"Ghost gate",
+					"Nice green land",
+					"Dwarf ruins",
+					"Ebonheart, Imperial Commission",
+					"Vivec, Palace of Vivec",
+					"Telasero, Propylon Chamber",
+					"Molag Mar",
+					"Vos",
+};
+
 
 	public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId)
 	{
@@ -161,143 +183,165 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 
 		int startConfig = gameConfigId;
-		// 0 inside boat
-		// 1 outside boat
-		// 2 combat
-		// 3 vivec, third
-		// 4 ald rhun,
-		// 5 tel mora, cast spell in third
-		// 6 inside cavern with azura, lots of people
-		// 7 ghost gate, look at gate, turn walk along gully, transition to next
-		// 8 nice green land walk along a road, transition to next
-		// 9 dwarf ruins outside  along a bridge walk up behind crea
 
+		// default to none
+		Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+		musicToPlay = 0;
+
+		GameConfig morrowindConfig = GameConfig.allGameConfigs.get(0);
 
 		if (startConfig == 0)
 		{
 			//scene  Imperial prison ship id 22668
-			GameConfig.allGameConfigs.get(0).startCellId = 22668;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(1, -0.3f, 2);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI / 4, 0);
+			morrowindConfig.startCellId = 22668;
+			morrowindConfig.startLocation = new Vector3f(1, -0.3f, 2);
+			morrowindConfig.startYP = new YawPitch(Math.PI / 4, 0);
 			musicToPlay = 1;//explore
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
 		}
 		else if (startConfig == 1)
 		{
 			// deck of start ship
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-108, 3, 936);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(-108, 3, 936);
+			morrowindConfig.startYP = new YawPitch(0, 0);
 			musicToPlay = 1;//explore
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
-
 		}
 		else if (startConfig == 2)
 		{
+			//Freeform
+			saveLoadConfig = true;
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(-108, 3, 936);
+			morrowindConfig.startYP = new YawPitch(0, 0);
+		}
+		else if (startConfig == 3)
+		{
 			//dwarwen ruin for combat but odd sound issue
-			// need to have axe and spell casting hands out and ready
-			GameConfig.allGameConfigs.get(0).startCellId = 23903;//23042;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(2, -1, 18);//(57, 0, -17);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI / 8, 0);//TODO:
+			morrowindConfig.startCellId = 23903;//23042;
+			morrowindConfig.startLocation = new Vector3f(2, -1, 18);//(57, 0, -17);
+			morrowindConfig.startYP = new YawPitch(Math.PI / 8, 0);
 			musicToPlay = 2;//battle
 			Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
 			Tes3AICREA.combatDemo = true;
 		}
-		else if (startConfig == 3)
-		{
-			//vivec for third person view
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(423, 8, 1079);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
-			musicToPlay = 1;//explore
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
-			AndySimpleWalkSetup.TRAILER_CAM = true;
-		}
 		else if (startConfig == 4)
 		{
-			// ald rhun
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-152, 31, -682);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+			//vivec for third person view
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(423, 8, 1079);
+			morrowindConfig.startYP = new YawPitch(0, 0);
 			musicToPlay = 1;//explore
-			Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
+			AndySimpleWalkSetup.TRAILER_CAM = true;
 		}
 		else if (startConfig == 5)
 		{
+			// ald rhun
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(-152, 31, -682);
+			morrowindConfig.startYP = new YawPitch(0, 0);
+			musicToPlay = 1;//explore
+			Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
+		}
+		else if (startConfig == 6)
+		{
 			//tel mora  , cast spell in third
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(1387, 18, -1438);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(Math.PI / 8, 0);//TODO:
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(1387, 18, -1438);
+			morrowindConfig.startYP = new YawPitch(Math.PI / 8, 0);//TODO:
 			musicToPlay = 1;//explore
 			Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
 			AndySimpleWalkSetup.TRAILER_CAM = true;
 		}
-		else if (startConfig == 6)
-		{
-			//inside cavern with azura
-			GameConfig.allGameConfigs.get(0).startCellId = 22087;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(0, 0, 16);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
-			musicToPlay = 1;//explore
-		}
 		else if (startConfig == 7)
 		{
-			//  ghost gate, look the walk down gully
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(256, 11, -460);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
-			Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
+			//inside cavern with azura
+			morrowindConfig.startCellId = 22087;
+			morrowindConfig.startLocation = new Vector3f(0, 0, 16);
+			morrowindConfig.startYP = new YawPitch(0, 0);
 			musicToPlay = 1;//explore
 		}
 		else if (startConfig == 8)
 		{
-			//nice green land walk along a road, transition to next
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(896, 12, -1472);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+			//  ghost gate, look the walk down gully
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(256, 11, -460);
+			morrowindConfig.startYP = new YawPitch(0, 0);
+			Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
 			musicToPlay = 1;//explore
 		}
 		else if (startConfig == 9)
 		{
+			//nice green land walk along a road, transition to next
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(896, 12, -1472);
+			morrowindConfig.startYP = new YawPitch(0, 0);
+			musicToPlay = 1;//explore
+		}
+		else if (startConfig == 10)
+		{
 			//   dwarf ruins outside along a bridge walk up behind crea
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-183, 49, -1059);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(-183, 49, -1059);
+			morrowindConfig.startYP = new YawPitch(0, 0);
 			Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
 			musicToPlay = 2;//battle
 		}
-		else if (startConfig == 10)//Freeform
+		else if (startConfig == 11)
 		{
-			freeFormConfig = true;
-			GameConfig.allGameConfigs.get(0).startCellId = 0;
-			GameConfig.allGameConfigs.get(0).startLocation = new Vector3f(-108, 3, 936);
-			GameConfig.allGameConfigs.get(0).startYP = new YawPitch(0, 0);//TODO:
-			musicToPlay = 0;//none
-			Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
+			//Ebonheart, Imperial Commission
+			morrowindConfig.startCellId = 22302;
+			morrowindConfig.startLocation = new Vector3f(0, 2, -6);
+			morrowindConfig.startYP = new YawPitch(Math.PI, 0);
+		}
+		else if (startConfig == 12)
+		{
+			//Vivec, Palace of Vivec
+			morrowindConfig.startCellId = 24230;
+			morrowindConfig.startLocation = new Vector3f(0, -4, 5);
+			morrowindConfig.startYP = new YawPitch(Math.PI, 0);
+		}
+		else if (startConfig == 13)
+		{
+			//Telasero, Propylon Chamber
+			morrowindConfig.startCellId = 23850;
+			morrowindConfig.startLocation = new Vector3f(5, -6, -9);
+			morrowindConfig.startYP = new YawPitch(Math.PI / 4, 0);
+		}
+		else if (startConfig == 14)
+		{
+			//Molag Mar
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(1405, 23, 758);
+			morrowindConfig.startYP = new YawPitch(0, 0);
+		}
+		else if (startConfig == 15)
+		{
+			//Vos
+			morrowindConfig.startCellId = 0;
+			morrowindConfig.startLocation = new Vector3f(1225, 19, -1465);
+			morrowindConfig.startYP = new YawPitch(0, 0);
 		}
 
 
 		//Android TESIV: Oblivion = 143176?, (425,43,-912)
-		GameConfig.allGameConfigs.get(1).startCellId = 180488;
-		GameConfig.allGameConfigs.get(1).startLocation = new Vector3f(425, 43, -912);
+		allGameConfigs.get(1).startCellId = 180488;
+		allGameConfigs.get(1).startLocation = new Vector3f(425, 43, -912);
 
 		//Android FO3: Fallout 3 = 2676, (-37, 165, 281)
-		GameConfig.allGameConfigs.get(2).startCellId = 2676;
-		GameConfig.allGameConfigs.get(2).startLocation = new Vector3f(-37, 165, 281);
+		allGameConfigs.get(2).startCellId = 2676;
+		allGameConfigs.get(2).startLocation = new Vector3f(-37, 165, 281);
 
 		//Android FONV: Fallout New Vegas = 1064441, (23, 94, -24)
-		GameConfig.allGameConfigs.get(3).startCellId = 1064441;
-		GameConfig.allGameConfigs.get(3).startLocation = new Vector3f(23, 94, -24);
+		allGameConfigs.get(3).startCellId = 1064441;
+		allGameConfigs.get(3).startLocation = new Vector3f(23, 94, -24);
 
 		//Android TESV: Skyrim = 107119, (251, -44, 94)
-		GameConfig.allGameConfigs.get(4).startCellId = 107119;
-		GameConfig.allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
+		allGameConfigs.get(4).startCellId = 107119;
+		allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
 
 		//Android FO4: Fallout 4 = 7768, (19, 1, 5)
-		GameConfig.allGameConfigs.get(5).startCellId = 7768;
-		GameConfig.allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+		allGameConfigs.get(5).startCellId = 7768;
+		allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
 
 
 		simpleWalkSetup = new AndySimpleWalkSetup("SimpleBethCellManager", gl_window);
@@ -328,12 +372,17 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	{
 		if (esmManager != null)
 		{
-			PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(),
-					new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
-			PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
-					"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
-			PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
+			// don't write out location unless we started the save load version up
+			if (saveLoadConfig)
+			{
+				PropertyLoader.properties.setProperty("YawPitch" + esmManager.getName(),
+						new YawPitch(simpleWalkSetup.getAvatarLocation().getTransform()).toString());
+				PropertyLoader.properties.setProperty("Trans" + esmManager.getName(),
+						"" + PropertyCodec.vector3fIn(simpleWalkSetup.getAvatarLocation().get(new Vector3f())));
+				PropertyLoader.properties.setProperty("CellId" + esmManager.getName(), "" + simpleBethCellManager.getCurrentCellFormId());
+			}
 		}
+		// save it in case anything else has written to it
 		PropertyLoader.save();
 
 	}
@@ -394,7 +443,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						YawPitch yp = selectedGameConfig.startYP;
 						Vector3f trans = selectedGameConfig.startLocation;
 						int prevCellformid = selectedGameConfig.startCellId;
-						if (freeFormConfig)//Freeform so load the recorded values
+						if (saveLoadConfig)//Freeform so load the recorded values
 						{
 							yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
 							trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
@@ -463,7 +512,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						// I could use the j3dcellfactory now? with the cached cell records?
 						simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
 
-						if (selectedGameConfig == GameConfig.allGameConfigs.get(0))
+						if (selectedGameConfig == allGameConfigs.get(0))
 						{
 							System.out.println("Adding Tes3 extensions");
 							tes3Extensions = new Tes3Extensions(selectedGameConfig, esmManager, mediaSources, simpleWalkSetup,

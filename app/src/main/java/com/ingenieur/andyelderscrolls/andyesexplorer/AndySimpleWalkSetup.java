@@ -367,7 +367,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 	}
 
-	public void setupGraphicsSetting(GLWindow gl_window)
+	private void setupGraphicsSetting(GLWindow gl_window)
 	{
 
 		if (cameraPanel == null)
@@ -385,9 +385,13 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			{
 
 				if (gl_window == null)
+				{
 					cameraPanel = new CameraPanel(universe);
+				}
 				else
+				{
 					cameraPanel = new CameraPanel(universe, gl_window);
+				}
 
 				// and the dolly it rides on
 				if (TRAILER_CAM)

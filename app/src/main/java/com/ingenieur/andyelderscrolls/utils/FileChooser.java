@@ -61,6 +61,15 @@ public class FileChooser implements DialogInterface.OnDismissListener
 
 	public FileChooser(Activity activity, File startFolder)
 	{
+		// is the start folder a extant file/folder? if not see if a parent can be found that is
+		if( !startFolder.exists())
+		{
+			startFolder = startFolder.getParentFile();
+			while(!startFolder.exists())
+				startFolder = startFolder.getParentFile();
+		}
+
+
 		this.activity = activity;
 		dialog = new Dialog(activity);
 
