@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,6 +22,8 @@ import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
+
+import org.jogamp.java3d.Canvas3D;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,17 +58,23 @@ public class ElderScrollsActivity extends Activity
 
 	private GameConfig gameSelected;
 
+	private SopInterceptor sysoutInterceptor;
+	private SopInterceptor syserrInterceptor;
+	private boolean setLogFile = false;
+
 
 	@Override
 	public void onCreate(final Bundle state)
 	{
 		super.onCreate(state);
 
+
+
 		// get system out to log
-		PrintStream interceptor = new SopInterceptor(System.out, "sysout");
-		System.setOut(interceptor);
-		PrintStream interceptor2 = new SopInterceptor(System.err, "syserr");
-		System.setErr(interceptor2);
+		sysoutInterceptor = new SopInterceptor(System.out, "sysout");
+		System.setOut(sysoutInterceptor);
+		syserrInterceptor = new SopInterceptor(System.err, "syserr");
+		System.setErr(syserrInterceptor);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
 			int hasWriteExternalStorage = checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE);
@@ -108,6 +117,10 @@ public class ElderScrollsActivity extends Activity
 		fillGameList();
 	}
 
+	public void toggleWriteLog(View view)
+	{
+		setLogFile = !setLogFile;
+	}
 
 	public void setGameESMFile(View view)
 	{
@@ -254,6 +267,7 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameSelected != null)
 		{
+			setUpLogFile(gameSelected);
 			Intent intent = new Intent(this, NifDisplayActivity.class);
 			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
@@ -269,6 +283,7 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameSelected != null)
 		{
+			setUpLogFile(gameSelected);
 			Intent intent = new Intent(this, KfDisplayActivity.class);
 			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
@@ -284,6 +299,7 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameSelected != null)
 		{
+			setUpLogFile(gameSelected);
 			Intent intent = new Intent(this, JBulletActivity.class);
 			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
@@ -299,6 +315,7 @@ public class ElderScrollsActivity extends Activity
 	{
 		if (gameSelected != null)
 		{
+			setUpLogFile(gameSelected);
 			Intent intent = new Intent(this, AndyESExplorerActivity.class);
 			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
@@ -307,6 +324,17 @@ public class ElderScrollsActivity extends Activity
 		{
 			Toast.makeText(ElderScrollsActivity.this, "Please select a game root folder", Toast.LENGTH_SHORT)
 					.show();
+		}
+	}
+
+	private void setUpLogFile(GameConfig gameSelected)
+	{
+		if (setLogFile)
+		{
+			// just go for downloads, always there
+			File logFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CallOfMorrowindLog.log");
+			sysoutInterceptor.setLogFile(logFile);
+			syserrInterceptor.setLogFile(logFile);
 		}
 	}
 

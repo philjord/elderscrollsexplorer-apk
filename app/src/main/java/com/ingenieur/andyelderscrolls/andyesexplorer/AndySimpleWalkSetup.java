@@ -265,6 +265,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		if (cameraPanel.isRendering())
 		{
 			cameraPanel.stopRendering();
+			cameraPanel.getCanvas3D2D().removeNotify();
 		}
 	}
 

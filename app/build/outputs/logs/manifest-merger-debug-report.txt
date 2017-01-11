@@ -50,7 +50,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:17:9-37
 	android:anyDensity
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:13:9-34
-uses-feature#0x00030000
+uses-feature#0x00020000
 ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:20:5-78
 	android:glEsVersion
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:20:19-51

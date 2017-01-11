@@ -30,4 +30,6 @@ On each start up there are several pre-set start locations and configurations.
     <string name="welcometextyes">Remind me later</string>
     <string name="welcometextno">Don\'t remind me</string>
     <string name="wait_file_download">file downloading</string>
+    <string name="capturelogs">Write log</string>
+    <string name="dontcapturelogs">Don\'t write log</string>
 </resources>

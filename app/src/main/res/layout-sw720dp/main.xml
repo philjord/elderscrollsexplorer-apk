@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+    >
+
+    <GridLayout
+        android:layout_width="620dp"
+        android:layout_height="107dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.08">
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_nif_display"
+            android:onClick="showNifDisplay"
+            android:id="@+id/nifButton"
+            android:layout_weight="0.04"
+            android:layout_row="1"
+            android:layout_column="0"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/esexplorertext"
+            android:id="@+id/esexplorerButton"
+            android:onClick="showESExplorer"
+            android:layout_weight="0.04"
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/kfdisplaytext"
+            android:id="@+id/kfButton"
+            android:onClick="showKfDisplay"
+            android:layout_weight="0.04"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="2"
+            android:layout_column="0"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/jbulletdisplaytext"
+            android:id="@+id/jbulletButton"
+            android:onClick="showJBulletDisplay"
+            android:layout_weight="0.04"
+            android:layout_row="0"
+            android:layout_column="0"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/setgameesmfile"
+            android:id="@+id/setgameesmfile"
+            android:onClick="setGameESMFile"
+            android:layout_weight="0.04"
+            android:layout_row="2"
+            android:layout_column="1"/>
+        <ToggleButton
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/capturelogs"
+            android:textOn="@string/dontcapturelogs"
+            android:id="@+id/capturelogs"
+            android:onClick="toggleWriteLog"
+            android:layout_weight="0.04"
+            android:layout_row="1"
+            android:layout_column="1"/>
+
+    </GridLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_weight="0.62"
+        android:layout_height="0dp"
+        android:id="@+id/gameSelectView"
+        android:layout_gravity="center_horizontal"
+        android:choiceMode="singleChoice"
+        android:listSelector="#666666" />
+
+
+</LinearLayout>
+
+

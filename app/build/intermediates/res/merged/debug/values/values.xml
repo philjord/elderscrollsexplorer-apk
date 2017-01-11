@@ -5,9 +5,11 @@
     <string name="app_name">Call of Red Mountain</string>
     <string name="btn_choose">Choose</string>
     <string name="button_nif_display">Nif Display</string>
+    <string name="capturelogs">Write log</string>
     <string name="common_google_play_services_unknown_issue"><ns1:g id="app_name">%1$s</ns1:g> is having trouble with Google Play services. Please try again.</string>
     <string name="default_web_client_id" translatable="false">702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com</string>
     <string name="directory_selected_label">selected directory</string>
+    <string name="dontcapturelogs">Don\'t write log</string>
     <string name="edit_message">Enter a message</string>
     <string name="esexplorertext">Explore</string>
     <string name="firebase_database_url" translatable="false">https://call-of-red-mountain.firebaseio.com</string>

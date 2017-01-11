@@ -111,7 +111,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 					"Telasero, Propylon Chamber",
 					"Molag Mar",
 					"Vos",
-};
+			};
 
 
 	public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId)
@@ -340,8 +340,19 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
 
 		//Android FO4: Fallout 4 = 7768, (19, 1, 5)
-		allGameConfigs.get(5).startCellId = 7768;
+		allGameConfigs.get(5).startCellId = 7768;// inside house at stadium home base
 		allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+
+		//allGameConfigs.get(5).startCellId = 3988;// inside stadium
+		//allGameConfigs.get(5).startLocation = new Vector3f(31, -17, -77);
+
+		//allGameConfigs.get(5).startCellId = 5848;// starting cell
+		//allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+
+		//allGameConfigs.get(5).startCellId = 478504;// arcjetsystem01
+		//allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+
+
 
 
 		simpleWalkSetup = new AndySimpleWalkSetup("SimpleBethCellManager", gl_window);
@@ -527,19 +538,26 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 							// version doesn't seem to work, possibly the activity is the key
 							if (musicToPlay > 0)
 							{
+								File musicFileToPlay = new File("");
 								if (musicToPlay == 1)
 								{
 									//1-7
 									int piece = (int) (Math.random() * 7) + 1;
-									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(gameConfigToLoad.scrollsFolder + "/Music/Explore/mx_explore_" + piece + ".mp3")));
+									musicFileToPlay = new File(gameConfigToLoad.scrollsFolder + "/Music/Explore/mx_explore_" + piece + ".mp3");
 								}
 								else if (musicToPlay == 2)
 								{
 									// notice extra spaces in some battle mp3 names
-									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(new File(gameConfigToLoad.scrollsFolder + "/Music/Battle/MW battle1.mp3")));
+									musicFileToPlay = new File(gameConfigToLoad.scrollsFolder + "/Music/Battle/MW battle1.mp3");
 								}
-								musicMediaPlayer.setVolume(0.15f, 0.15f);
-								musicMediaPlayer.start();
+
+								if (musicFileToPlay.exists() && musicFileToPlay.isFile())
+								{
+									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(musicFileToPlay));
+									musicMediaPlayer.setVolume(0.15f, 0.15f);
+									musicMediaPlayer.start();
+								}
+
 							}
 
 							SimpleSounds.mp3SystemMediaPlayer = new
@@ -555,15 +573,15 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 											if (!s.startsWith("/"))
 												s = "/" + s;
 
-											File f = new File(gameConfigToLoad.scrollsFolder + s);
-											System.out.println("does mp3 exist? " + f.exists() + " " + f);
+											File mp3File = new File(gameConfigToLoad.scrollsFolder + s);
+											if (mp3File.exists())
+											{
+												musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(mp3File));
 
-
-											musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(new File(gameConfigToLoad.scrollsFolder + s)));
-
-											musicMediaPlayer2.setVolume(v, v);
-											musicMediaPlayer2.setLooping(false);
-											musicMediaPlayer2.start();
+												musicMediaPlayer2.setVolume(v, v);
+												musicMediaPlayer2.setLooping(false);
+												musicMediaPlayer2.start();
+											}
 										}
 									};
 
@@ -637,7 +655,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	{
 		simpleWalkSetup.startRenderer(gl_window);
 	}
-
 
 	private class KeyHandler extends KeyAdapter
 	{

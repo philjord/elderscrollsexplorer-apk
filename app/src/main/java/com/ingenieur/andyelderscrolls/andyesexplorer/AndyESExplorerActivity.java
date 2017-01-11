@@ -11,6 +11,7 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
+import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
@@ -22,6 +23,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	private GLWindow gl_window;
 	private String gameName;
 	private int gameConfigId = 1;
+	private boolean scrollsExplorerInitCalled = false;
 
 
 	@Override
@@ -31,6 +33,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 		System.setProperty("j3d.defaultReadCapability", "false");
 		System.setProperty("j3d.defaultNodePickable", "false");
 		System.setProperty("j3d.defaultNodeCollidable", "false");
+		System.setProperty("j3d.noDestroyContext", "true");// don't clean up as the preserve/restore will handle it
 
 		SimpleShaderAppearance.setVersionES300();
 
@@ -57,40 +60,35 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 
 		gl_window = GLWindow.create(caps);
-		gl_window.setSurfaceScale(new float[]{0.5f, 0.5f});
-
-		//Alternatively, control scaling through the Android API:
-		// For applications written in Java, configure the fixed-size property of the GLSurfaceView instance (available since API level 1).
-		//	Set the property using the setFixedSize function, which takes two arguments defining the resolution of the final render target.
-		//gl_window.setSize(1280,720);
-
+		//TODO: why the hell was this here? just to try to imprve performance
+		//gl_window.setSurfaceScale(new float[]{0.5f, 0.5f});
 		gl_window.setFullscreen(true);
 
 		this.setContentView(this.getWindow(), gl_window);
 
-
-		gl_window.setVisible(true);
 
 		gl_window.addGLEventListener(new GLEventListener()
 									 {
 										 @Override
 										 public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable)
 										 {
-											 //System.err.println("GLEventListenerinit");
+										 }
 
+										 @Override
+										 public void reshape(final GLAutoDrawable drawable, final int x, final int y,
+															 final int w, final int h)
+										 {
+										 }
+
+										 @Override
+										 public void display(final GLAutoDrawable drawable)
+										 {
 											 try
 											 {
-												 float[] fs = new float[2];
-												 gl_window.getCurrentSurfaceScale(fs);
-												 //System.out.println("getCurrentSurfaceScale " + fs[0] + " " + fs[1]);
-
-
-												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
-												 //KfDisplayTester from this init function
-
-												 // this is called ona  resume as well, so only inti once
-												 if (scrollsExplorer == null)
+												 // this is called on a resume as well, so only init once
+												 if (!scrollsExplorerInitCalled)
 												 {
+													 scrollsExplorerInitCalled = true;
 													 AndyESExplorerActivity.this.runOnUiThread(new Runnable()
 													 {
 														 @Override
@@ -102,17 +100,11 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 												 }
 												 else
 												 {
-
-													 //System.err.println("Init with a non null explorer");
-
-													 if (pauseRestartRequired)
+													 // possibly hasn't been created yet
+													 if (scrollsExplorer != null)
 													 {
-
-														 //System.err.println("pauseRestartRequired is true!");
-
-														 // this is from a resume
+														 // this is from a resume (start renderer calls addNotify)
 														 scrollsExplorer.startRenderer(gl_window);
-														 pauseRestartRequired = false;
 													 }
 												 }
 											 }
@@ -123,24 +115,8 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 										 }
 
 										 @Override
-										 public void reshape(final GLAutoDrawable drawable, final int x, final int y,
-															 final int w, final int h)
-										 {
-											 //System.err.println("GLEventListenerreshape");
-
-										 }
-
-										 @Override
-										 public void display(final GLAutoDrawable drawable)
-										 {
-											 //System.err.println("GLEventListenerdisplay");
-										 }
-
-										 @Override
 										 public void dispose(final GLAutoDrawable drawable)
 										 {
-											 //System.err.println("GLEventListenerdispose");
-
 										 }
 									 }
 
@@ -149,43 +125,28 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 	}
 
-	private boolean pauseRestartRequired = false;
-
 	@Override
 	public void onPause()
 	{
-		//System.err.println("onPause onPause onPause onPause onPause");
 		if (scrollsExplorer != null)
 		{
 			scrollsExplorer.closingTime();
+			// note stop renderer also calls removenotify
 			scrollsExplorer.stopRenderer();
 		}
-		//gl_window.setVisible(false);
+
 		super.onPause();
-		pauseRestartRequired = true;
 	}
 
 	@Override
 	public void onResume()
 	{
-
-
-		//gl_window.setVisible(true);
-		//if (nifDisplay != null)
-		//	nifDisplay.canvas3D2D.startRenderer();
 		super.onResume();
-
-
 	}
 
 	@Override
 	public void onDestroy()
 	{
-		if (scrollsExplorer != null)
-			scrollsExplorer.closingTime();
-		if (gl_window != null)
-			gl_window.destroy();
-
 		super.onDestroy();
 	}
 
