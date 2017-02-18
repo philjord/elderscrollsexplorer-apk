@@ -1,5 +1,21 @@
 [
     {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_donations.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\layout\\dialog_donations.xml"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment.xml"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment_google.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment_google.xml"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment_flattr.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment_flattr.xml"
+    },
+    {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\morrowind.xml",
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\layout\\morrowind.xml"
     },
@@ -8,11 +24,19 @@
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\layout\\esexplorer.xml"
     },
     {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment_paypal.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment_paypal.xml"
+    },
+    {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\status_bar_ongoing_event_progress_bar.xml",
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\layout\\status_bar_ongoing_event_progress_bar.xml"
     },
     {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment_bitcoin.xml",
+        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment_bitcoin.xml"
     }
 ]

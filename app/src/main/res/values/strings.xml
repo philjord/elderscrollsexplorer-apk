@@ -32,4 +32,19 @@ On each start up there are several pre-set start locations and configurations.
     <string name="wait_file_download">file downloading</string>
     <string name="capturelogs">Write log</string>
     <string name="dontcapturelogs">Don\'t write log</string>
+    <string name="menu_test_3d">Test 3D</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About</string>
+    <string name="menu_donate">Donate</string>
+    <string name="menu_deoptomize">Deoptomize</string>
+    <string name="menu_anti_alias">x2 AA</string>
+
+    <string-array name="donation_google_catalog_values">
+        <item>1 NZD</item>
+        <item>2 NZD</item>
+        <item>5 NZD</item>
+        <item>10 NZD</item>
+        <item>15 NZD</item>
+        <item>20 NZD</item>
+    </string-array>
 </resources>

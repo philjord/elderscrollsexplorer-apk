@@ -1,7 +1,6 @@
 package com.ingenieur.andyelderscrolls;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -11,6 +10,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,14 +37,21 @@ import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
 
+import org.jogamp.java3d.JoglesPipeline;
+
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
+import simpleandroid.JoglStatusActivity;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static com.ingenieur.andyelderscrolls.CallOfDonationsFragment.GOOGLE_CATALOG;
+import static com.ingenieur.andyelderscrolls.CallOfDonationsFragment.GOOGLE_PUBKEY;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_FILE;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
@@ -52,9 +63,12 @@ import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.conf
 /**
  * Created by phil on 7/15/2016.
  */
-public class MorrowindActivity extends Activity implements IDownloaderClient
+public class MorrowindActivity extends FragmentActivity implements IDownloaderClient
 {
 	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
+	private static final String DEOPTOMIZE = "DEOPTOMIZE";
+	private static final String ANTIALIAS = "ANTIALIAS";
+
 	private GameConfig gameSelected;
 
 	private FirebaseAnalytics mFirebaseAnalytics;
@@ -70,6 +84,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		System.setOut(interceptor);
 		PrintStream interceptor2 = new SopInterceptor(System.err, "syserr");
 		System.setErr(interceptor2);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
 			int hasWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -87,6 +102,79 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		{
 			permissionGranted();
 		}
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		boolean deoptomize = settings.getBoolean(DEOPTOMIZE, false);
+		menu.findItem(R.id.menu_deoptomize).setChecked(deoptomize);
+		setDeoptomize(deoptomize);
+		boolean antialias = settings.getBoolean(ANTIALIAS, false);
+		menu.findItem(R.id.menu_anti_alias).setChecked(antialias);
+		AndyESExplorerActivity.antialias = antialias;
+
+
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+	{
+		return super.onPrepareOptionsMenu(menu);
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.menu_test_3d:
+				test3d();
+				return true;
+			case R.id.menu_donate:
+				//donate();
+				return true;
+			case R.id.menu_deoptomize:
+				item.setChecked(!item.isChecked());
+				setDeoptomize(item.isChecked());
+				return true;
+			case R.id.menu_anti_alias:
+				item.setChecked(!item.isChecked());
+				AndyESExplorerActivity.antialias = item.isChecked();
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putBoolean(ANTIALIAS, item.isChecked());
+				editor.apply();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void donate()
+	{
+		CallOfDonationsFragment donationsDialogFragment = new CallOfDonationsFragment();
+		donationsDialogFragment.show(getSupportFragmentManager(), "DialogFragment");
+
+		/*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		DonationsFragment donationsFragment;
+
+		donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true,
+				GOOGLE_PUBKEY, GOOGLE_CATALOG,
+				getResources().getStringArray(R.array.donation_google_catalog_values), false, null, null,
+				null, false, null, null, false, null);
+
+		ft.replace(R.id.donations_activity_container, donationsFragment, "donationsFragment");
+		ft.commit();*/
+	}
+
+	private void test3d()
+	{
+		Intent myIntent = new Intent(this, JoglStatusActivity.class);
+		this.startActivity(myIntent);
 	}
 
 	private void startApp()
@@ -174,7 +262,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 	{
 		for (GameConfig gameConfig : GameConfig.allGameConfigs)
 		{
-			System.out.println("looking for game folder " + gameConfig.folderKey);
+			//System.out.println("looking for game folder " + gameConfig.folderKey);
 
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			String gameFolder = settings.getString(GAME_FOLDER + gameConfig.folderKey, "");
@@ -247,7 +335,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				Bundle bundle = new Bundle();
 				bundle.putString(FirebaseAnalytics.Param.ITEM_ID, ""+which);
 				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, configNames[which]);
-				bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+				bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "which_game_config");
 				mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 				Intent intent = new Intent(MorrowindActivity.this, AndyESExplorerActivity.class);
@@ -374,6 +462,8 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		setState(newState);
 		boolean showDashboard = true;
 		boolean indeterminate;
+		String failMessage = null;
+
 		switch (newState)
 		{
 			case IDownloaderClient.STATE_IDLE:
@@ -392,9 +482,13 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				break;
 
 			case IDownloaderClient.STATE_FAILED_CANCELED:
-			case IDownloaderClient.STATE_FAILED:
-			case IDownloaderClient.STATE_FAILED_FETCHING_URL:
+				failMessage = "STATE_FAILED_CANCELED";
 			case IDownloaderClient.STATE_FAILED_UNLICENSED:
+				failMessage = "STATE_FAILED_UNLICENSED";
+			case IDownloaderClient.STATE_FAILED:
+				failMessage = "STATE_FAILED";
+			case IDownloaderClient.STATE_FAILED_FETCHING_URL:
+				failMessage = "STATE_FAILED_FETCHING_URL";
 				showDashboard = false;
 				indeterminate = false;
 				break;
@@ -429,6 +523,12 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		if(newDashboardVisibility == View.GONE)
 		{
 			startApp();
+		}
+
+		if(failMessage != null)
+		{
+			Toast.makeText(MorrowindActivity.this, "Download of expansion file failed due to : " + failMessage +
+					". It is recomended you uninstall then re-install the app.", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -487,7 +587,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				else
 				{
 					// Permission Denied
-					Toast.makeText(MorrowindActivity.this, "WRITE_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
+					Toast.makeText(MorrowindActivity.this, "WRITE_EXTERNAL_STORAGE Denied", Toast.LENGTH_LONG)
 							.show();
 				}
 				break;
@@ -508,8 +608,18 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		return true;
 	}
 
+	public void setDeoptomize(boolean deoptomize)
+	{
+		//DEBUG to fix Nexus 5
+		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = !deoptomize;
+		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = !deoptomize;
+		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = !deoptomize;
 
-
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean(DEOPTOMIZE, deoptomize);
+		editor.apply();
+	}
 
 
 	/**

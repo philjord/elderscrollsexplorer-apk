@@ -24,12 +24,14 @@ import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import org.jogamp.java3d.Canvas3D;
+import org.jogamp.java3d.JoglesPipeline;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 
@@ -68,7 +70,10 @@ public class ElderScrollsActivity extends Activity
 	{
 		super.onCreate(state);
 
-
+		//DEBUG to fix Nexus 5
+		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = false;
+		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;
+		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;
 
 		// get system out to log
 		sysoutInterceptor = new SopInterceptor(System.out, "sysout");
