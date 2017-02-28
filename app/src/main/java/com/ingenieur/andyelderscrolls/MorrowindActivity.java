@@ -1,7 +1,11 @@
 package com.ingenieur.andyelderscrolls;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +14,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,8 +52,6 @@ import scrollsexplorer.PropertyLoader;
 import simpleandroid.JoglStatusActivity;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.ingenieur.andyelderscrolls.CallOfDonationsFragment.GOOGLE_CATALOG;
-import static com.ingenieur.andyelderscrolls.CallOfDonationsFragment.GOOGLE_PUBKEY;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_FILE;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
@@ -63,11 +63,15 @@ import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.conf
 /**
  * Created by phil on 7/15/2016.
  */
-public class MorrowindActivity extends FragmentActivity implements IDownloaderClient
+public class MorrowindActivity extends Activity implements IDownloaderClient
 {
 	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
 	private static final String DEOPTOMIZE = "DEOPTOMIZE";
 	private static final String ANTIALIAS = "ANTIALIAS";
+
+	public static final String GOOGLE_PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqoEA2+dtSDgAZZhwOIhf67H2xR8rvrLENhrI5zNl8W7+GfGsRxfMmGiwisuOASY8fBh+t5IZumP7WGJ418oML6rUBpUCNihDuZcS/OrNQky7RyFkoY16n1G3v+jm4UwLoEsNQJnEpBWvPy0hptT6qRpRhNI7SVYilzPBc7FQPG2NWKh6kNoqSVoPI3K5hRzIYtqRtkHhFtMvpZhxcQuzKptLDu0ceCyEQLeWJmtiO1yCd57zkG0R+sIWd+69uuORIJGmg8vJWljyBTdhrKB8+sg3SZh4S/6lj0GZpy+M7cpzoJC4aBRVN/YMDxax1c56l7T8AY63pcCou8Ai20ER8QIDAQAB";
+	public static final String[] GOOGLE_CATALOG = new String[]{"corm.donation.1",
+			"corm.donation.2", "corm.donation.5", "corm.donation.10", "corm.donation.20"};
 
 	private GameConfig gameSelected;
 
@@ -135,7 +139,7 @@ public class MorrowindActivity extends FragmentActivity implements IDownloaderCl
 				test3d();
 				return true;
 			case R.id.menu_donate:
-				//donate();
+				donate();
 				return true;
 			case R.id.menu_deoptomize:
 				item.setChecked(!item.isChecked());
@@ -156,19 +160,33 @@ public class MorrowindActivity extends FragmentActivity implements IDownloaderCl
 
 	private void donate()
 	{
-		CallOfDonationsFragment donationsDialogFragment = new CallOfDonationsFragment();
-		donationsDialogFragment.show(getSupportFragmentManager(), "DialogFragment");
-
-		/*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		DonationsFragment donationsFragment;
 
-		donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true,
+		donationsFragment = DonationsFragment.newInstance( false, true,//BuildConfig.DEBUG, true,
 				GOOGLE_PUBKEY, GOOGLE_CATALOG,
 				getResources().getStringArray(R.array.donation_google_catalog_values), false, null, null,
 				null, false, null, null, false, null);
 
 		ft.replace(R.id.donations_activity_container, donationsFragment, "donationsFragment");
-		ft.commit();*/
+		ft.commit();
+	}
+
+	/**
+	 * Needed for Google Play In-app Billing. It uses startIntentSenderForResult(). The result is not propagated to
+	 * the Fragment like in startActivityForResult(). Thus we need to propagate manually to our Fragment.
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+
+		FragmentManager fragmentManager = getFragmentManager();
+		Fragment fragment = fragmentManager.findFragmentByTag("donationsFragment");
+		if (fragment != null)
+		{
+			fragment.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	private void test3d()
@@ -614,6 +632,9 @@ public class MorrowindActivity extends FragmentActivity implements IDownloaderCl
 		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = !deoptomize;
 		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = !deoptomize;
 		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = !deoptomize;
+		JoglesPipeline.LATE_RELEASE_CONTEXT = !deoptomize;
+		JoglesPipeline.MINIMISE_NATIVE_CALLS_TRANSPARENCY = !deoptomize;
+		JoglesPipeline.MINIMISE_NATIVE_CALLS_TEXTURE = !deoptomize;
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
