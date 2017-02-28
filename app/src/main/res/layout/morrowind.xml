@@ -51,6 +51,12 @@
         android:layout_gravity="center_horizontal"
         android:choiceMode="singleChoice"
         android:listSelector="#666666" />
+    <LinearLayout
+        android:id="@+id/donations_activity_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
 
 </LinearLayout>
 

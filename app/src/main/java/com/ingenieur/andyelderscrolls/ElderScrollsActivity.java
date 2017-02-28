@@ -70,16 +70,30 @@ public class ElderScrollsActivity extends Activity
 	{
 		super.onCreate(state);
 
-		//DEBUG to fix Nexus 5
-		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = false;
-		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;
-		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;
 
 		// get system out to log
 		sysoutInterceptor = new SopInterceptor(System.out, "sysout");
 		System.setOut(sysoutInterceptor);
 		syserrInterceptor = new SopInterceptor(System.err, "syserr");
 		System.setErr(syserrInterceptor);
+
+
+
+		//DEBUG to fix Nexus 5
+		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = false;
+		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;
+		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;
+
+		//Debugishness to investigate egl error 300e
+		JoglesPipeline.LATE_RELEASE_CONTEXT = false;
+
+		System.err.println("Tools\n" +
+				"\t\tJ3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = false;\n" +
+				"\t\tJoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;\n" +
+				"\t\tJoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;\n" +
+				"\t\tJoglesPipeline.LATE_RELEASE_CONTEXT = false;");
+
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
 			int hasWriteExternalStorage = checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE);

@@ -19,6 +19,7 @@ package com.ingenieur.andyelderscrolls;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -28,7 +29,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,7 +50,8 @@ import org.sufficientlysecure.donations.google.util.IabHelper;
 import org.sufficientlysecure.donations.google.util.IabResult;
 import org.sufficientlysecure.donations.google.util.Purchase;
 
-public class DonationsFragment extends Fragment {
+public class DonationsFragment extends Fragment
+{
 
 
 	public static final String ARG_DEBUG = "debug";
@@ -175,6 +176,13 @@ public class DonationsFragment extends Fragment {
 
 		mBitcoinEnabled = getArguments().getBoolean(ARG_BITCOIN_ENABLED);
 		mBitcoinAddress = getArguments().getString(ARG_BITCOIN_ADDRESS);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mHelper != null) mHelper.dispose();
+		mHelper = null;
 	}
 
 	@Override

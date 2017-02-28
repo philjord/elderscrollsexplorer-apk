@@ -1,9 +1,5 @@
 [
     {
-        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_donations.xml",
-        "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\layout\\dialog_donations.xml"
-    },
-    {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\donations__fragment.xml",
         "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\layout\\donations__fragment.xml"
     },

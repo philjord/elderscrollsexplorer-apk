@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:2:1-122:12
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:2:1-123:12
 	package
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:3:5-45
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml
@@ -96,7 +96,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:46:22-64
 application
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:48:5-121:19
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:48:5-122:19
 MERGED from [com.google.firebase:firebase-core:10.0.1] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-core\10.0.1\AndroidManifest.xml:5:5-20
 MERGED from [com.google.firebase:firebase-analytics:10.0.1] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\10.0.1\AndroidManifest.xml:24:5-33:19
 MERGED from [com.google.firebase:firebase-analytics-impl:10.0.1] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\10.0.1\AndroidManifest.xml:24:5-28:19
@@ -108,106 +108,108 @@ MERGED from [org.sufficientlysecure:donations:2.5] C:\Users\phil\AndroidStudioPr
 MERGED from [com.android.support:support-v4:24.0.0] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\AndroidManifest.xml:25:5-20
 	android:label
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:50:9-41
+	android:hardwareAccelerated
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:52:9-43
 	android:icon
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:49:9-45
 	android:largeHeap
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:51:9-33
 activity#com.ingenieur.andyelderscrolls.MorrowindActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:52:9-62:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:53:9-63:20
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:55:13-49
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:56:13-49
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:54:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:55:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:53:13-46
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:54:13-46
 intent-filter#android.intent.action.MAIN+android.intent.category.DEFAULT+android.intent.category.LAUNCHER
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:57:13-61:29
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:58:13-62:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:58:17-68
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:59:17-68
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:58:25-66
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:59:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:59:17-76
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:60:17-76
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:59:27-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:60:27-74
 category#android.intent.category.DEFAULT
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:60:17-75
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:61:17-75
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:60:27-73
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:61:27-73
 activity#com.ingenieur.andyelderscrolls.ElderScrollsActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:63:9-73:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:64:9-74:20
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:66:13-47
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:67:13-47
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:65:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:66:13-74
 	android:icon
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:67:13-43
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:68:13-43
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:64:13-49
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:65:13-49
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:69:13-72:29
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:70:13-73:29
 activity#com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:74:9-83:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:75:9-84:20
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:77:13-40
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:78:13-40
 	android:parentActivityName
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:78:13-63
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:79:13-63
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:76:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:77:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:75:13-58
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:76:13-58
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:80:13-82:56
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:81:13-83:56
 	android:value
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:82:17-54
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:83:17-54
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:81:17-63
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:82:17-63
 activity#com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:84:9-93:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:85:9-94:20
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:87:13-39
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:88:13-39
 	android:parentActivityName
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:88:13-63
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:89:13-63
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:86:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:87:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:85:13-56
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:86:13-56
 activity#com.ingenieur.andyelderscrolls.jbullet.JBulletActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:94:9-103:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:95:9-104:20
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:97:13-36
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:98:13-36
 	android:parentActivityName
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:98:13-63
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:99:13-63
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:96:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:97:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:95:13-52
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:96:13-52
 activity#com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:104:9-114:20
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:105:9-115:20
 	android:screenOrientation
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:109:13-56
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:110:13-56
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:107:13-39
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:108:13-39
 	android:parentActivityName
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:108:13-63
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:109:13-63
 	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:106:13-74
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:107:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:105:13-66
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:106:13-66
 activity#simpleandroid.JoglStatusActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:115:9-116:68
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:116:9-117:68
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:115:19-51
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:116:19-51
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:116:19-66
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:117:19-66
 service#com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:118:9-67
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:119:9-67
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:118:18-64
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:119:18-64
 receiver#com.ingenieur.andyelderscrolls.utils.obb.ObbAlarmServiceReceiver
-ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:119:9-71
+ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:120:9-71
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:119:19-68
+		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:120:19-68
 receiver#com.google.android.gms.measurement.AppMeasurementReceiver
 ADDED from [com.google.firebase:firebase-analytics:10.0.1] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\10.0.1\AndroidManifest.xml:25:7-26:18
 MERGED from [com.google.firebase:firebase-analytics-impl:10.0.1] C:\Users\phil\AndroidStudioProjects\ese-android\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\10.0.1\AndroidManifest.xml:25:7-26:18

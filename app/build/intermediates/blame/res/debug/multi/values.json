@@ -7,21 +7,29 @@
                     "startLine": 2,
                     "startColumn": 4,
                     "startOffset": 105,
-                    "endLine": 9,
+                    "endLine": 8,
                     "endColumn": 19,
-                    "endOffset": 342
+                    "endOffset": 339
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 41,
+                        "startColumn": 4,
+                        "startOffset": 2976,
+                        "endLine": 47,
+                        "endColumn": 19,
+                        "endOffset": 3210
+                    }
                 }
             },
             {
                 "to": {
-                    "startLine": 10,
+                    "startLine": 9,
                     "startColumn": 4,
-                    "startOffset": 347,
+                    "startOffset": 344,
                     "endColumn": 67,
-                    "endOffset": 410
+                    "endOffset": 407
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-basement\\10.0.1\\res\\values\\values.xml"
@@ -29,11 +37,23 @@
             },
             {
                 "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 412,
+                    "endColumn": 52,
+                    "endOffset": 460
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
                     "startLine": 11,
                     "startColumn": 4,
-                    "startOffset": 415,
-                    "endColumn": 52,
-                    "endOffset": 463
+                    "startOffset": 465,
+                    "endColumn": 57,
+                    "endOffset": 518
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -43,9 +63,9 @@
                 "to": {
                     "startLine": 12,
                     "startColumn": 4,
-                    "startOffset": 468,
-                    "endColumn": 57,
-                    "endOffset": 521
+                    "startOffset": 523,
+                    "endColumn": 45,
+                    "endOffset": 564
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -55,9 +75,9 @@
                 "to": {
                     "startLine": 13,
                     "startColumn": 4,
-                    "startOffset": 526,
-                    "endColumn": 45,
-                    "endOffset": 567
+                    "startOffset": 569,
+                    "endColumn": 58,
+                    "endOffset": 623
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -67,9 +87,9 @@
                 "to": {
                     "startLine": 14,
                     "startColumn": 4,
-                    "startOffset": 572,
-                    "endColumn": 58,
-                    "endOffset": 626
+                    "startOffset": 628,
+                    "endColumn": 49,
+                    "endOffset": 673
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -79,21 +99,9 @@
                 "to": {
                     "startLine": 15,
                     "startColumn": 4,
-                    "startOffset": 631,
-                    "endColumn": 49,
-                    "endOffset": 676
-                },
-                "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
-                }
-            },
-            {
-                "to": {
-                    "startLine": 16,
-                    "startColumn": 4,
-                    "startOffset": 681,
+                    "startOffset": 678,
                     "endColumn": 166,
-                    "endOffset": 843
+                    "endOffset": 840
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-basement\\10.0.1\\res\\values\\values.xml"
@@ -101,11 +109,11 @@
             },
             {
                 "to": {
-                    "startLine": 17,
+                    "startLine": 16,
                     "startColumn": 4,
-                    "startOffset": 848,
+                    "startOffset": 845,
                     "endColumn": 143,
-                    "endOffset": 987
+                    "endOffset": 984
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -113,11 +121,11 @@
             },
             {
                 "to": {
-                    "startLine": 18,
+                    "startLine": 17,
                     "startColumn": 4,
-                    "startOffset": 992,
+                    "startOffset": 989,
                     "endColumn": 71,
-                    "endOffset": 1059
+                    "endOffset": 1056
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -125,11 +133,23 @@
             },
             {
                 "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1061,
+                    "endColumn": 102,
+                    "endOffset": 1159
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
                     "startLine": 19,
                     "startColumn": 4,
-                    "startOffset": 1064,
-                    "endColumn": 102,
-                    "endOffset": 1162
+                    "startOffset": 1164,
+                    "endColumn": 72,
+                    "endOffset": 1232
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -139,9 +159,9 @@
                 "to": {
                     "startLine": 20,
                     "startColumn": 4,
-                    "startOffset": 1167,
-                    "endColumn": 72,
-                    "endOffset": 1235
+                    "startOffset": 1237,
+                    "endColumn": 54,
+                    "endOffset": 1287
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -151,9 +171,9 @@
                 "to": {
                     "startLine": 21,
                     "startColumn": 4,
-                    "startOffset": 1240,
-                    "endColumn": 54,
-                    "endOffset": 1290
+                    "startOffset": 1292,
+                    "endColumn": 142,
+                    "endOffset": 1430
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -163,9 +183,9 @@
                 "to": {
                     "startLine": 22,
                     "startColumn": 4,
-                    "startOffset": 1295,
-                    "endColumn": 142,
-                    "endOffset": 1433
+                    "startOffset": 1435,
+                    "endColumn": 80,
+                    "endOffset": 1511
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -175,9 +195,9 @@
                 "to": {
                     "startLine": 23,
                     "startColumn": 4,
-                    "startOffset": 1438,
-                    "endColumn": 80,
-                    "endOffset": 1514
+                    "startOffset": 1516,
+                    "endColumn": 107,
+                    "endOffset": 1619
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -187,9 +207,9 @@
                 "to": {
                     "startLine": 24,
                     "startColumn": 4,
-                    "startOffset": 1519,
-                    "endColumn": 107,
-                    "endOffset": 1622
+                    "startOffset": 1624,
+                    "endColumn": 57,
+                    "endOffset": 1677
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -199,21 +219,21 @@
                 "to": {
                     "startLine": 25,
                     "startColumn": 4,
-                    "startOffset": 1627,
-                    "endColumn": 57,
-                    "endOffset": 1680
+                    "startOffset": 1682,
+                    "endColumn": 161,
+                    "endOffset": 1839
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 26,
                     "startColumn": 4,
-                    "startOffset": 1685,
-                    "endColumn": 152,
-                    "endOffset": 1833
+                    "startOffset": 1844,
+                    "endColumn": 52,
+                    "endOffset": 1892
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -223,9 +243,9 @@
                 "to": {
                     "startLine": 27,
                     "startColumn": 4,
-                    "startOffset": 1838,
-                    "endColumn": 52,
-                    "endOffset": 1886
+                    "startOffset": 1897,
+                    "endColumn": 85,
+                    "endOffset": 1978
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -235,9 +255,9 @@
                 "to": {
                     "startLine": 28,
                     "startColumn": 4,
-                    "startOffset": 1891,
-                    "endColumn": 85,
-                    "endOffset": 1972
+                    "startOffset": 1983,
+                    "endColumn": 78,
+                    "endOffset": 2057
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -247,9 +267,9 @@
                 "to": {
                     "startLine": 29,
                     "startColumn": 4,
-                    "startOffset": 1977,
-                    "endColumn": 78,
-                    "endOffset": 2051
+                    "startOffset": 2062,
+                    "endColumn": 100,
+                    "endOffset": 2158
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -259,9 +279,9 @@
                 "to": {
                     "startLine": 30,
                     "startColumn": 4,
-                    "startOffset": 2056,
-                    "endColumn": 100,
-                    "endOffset": 2152
+                    "startOffset": 2163,
+                    "endColumn": 82,
+                    "endOffset": 2241
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -271,9 +291,9 @@
                 "to": {
                     "startLine": 31,
                     "startColumn": 4,
-                    "startOffset": 2157,
-                    "endColumn": 82,
-                    "endOffset": 2235
+                    "startOffset": 2246,
+                    "endColumn": 152,
+                    "endOffset": 2394
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -283,9 +303,9 @@
                 "to": {
                     "startLine": 32,
                     "startColumn": 4,
-                    "startOffset": 2240,
-                    "endColumn": 152,
-                    "endOffset": 2388
+                    "startOffset": 2399,
+                    "endColumn": 116,
+                    "endOffset": 2511
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -295,9 +315,9 @@
                 "to": {
                     "startLine": 33,
                     "startColumn": 4,
-                    "startOffset": 2393,
-                    "endColumn": 116,
-                    "endOffset": 2505
+                    "startOffset": 2516,
+                    "endColumn": 75,
+                    "endOffset": 2587
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -307,9 +327,9 @@
                 "to": {
                     "startLine": 34,
                     "startColumn": 4,
-                    "startOffset": 2510,
-                    "endColumn": 75,
-                    "endOffset": 2581
+                    "startOffset": 2592,
+                    "endColumn": 52,
+                    "endOffset": 2640
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -319,9 +339,9 @@
                 "to": {
                     "startLine": 35,
                     "startColumn": 4,
-                    "startOffset": 2586,
-                    "endColumn": 52,
-                    "endOffset": 2634
+                    "startOffset": 2645,
+                    "endColumn": 127,
+                    "endOffset": 2768
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -331,9 +351,9 @@
                 "to": {
                     "startLine": 36,
                     "startColumn": 4,
-                    "startOffset": 2639,
-                    "endColumn": 127,
-                    "endOffset": 2762
+                    "startOffset": 2773,
+                    "endColumn": 100,
+                    "endOffset": 2869
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -343,9 +363,9 @@
                 "to": {
                     "startLine": 37,
                     "startColumn": 4,
-                    "startOffset": 2767,
-                    "endColumn": 100,
-                    "endOffset": 2863
+                    "startOffset": 2874,
+                    "endColumn": 66,
+                    "endOffset": 2936
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
@@ -355,21 +375,21 @@
                 "to": {
                     "startLine": 38,
                     "startColumn": 4,
-                    "startOffset": 2868,
-                    "endColumn": 66,
-                    "endOffset": 2930
+                    "startOffset": 2941,
+                    "endColumn": 60,
+                    "endOffset": 2997
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\org.sufficientlysecure\\donations\\2.5\\res\\values\\values.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 39,
                     "startColumn": 4,
-                    "startOffset": 2935,
-                    "endColumn": 60,
-                    "endOffset": 2991
+                    "startOffset": 3002,
+                    "endColumn": 56,
+                    "endOffset": 3054
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -379,9 +399,9 @@
                 "to": {
                     "startLine": 40,
                     "startColumn": 4,
-                    "startOffset": 2996,
-                    "endColumn": 56,
-                    "endOffset": 3048
+                    "startOffset": 3059,
+                    "endColumn": 50,
+                    "endOffset": 3105
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -391,21 +411,21 @@
                 "to": {
                     "startLine": 41,
                     "startColumn": 4,
-                    "startOffset": 3053,
-                    "endColumn": 50,
-                    "endOffset": 3099
+                    "startOffset": 3110,
+                    "endColumn": 114,
+                    "endOffset": 3220
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 42,
                     "startColumn": 4,
-                    "startOffset": 3104,
-                    "endColumn": 114,
-                    "endOffset": 3214
+                    "startOffset": 3225,
+                    "endColumn": 81,
+                    "endOffset": 3302
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -415,9 +435,9 @@
                 "to": {
                     "startLine": 43,
                     "startColumn": 4,
-                    "startOffset": 3219,
-                    "endColumn": 81,
-                    "endOffset": 3296
+                    "startOffset": 3307,
+                    "endColumn": 103,
+                    "endOffset": 3406
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -427,9 +447,9 @@
                 "to": {
                     "startLine": 44,
                     "startColumn": 4,
-                    "startOffset": 3301,
-                    "endColumn": 103,
-                    "endOffset": 3400
+                    "startOffset": 3411,
+                    "endColumn": 102,
+                    "endOffset": 3509
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -439,9 +459,9 @@
                 "to": {
                     "startLine": 45,
                     "startColumn": 4,
-                    "startOffset": 3405,
-                    "endColumn": 102,
-                    "endOffset": 3503
+                    "startOffset": 3514,
+                    "endColumn": 119,
+                    "endOffset": 3629
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -451,9 +471,9 @@
                 "to": {
                     "startLine": 46,
                     "startColumn": 4,
-                    "startOffset": 3508,
-                    "endColumn": 119,
-                    "endOffset": 3623
+                    "startOffset": 3634,
+                    "endColumn": 103,
+                    "endOffset": 3733
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
@@ -463,21 +483,21 @@
                 "to": {
                     "startLine": 47,
                     "startColumn": 4,
-                    "startOffset": 3628,
-                    "endColumn": 103,
-                    "endOffset": 3727
+                    "startOffset": 3738,
+                    "endColumn": 62,
+                    "endOffset": 3796
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\generated\\res\\google-services\\debug\\values\\values.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 48,
                     "startColumn": 4,
-                    "startOffset": 3732,
-                    "endColumn": 62,
-                    "endOffset": 3790
+                    "startOffset": 3801,
+                    "endColumn": 52,
+                    "endOffset": 3849
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -487,21 +507,9 @@
                 "to": {
                     "startLine": 49,
                     "startColumn": 4,
-                    "startOffset": 3795,
-                    "endColumn": 52,
-                    "endOffset": 3843
-                },
-                "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
-                }
-            },
-            {
-                "to": {
-                    "startLine": 50,
-                    "startColumn": 4,
-                    "startOffset": 3848,
+                    "startOffset": 3854,
                     "endColumn": 58,
-                    "endOffset": 3902
+                    "endOffset": 3908
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -509,11 +517,23 @@
             },
             {
                 "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 3913,
+                    "endColumn": 44,
+                    "endOffset": 3953
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
                     "startLine": 51,
                     "startColumn": 4,
-                    "startOffset": 3907,
-                    "endColumn": 44,
-                    "endOffset": 3947
+                    "startOffset": 3958,
+                    "endColumn": 49,
+                    "endOffset": 4003
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -523,28 +543,21 @@
                 "to": {
                     "startLine": 52,
                     "startColumn": 4,
-                    "startOffset": 3952,
-                    "endColumn": 49,
-                    "endOffset": 3997
+                    "startOffset": 4008,
+                    "endColumn": 54,
+                    "endOffset": 4058
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml",
-                    "position": {
-                        "startLine": 39,
-                        "startColumn": 4,
-                        "startOffset": 2764,
-                        "endColumn": 49,
-                        "endOffset": 2809
-                    }
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 53,
                     "startColumn": 4,
-                    "startOffset": 4002,
-                    "endColumn": 54,
-                    "endOffset": 4052
+                    "startOffset": 4063,
+                    "endColumn": 46,
+                    "endOffset": 4105
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -554,9 +567,9 @@
                 "to": {
                     "startLine": 54,
                     "startColumn": 4,
-                    "startOffset": 4057,
-                    "endColumn": 46,
-                    "endOffset": 4099
+                    "startOffset": 4110,
+                    "endColumn": 42,
+                    "endOffset": 4148
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -566,9 +579,9 @@
                 "to": {
                     "startLine": 55,
                     "startColumn": 4,
-                    "startOffset": 4104,
-                    "endColumn": 42,
-                    "endOffset": 4142
+                    "startOffset": 4153,
+                    "endColumn": 48,
+                    "endOffset": 4197
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -578,9 +591,9 @@
                 "to": {
                     "startLine": 56,
                     "startColumn": 4,
-                    "startOffset": 4147,
-                    "endColumn": 48,
-                    "endOffset": 4191
+                    "startOffset": 4202,
+                    "endColumn": 37,
+                    "endOffset": 4235
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -590,21 +603,21 @@
                 "to": {
                     "startLine": 57,
                     "startColumn": 4,
-                    "startOffset": 4196,
-                    "endColumn": 37,
-                    "endOffset": 4229
+                    "startOffset": 4240,
+                    "endColumn": 76,
+                    "endOffset": 4312
                 },
                 "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
                 }
             },
             {
                 "to": {
                     "startLine": 58,
                     "startColumn": 4,
-                    "startOffset": 4234,
-                    "endColumn": 76,
-                    "endOffset": 4306
+                    "startOffset": 4317,
+                    "endColumn": 78,
+                    "endOffset": 4391
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -614,21 +627,9 @@
                 "to": {
                     "startLine": 59,
                     "startColumn": 4,
-                    "startOffset": 4311,
-                    "endColumn": 78,
-                    "endOffset": 4385
-                },
-                "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
-                }
-            },
-            {
-                "to": {
-                    "startLine": 60,
-                    "startColumn": 4,
-                    "startOffset": 4390,
+                    "startOffset": 4396,
                     "endColumn": 61,
-                    "endOffset": 4447
+                    "endOffset": 4453
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -636,11 +637,23 @@
             },
             {
                 "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 4458,
+                    "endColumn": 61,
+                    "endOffset": 4515
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
                     "startLine": 61,
                     "startColumn": 4,
-                    "startOffset": 4452,
-                    "endColumn": 61,
-                    "endOffset": 4509
+                    "startOffset": 4520,
+                    "endColumn": 78,
+                    "endOffset": 4594
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -650,9 +663,9 @@
                 "to": {
                     "startLine": 62,
                     "startColumn": 4,
-                    "startOffset": 4514,
-                    "endColumn": 78,
-                    "endOffset": 4588
+                    "startOffset": 4599,
+                    "endColumn": 67,
+                    "endOffset": 4662
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -662,9 +675,9 @@
                 "to": {
                     "startLine": 63,
                     "startColumn": 4,
-                    "startOffset": 4593,
-                    "endColumn": 67,
-                    "endOffset": 4656
+                    "startOffset": 4667,
+                    "endColumn": 56,
+                    "endOffset": 4719
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -674,9 +687,9 @@
                 "to": {
                     "startLine": 64,
                     "startColumn": 4,
-                    "startOffset": 4661,
-                    "endColumn": 56,
-                    "endOffset": 4713
+                    "startOffset": 4724,
+                    "endColumn": 69,
+                    "endOffset": 4789
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -686,9 +699,9 @@
                 "to": {
                     "startLine": 65,
                     "startColumn": 4,
-                    "startOffset": 4718,
-                    "endColumn": 69,
-                    "endOffset": 4783
+                    "startOffset": 4794,
+                    "endColumn": 110,
+                    "endOffset": 4900
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -698,9 +711,9 @@
                 "to": {
                     "startLine": 66,
                     "startColumn": 4,
-                    "startOffset": 4788,
-                    "endColumn": 110,
-                    "endOffset": 4894
+                    "startOffset": 4905,
+                    "endColumn": 105,
+                    "endOffset": 5006
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -710,9 +723,9 @@
                 "to": {
                     "startLine": 67,
                     "startColumn": 4,
-                    "startOffset": 4899,
-                    "endColumn": 105,
-                    "endOffset": 5000
+                    "startOffset": 5011,
+                    "endColumn": 111,
+                    "endOffset": 5118
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -722,9 +735,9 @@
                 "to": {
                     "startLine": 68,
                     "startColumn": 4,
-                    "startOffset": 5005,
-                    "endColumn": 111,
-                    "endOffset": 5112
+                    "startOffset": 5123,
+                    "endColumn": 80,
+                    "endOffset": 5199
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -734,9 +747,9 @@
                 "to": {
                     "startLine": 69,
                     "startColumn": 4,
-                    "startOffset": 5117,
-                    "endColumn": 80,
-                    "endOffset": 5193
+                    "startOffset": 5204,
+                    "endColumn": 68,
+                    "endOffset": 5268
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -746,9 +759,9 @@
                 "to": {
                     "startLine": 70,
                     "startColumn": 4,
-                    "startOffset": 5198,
-                    "endColumn": 68,
-                    "endOffset": 5262
+                    "startOffset": 5273,
+                    "endColumn": 67,
+                    "endOffset": 5336
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -758,9 +771,9 @@
                 "to": {
                     "startLine": 71,
                     "startColumn": 4,
-                    "startOffset": 5267,
-                    "endColumn": 67,
-                    "endOffset": 5330
+                    "startOffset": 5341,
+                    "endColumn": 105,
+                    "endOffset": 5442
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -770,9 +783,9 @@
                 "to": {
                     "startLine": 72,
                     "startColumn": 4,
-                    "startOffset": 5335,
-                    "endColumn": 105,
-                    "endOffset": 5436
+                    "startOffset": 5447,
+                    "endColumn": 108,
+                    "endOffset": 5551
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -782,9 +795,9 @@
                 "to": {
                     "startLine": 73,
                     "startColumn": 4,
-                    "startOffset": 5441,
-                    "endColumn": 108,
-                    "endOffset": 5545
+                    "startOffset": 5556,
+                    "endColumn": 88,
+                    "endOffset": 5640
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -794,9 +807,9 @@
                 "to": {
                     "startLine": 74,
                     "startColumn": 4,
-                    "startOffset": 5550,
-                    "endColumn": 88,
-                    "endOffset": 5634
+                    "startOffset": 5645,
+                    "endColumn": 119,
+                    "endOffset": 5760
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -806,9 +819,9 @@
                 "to": {
                     "startLine": 75,
                     "startColumn": 4,
-                    "startOffset": 5639,
-                    "endColumn": 119,
-                    "endOffset": 5754
+                    "startOffset": 5765,
+                    "endColumn": 95,
+                    "endOffset": 5856
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -818,9 +831,9 @@
                 "to": {
                     "startLine": 76,
                     "startColumn": 4,
-                    "startOffset": 5759,
-                    "endColumn": 95,
-                    "endOffset": 5850
+                    "startOffset": 5861,
+                    "endColumn": 101,
+                    "endOffset": 5958
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -830,9 +843,9 @@
                 "to": {
                     "startLine": 77,
                     "startColumn": 4,
-                    "startOffset": 5855,
-                    "endColumn": 101,
-                    "endOffset": 5952
+                    "startOffset": 5963,
+                    "endColumn": 54,
+                    "endOffset": 6013
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -842,9 +855,9 @@
                 "to": {
                     "startLine": 78,
                     "startColumn": 4,
-                    "startOffset": 5957,
-                    "endColumn": 54,
-                    "endOffset": 6007
+                    "startOffset": 6018,
+                    "endColumn": 63,
+                    "endOffset": 6077
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -854,9 +867,9 @@
                 "to": {
                     "startLine": 79,
                     "startColumn": 4,
-                    "startOffset": 6012,
-                    "endColumn": 63,
-                    "endOffset": 6071
+                    "startOffset": 6082,
+                    "endColumn": 65,
+                    "endOffset": 6143
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -866,21 +879,9 @@
                 "to": {
                     "startLine": 80,
                     "startColumn": 4,
-                    "startOffset": 6076,
-                    "endColumn": 65,
-                    "endOffset": 6137
-                },
-                "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
-                }
-            },
-            {
-                "to": {
-                    "startLine": 81,
-                    "startColumn": 4,
-                    "startOffset": 6142,
+                    "startOffset": 6148,
                     "endColumn": 63,
-                    "endOffset": 6201
+                    "endOffset": 6207
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -888,12 +889,24 @@
             },
             {
                 "to": {
-                    "startLine": 82,
+                    "startLine": 81,
                     "startColumn": 4,
-                    "startOffset": 6206,
-                    "endLine": 97,
+                    "startOffset": 6212,
+                    "endLine": 96,
                     "endColumn": 13,
-                    "endOffset": 7766
+                    "endOffset": 7772
+                },
+                "from": {
+                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 97,
+                    "startColumn": 4,
+                    "startOffset": 7777,
+                    "endColumn": 58,
+                    "endOffset": 7831
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -903,9 +916,9 @@
                 "to": {
                     "startLine": 98,
                     "startColumn": 4,
-                    "startOffset": 7771,
+                    "startOffset": 7836,
                     "endColumn": 58,
-                    "endOffset": 7825
+                    "endOffset": 7890
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
@@ -915,22 +928,10 @@
                 "to": {
                     "startLine": 99,
                     "startColumn": 4,
-                    "startOffset": 7830,
-                    "endColumn": 58,
-                    "endOffset": 7884
-                },
-                "from": {
-                    "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\src\\main\\res\\values\\strings.xml"
-                }
-            },
-            {
-                "to": {
-                    "startLine": 100,
-                    "startColumn": 4,
-                    "startOffset": 7889,
-                    "endLine": 102,
+                    "startOffset": 7895,
+                    "endLine": 101,
                     "endColumn": 12,
-                    "endOffset": 8011
+                    "endOffset": 8017
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -938,12 +939,12 @@
             },
             {
                 "to": {
-                    "startLine": 103,
+                    "startLine": 102,
                     "startColumn": 4,
-                    "startOffset": 8016,
-                    "endLine": 105,
+                    "startOffset": 8022,
+                    "endLine": 104,
                     "endColumn": 12,
-                    "endOffset": 8137
+                    "endOffset": 8143
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -951,12 +952,12 @@
             },
             {
                 "to": {
-                    "startLine": 106,
+                    "startLine": 105,
                     "startColumn": 4,
-                    "startOffset": 8142,
-                    "endLine": 112,
+                    "startOffset": 8148,
+                    "endLine": 111,
                     "endColumn": 12,
-                    "endOffset": 8523
+                    "endOffset": 8529
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"
@@ -964,12 +965,12 @@
             },
             {
                 "to": {
-                    "startLine": 113,
+                    "startLine": 112,
                     "startColumn": 4,
-                    "startOffset": 8528,
-                    "endLine": 116,
+                    "startOffset": 8534,
+                    "endLine": 115,
                     "endColumn": 12,
-                    "endOffset": 8701
+                    "endOffset": 8707
                 },
                 "from": {
                     "file": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\exploded-aar\\ese-android\\downloader_library\\unspecified\\res\\values\\values.xml"

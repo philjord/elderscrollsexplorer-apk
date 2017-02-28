@@ -2,8 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="115"
-    android:versionName="1.15">
+    android:versionCode="119"
+    android:versionName="1.19">
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -48,7 +48,8 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true">
+        android:largeHeap="true"
+        android:hardwareAccelerated="true">
         <activity
             android:name=".MorrowindActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
