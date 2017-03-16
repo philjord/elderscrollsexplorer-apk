@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/optionsAvatarLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="optionsAvatarLocation"/>
+
+            <Button
+                android:id="@+id/optionsAvatarLocationGo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Go"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Load Far Grid Count"/>
+
+            <SeekBar
+                android:id="@+id/optionsFarLoadGridCount"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="64"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Load Near Grid Count"/>
+
+            <SeekBar
+                android:id="@+id/optionsNearLoadGridCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="16"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Object Fade Distance"/>
+
+            <SeekBar
+                android:id="@+id/optionsObjectFadeDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="160"/>
+
+            <CheckBox
+                android:id="@+id/optionsShowPathGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Path Grid"/>
+
+            <CheckBox
+                android:id="@+id/optionsFogEnabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enable Fog"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ambient Light Level"/>
+
+            <SeekBar
+                android:id="@+id/optionsAmbientLightLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Directional Light Level"/>
+
+            <SeekBar
+                android:id="@+id/optionsDirectionalLightLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"/>
+
+            <CheckBox
+                android:id="@+id/optionsPlacedLightsEnabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placed Lights Enabled"/>
+
+            <CheckBox
+                android:id="@+id/optionsCharacterOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Character Outlines"/>
+
+            <CheckBox
+                android:id="@+id/optionsDoorOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Door Outlines"/>
+
+            <CheckBox
+                android:id="@+id/optionsContainerOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Container Outlines"/>
+
+            <CheckBox
+                android:id="@+id/optionsParticlesOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Particles Outlines"/>
+
+            <CheckBox
+                android:id="@+id/optionsFocusedObjectOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Focused Object Outlines"/>
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/optionsClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        />
+
+</LinearLayout>

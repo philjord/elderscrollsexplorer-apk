@@ -691,6 +691,19 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 			{
 				BethRenderSettings.setOutlineParts(!BethRenderSettings.isOutlineParts());
 			}
+			else if (e.getKeyCode() == KeyEvent.VK_O)
+			{
+				parentActivity.runOnUiThread(new Runnable()
+					 {
+						 @Override
+						 public void run()
+						 {
+							 OptionsDialog od = new OptionsDialog(parentActivity, simpleWalkSetup);
+							 od.display();
+						 }
+					 });
+			}
+
 
 		}
 	}

@@ -2,8 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="119"
-    android:versionName="1.19">
+    android:versionCode="122"
+    android:versionName="1.22">
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -61,6 +61,22 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MorrowindVRActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="Call of Red MountainVR"
+            android:icon="@drawable/vr_icon"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="com.google.intent.category.CARDBOARD"/>
+
+
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".ElderScrollsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

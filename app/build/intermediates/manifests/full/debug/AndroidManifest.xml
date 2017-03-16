@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ingenieur.ese.eseandroid"
-    android:versionCode="119"
-    android:versionName="1.19" >
+    android:versionCode="121"
+    android:versionName="1.21" >
 
     <uses-sdk
-        android:minSdkVersion="18"
-        android:targetSdkVersion="23" />
+        android:minSdkVersion="19"
+        android:targetSdkVersion="25" />
 
     <supports-screens
         android:anyDensity="true"
@@ -52,7 +52,16 @@
         android:name="com.ingenieur.ese.eseandroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.ingenieur.ese.eseandroid.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.ingenieur.ese.eseandroid.permission.C2D_MESSAGE" /> <!-- Required to read/write the paired viewer's distortion parameters. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Indicates use of Android's VR-mode, available only on Android N+. -->
+    <uses-feature
+        android:name="android.software.vr.mode"
+        android:required="false" /> <!-- Indicates use of VR features that are available only on Daydream-ready devices. -->
+    <uses-feature
+        android:name="android.hardware.vr.high_performance"
+        android:required="false" />
+
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:hardwareAccelerated="true"
@@ -68,6 +77,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.ingenieur.andyelderscrolls.MorrowindVRActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:icon="@drawable/vr_icon"
+            android:label="Call of Red MountainVR" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="com.google.intent.category.CARDBOARD" />
             </intent-filter>
         </activity>
         <activity

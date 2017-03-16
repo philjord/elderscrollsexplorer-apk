@@ -39,6 +39,7 @@ On each start up there are several pre-set start locations and configurations.
     <string name="menu_deoptomize">Deoptomize</string>
     <string name="menu_anti_alias">x2 AA</string>
     <string name="donations__description">Do you love Morrowind?\nAny support would be gratefully appreciated and may assist in speeding up development!</string>
+    <string name="menu_options">Options</string>
     <string-array name="donation_google_catalog_values">
         <item>Donation 1</item>
         <item>Donation 2</item>

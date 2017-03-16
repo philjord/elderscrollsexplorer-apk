@@ -32,6 +32,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 
 import nif.j3d.J3dNiTriBasedGeom;
+import nif.shaders.ShaderPrograms;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 
@@ -92,6 +93,8 @@ public class ElderScrollsActivity extends Activity
 				"\t\tJoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;\n" +
 				"\t\tJoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;\n" +
 				"\t\tJoglesPipeline.LATE_RELEASE_CONTEXT = false;");
+
+
 
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -205,7 +208,6 @@ public class ElderScrollsActivity extends Activity
 				editor.apply();
 
 				validESM = true;
-
 				break;
 			}
 		}
@@ -273,6 +275,9 @@ public class ElderScrollsActivity extends Activity
 					if (selection.equals(gameConfig.gameName))
 					{
 						gameSelected = gameConfig;
+
+						// debug shaders like this to externalize from jars
+						ShaderPrograms.fileSystemFolder = new File(gameConfig.scrollsFolder, "shaders");
 						break;
 					}
 				}

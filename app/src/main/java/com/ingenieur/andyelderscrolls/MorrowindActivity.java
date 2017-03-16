@@ -35,6 +35,7 @@ import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
+import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsDialog;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
@@ -47,6 +48,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import nif.j3d.J3dNiTriBasedGeom;
+import nif.shaders.ShaderPrograms;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import simpleandroid.JoglStatusActivity;
@@ -135,6 +137,10 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 	{
 		switch (item.getItemId())
 		{
+			case R.id.menu_options:
+				OptionsDialog od = new OptionsDialog(this, null);
+				od.display();
+				return true;
 			case R.id.menu_test_3d:
 				test3d();
 				return true;
@@ -264,6 +270,9 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				editor.apply();
 
 				validESM = true;
+
+
+
 				break;
 			}
 		}
@@ -303,6 +312,10 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 					{
 						gameConfig.scrollsFolder = gameFolder;
 						gameSelected = gameConfig;
+
+						// debug shaders like this to externalize from jars
+						ShaderPrograms.fileSystemFolder = new File(gameFolder, "shaders");
+
 						break;
 					}
 				}
