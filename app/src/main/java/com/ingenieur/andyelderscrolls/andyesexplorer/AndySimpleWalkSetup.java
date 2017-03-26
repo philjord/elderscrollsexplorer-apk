@@ -159,6 +159,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		physicsGroup.setCapability(BranchGroup.ALLOW_DETACH);
 		physicsGroup.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 		physicsGroup.setCapability(Group.ALLOW_CHILDREN_WRITE);
+		physicsGroup.setCapability(Group.ALLOW_PARENT_READ);
 		//modelGroup.addChild(physicsGroup); added if toggled on
 
 		visualGroup = new BranchGroup();

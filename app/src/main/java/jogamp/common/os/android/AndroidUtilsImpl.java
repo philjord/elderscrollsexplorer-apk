@@ -35,7 +35,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 // Android 7 does  not allow the mode MODE_WORLD_READ
-// this calss taken out of gluegen-rt-android
+// this class taken out of gluegen-rt-android.jar
 public class AndroidUtilsImpl {
    private static boolean DEBUG = false;
 
