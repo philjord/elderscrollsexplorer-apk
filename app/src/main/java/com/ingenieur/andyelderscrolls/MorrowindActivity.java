@@ -14,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -164,6 +166,17 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 				return true;
+			case R.id.menu_help:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				String welcomeMessage = this.getString(R.string.welcometext);
+				TextView textView = new TextView(this);
+				textView.setPadding(10,10,10,10);
+				textView.setText(Html.fromHtml(welcomeMessage));
+				textView.setMovementMethod(LinkMovementMethod.getInstance());
+				builder.setView(textView);
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -252,7 +265,14 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 					attemptLaunchMorrowind();
 				}
 			});
-			builder.setMessage(R.string.welcometext);
+
+			String welcomeMessage = this.getString(R.string.welcometext);
+			TextView textView = new TextView(this);
+			textView.setPadding(10,10,10,10);
+			textView.setText(Html.fromHtml(welcomeMessage));
+			textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+			builder.setView(textView);
 
 			// Create the AlertDialog
 			AlertDialog dialog = builder.create();

@@ -1742,22 +1742,38 @@ Nagyra értékelem!</string></file><file path="C:\Users\phil\.android\build-cach
         <item>Donation 5</item>
         <item>Donation 10</item>
         <item>Donation 20</item>
-    </string-array><string name="dontcapturelogs">Don\'t write log</string><string name="btn_choose">Choose</string><string name="jbulletdisplaytext">JBullet Display</string><string name="capturelogs">Write log</string><string name="welcometextno">Don\'t remind me</string><string name="menu_help">Help</string><string name="none">none</string><string name="action_settings">Settings</string><string name="app_name">Call of Red Mountain</string><string name="edit_message">Enter a message</string><string name="menu_start_tools">Start Tools</string><string name="wait_file_download">file downloading</string><string name="menu_donate">Donate</string><string name="directory_selected_label">selected directory</string><string name="donations__description">Do you love Morrowind?\nAny support would be gratefully appreciated and may assist in speeding up development!</string><string name="kfdisplaytext">Kf Display</string><string name="setgameesmfile">Set Game Data File</string><string name="welcometext">
-Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (2002).\n
-In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.\n
-Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.\n
-You can copy it to any location that is accessible from your computer\'s file explorer.\n
+    </string-array><string name="dontcapturelogs">Don\'t write log</string><string name="btn_choose">Choose</string><string name="jbulletdisplaytext">JBullet Display</string><string name="capturelogs">Write log</string><string name="welcometextno">Don\'t remind me</string><string name="menu_help">Help</string><string name="none">none</string><string name="action_settings">Settings</string><string name="app_name">Call of Red Mountain</string><string name="edit_message">Enter a message</string><string name="menu_start_tools">Start Tools</string><string name="wait_file_download">file downloading</string><string name="menu_donate">Donate</string><string name="directory_selected_label">selected directory</string><string name="donations__description">Do you love Morrowind?\nAny support would be gratefully appreciated and may assist in speeding up development!</string><string name="kfdisplaytext">Kf Display</string><string name="setgameesmfile">Set Game Data File</string><string formatted="false" name="welcometext">&lt;html>
+    &lt;p>
+Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (2002).&lt;br>
+In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.&lt;br>
+Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.&lt;br>
+You can copy it to any location that is accessible from your computer\'s file explorer.&lt;br>
+There is an video of how to do this here:&lt;br>
+&lt;a href="https://www.youtube.com/watch?v=q_MmQSTznh4">Call or Red Mountain setup demonstration&lt;/a>&lt;br>
+&lt;/p>
+&lt;p>
 When you first start up Call of Red Mountain you will be asked to select the Morrowind.esm file that is located in that game installation folder
-on your device. From there the game engine will locate the other asset files relative to that esm file. \n
-\n
-The controls of Call of Red Mountain are not refined and so may take a little getting used to.
-The screen of your device is divided into 4 squares, in half horizontally and in half vertically\n
+on your device. From there the game engine will locate the other asset files relative to that esm file. &lt;br>
+The controls of Call of Red Mountain are not refined and so may take a little getting used to.&lt;br>
+The screen of your device is divided into 4 squares, in half horizontally and in half vertically&lt;br>
 The lower left is the walk controls, similar to W S A D on a keyboard, so your character will walk forward when you press in the
-upper portion of the lower left square, backward when touched in the lower portion and strafe side to side when touched on either side.\n
-The lower right square acts similarly to the mouse on a computer, so dragging around in this area will make the view rotate.\n
-Either of the upper squares simply activates whatever is in front of you (and highlighted), so gates will open and travel doors will be activated.\n
-On each start up there are several pre-set start locations and configurations.
-    </string><string name="menu_deoptomize">Deoptomize</string></file></source><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\rs\debug"/><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\resValues\debug"/><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\google-services\debug"><file path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\google-services\debug\values\values.xml" qualifiers=""><string name="default_web_client_id" translatable="false">702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com</string><string name="google_app_id" translatable="false">1:702485706049:android:b03ecb0045344a46</string><string name="firebase_database_url" translatable="false">https://call-of-red-mountain.firebaseio.com</string><string name="google_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string><string name="google_crash_reporting_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string><string name="google_storage_bucket" translatable="false">call-of-red-mountain.appspot.com</string><string name="gcm_defaultSenderId" translatable="false">702485706049</string></file></source></dataSet><dataSet config="debug" generated-set="debug$Generated"><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\src\debug\res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="AlertDialog"><attr name="android:layout"/><attr format="reference" name="buttonPanelSideLayout"/><attr format="reference" name="listLayout"/><attr format="reference" name="multiChoiceItemLayout"/><attr format="reference" name="singleChoiceItemLayout"/><attr format="reference" name="listItemLayout"/><attr format="boolean" name="showTitle"/></declare-styleable><declare-styleable name="AppCompatSeekBar"><attr name="android:thumb"/><attr format="reference" name="tickMark"/><attr format="color" name="tickMarkTint"/><attr name="tickMarkTintMode">
+upper portion of the lower left square, backward when touched in the lower portion and strafe side to side when touched on either side.&lt;br>
+The lower right square acts similarly to the mouse on a computer, so dragging around in this area will make the view rotate.&lt;br>
+Either of the upper squares simply activates whatever is in front of you (and highlighted), so gates will open and travel doors will be activated.&lt;br>
+&lt;/p>
+&lt;p>
+There are several pre-set start locations and configurations, or you can use the in game options menu to warp around.&lt;br>
+&lt;/p>
+&lt;p>
+To show the keyboard swipe up in the top half of the screen.
+To change options in game, show the keyboard, then press o
+If you want to fly, show the keyboard, then press f
+In free-fly mode press on the left side of the upper portion of the screen to go up or down.
+&lt;/p>
+&lt;p>If you have some time and own the game Oblivion you could attempt to build a converted texture file and play it&lt;br>
+To do that please follow these instructions:&lt;br>
+&lt;a href="https://www.dropbox.com/s/s6mc0tzt1u6pv3d/CoRM%20texture%20conversion.zip?dl=0">CoRM texture conversion&lt;/a>
+</string><string name="menu_deoptomize">Deoptomize</string></file></source><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\rs\debug"/><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\resValues\debug"/><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\google-services\debug"><file path="C:\Users\phil\AndroidStudioProjects\ese-android\app\build\generated\res\google-services\debug\values\values.xml" qualifiers=""><string name="default_web_client_id" translatable="false">702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com</string><string name="google_app_id" translatable="false">1:702485706049:android:b03ecb0045344a46</string><string name="firebase_database_url" translatable="false">https://call-of-red-mountain.firebaseio.com</string><string name="google_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string><string name="google_crash_reporting_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string><string name="google_storage_bucket" translatable="false">call-of-red-mountain.appspot.com</string><string name="gcm_defaultSenderId" translatable="false">702485706049</string></file></source></dataSet><dataSet config="debug" generated-set="debug$Generated"><source path="C:\Users\phil\AndroidStudioProjects\ese-android\app\src\debug\res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="AlertDialog"><attr name="android:layout"/><attr format="reference" name="buttonPanelSideLayout"/><attr format="reference" name="listLayout"/><attr format="reference" name="multiChoiceItemLayout"/><attr format="reference" name="singleChoiceItemLayout"/><attr format="reference" name="listItemLayout"/><attr format="boolean" name="showTitle"/></declare-styleable><declare-styleable name="AppCompatSeekBar"><attr name="android:thumb"/><attr format="reference" name="tickMark"/><attr format="color" name="tickMarkTint"/><attr name="tickMarkTintMode">
             
             <enum name="src_over" value="3"/>
             

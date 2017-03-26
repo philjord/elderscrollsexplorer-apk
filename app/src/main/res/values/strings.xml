@@ -11,22 +11,38 @@
     <string name="btn_choose">Choose</string>
     <string name="none">none</string>
     <string name="setgameesmfile">Set Game Data File</string>
-    <string name="welcometext">
-Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (2002).\n
-In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.\n
-Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.\n
-You can copy it to any location that is accessible from your computer\'s file explorer.\n
+    <string name="welcometext" formatted="false"><![CDATA[<html>
+    <p>
+Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (2002).<br>
+In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.<br>
+Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb or more so you will need plenty of sdcard space.<br>
+You can copy it to any location that is accessible from your computer\'s file explorer.<br>
+There is an video of how to do this here:<br>
+<a href="https://www.youtube.com/watch?v=q_MmQSTznh4">Call or Red Mountain setup demonstration</a><br>
+</p>
+<p>
 When you first start up Call of Red Mountain you will be asked to select the Morrowind.esm file that is located in that game installation folder
-on your device. From there the game engine will locate the other asset files relative to that esm file. \n
-\n
-The controls of Call of Red Mountain are not refined and so may take a little getting used to.
-The screen of your device is divided into 4 squares, in half horizontally and in half vertically\n
+on your device. From there the game engine will locate the other asset files relative to that esm file. <br>
+The controls of Call of Red Mountain are not refined and so may take a little getting used to.<br>
+The screen of your device is divided into 4 squares, in half horizontally and in half vertically<br>
 The lower left is the walk controls, similar to W S A D on a keyboard, so your character will walk forward when you press in the
-upper portion of the lower left square, backward when touched in the lower portion and strafe side to side when touched on either side.\n
-The lower right square acts similarly to the mouse on a computer, so dragging around in this area will make the view rotate.\n
-Either of the upper squares simply activates whatever is in front of you (and highlighted), so gates will open and travel doors will be activated.\n
-On each start up there are several pre-set start locations and configurations.
-    </string>
+upper portion of the lower left square, backward when touched in the lower portion and strafe side to side when touched on either side.<br>
+The lower right square acts similarly to the mouse on a computer, so dragging around in this area will make the view rotate.<br>
+Either of the upper squares simply activates whatever is in front of you (and highlighted), so gates will open and travel doors will be activated.<br>
+</p>
+<p>
+There are several pre-set start locations and configurations, or you can use the in game options menu to warp around.<br>
+</p>
+<p>
+To show the keyboard swipe up in the top half of the screen.
+To change options in game, show the keyboard, then press o
+If you want to fly, show the keyboard, then press f
+In free-fly mode press on the left side of the upper portion of the screen to go up or down.
+</p>
+<p>If you have some time and own the game Oblivion you could attempt to build a converted texture file and play it<br>
+To do that please follow these instructions:<br>
+<a href="https://www.dropbox.com/s/s6mc0tzt1u6pv3d/CoRM%20texture%20conversion.zip?dl=0">CoRM texture conversion</a>
+]]></string>
     <string name="welcometextyes">Remind me later</string>
     <string name="welcometextno">Don\'t remind me</string>
     <string name="wait_file_download">file downloading</string>
