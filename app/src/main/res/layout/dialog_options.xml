@@ -101,6 +101,12 @@
                 android:text="Placed Lights Enabled"/>
 
             <CheckBox
+                android:id="@+id/optionsLightOutlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Light Outlines"/>
+
+            <CheckBox
                 android:id="@+id/optionsCharacterOutlines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

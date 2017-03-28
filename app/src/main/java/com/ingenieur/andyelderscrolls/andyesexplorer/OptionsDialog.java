@@ -150,6 +150,18 @@ public class OptionsDialog extends Dialog
 				BethRenderSettings.setEnablePlacedLights(((CheckBox)v).isChecked());
 			}
 		});
+
+
+		CheckBox optionsLightOutlines = (CheckBox)rootView.findViewById(R.id.optionsLightOutlines);
+		optionsLightOutlines.setChecked(BethRenderSettings.isOutlineLights());
+		optionsLightOutlines.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				BethRenderSettings.setOutlineLights(((CheckBox)v).isChecked());
+			}
+		});
 		CheckBox optionsCharacterOutlines = (CheckBox)rootView.findViewById(R.id.optionsCharacterOutlines);
 		optionsCharacterOutlines.setChecked(BethRenderSettings.isOutlineChars());
 		optionsCharacterOutlines.setOnClickListener(new View.OnClickListener()
