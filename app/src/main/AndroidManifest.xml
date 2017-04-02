@@ -2,8 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="123"
-    android:versionName="1.23">
+    android:versionCode="124"
+    android:versionName="1.24">
 
     <uses-sdk
         android:minSdkVersion="18"

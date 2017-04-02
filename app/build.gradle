@@ -68,7 +68,7 @@ dependencies {
     compile files('libs/jl1.0.1.jar')
     compile project(path: ':downloader_library')
     compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
+    releaseCompile 'com.google.firebase:firebase-crash:10.2.0'
     compile 'org.sufficientlysecure:donations:2.5'
     compile 'com.google.vr:sdk-audio:1.10.0'
     compile 'com.google.vr:sdk-base:1.10.0'
