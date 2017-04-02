@@ -247,7 +247,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 			//tel mora  , cast spell in third
 			morrowindConfig.startCellId = 0;
 			morrowindConfig.startLocation = new Vector3f(1387, 18, -1438);
-			morrowindConfig.startYP = new YawPitch(Math.PI / 8, 0);//TODO:
+			morrowindConfig.startYP = new YawPitch(Math.PI / 8, 0);
 			musicToPlay = 1;//explore
 			Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
 			AndySimpleWalkSetup.TRAILER_CAM = true;
@@ -396,6 +396,14 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		// save it in case anything else has written to it
 		PropertyLoader.save();
 
+	}
+
+	public void destroy()
+	{
+		// our anonymous class holds a reference to this instance
+		SimpleSounds.mp3SystemMediaPlayer = null;
+		simpleWalkSetup.destroy();
+		simpleBethCellManager.destroy();
 	}
 
 	private static boolean hasESMAndBSAFiles(GameConfig gameConfig)
@@ -554,37 +562,44 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 								if (musicFileToPlay.exists() && musicFileToPlay.isFile())
 								{
 									musicMediaPlayer = MediaPlayer.create(parentActivity, Uri.fromFile(musicFileToPlay));
-									musicMediaPlayer.setVolume(0.15f, 0.15f);
-									musicMediaPlayer.start();
+									if(musicMediaPlayer != null)
+									{
+										musicMediaPlayer.setVolume(0.15f, 0.15f);
+										musicMediaPlayer.start();
+									}
 								}
 
 							}
 
-							SimpleSounds.mp3SystemMediaPlayer = new
-									SimpleSounds.Mp3SystemMediaPlayer()
-									{
-										MediaPlayer musicMediaPlayer2;
-
-										@Override
-										public void playAnMp3(String s, float v)
+							if(SimpleSounds.mp3SystemMediaPlayer == null)
+							{
+								SimpleSounds.mp3SystemMediaPlayer = new
+										SimpleSounds.Mp3SystemMediaPlayer()
 										{
+											MediaPlayer musicMediaPlayer2;
 
-											s = s.replace("\\", "/");
-											if (!s.startsWith("/"))
-												s = "/" + s;
-
-											File mp3File = new File(gameConfigToLoad.scrollsFolder + s);
-											if (mp3File.exists())
+											@Override
+											public void playAnMp3(String s, float v)
 											{
-												musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(mp3File));
 
-												musicMediaPlayer2.setVolume(v, v);
-												musicMediaPlayer2.setLooping(false);
-												musicMediaPlayer2.start();
+												s = s.replace("\\", "/");
+												if (!s.startsWith("/"))
+													s = "/" + s;
+
+												File mp3File = new File(gameConfigToLoad.scrollsFolder + s);
+												if (mp3File.exists())
+												{
+													musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(mp3File));
+													if (musicMediaPlayer != null)
+													{
+														musicMediaPlayer2.setVolume(v, v);
+														musicMediaPlayer2.setLooping(false);
+														musicMediaPlayer2.start();
+													}
+												}
 											}
-										}
-									};
-
+										};
+							}
 						}
 
 
