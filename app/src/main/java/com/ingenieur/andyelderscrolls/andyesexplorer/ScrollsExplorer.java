@@ -402,8 +402,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	{
 		// our anonymous class holds a reference to this instance
 		SimpleSounds.mp3SystemMediaPlayer = null;
-		simpleWalkSetup.destroy();
-		simpleBethCellManager.destroy();
+		//simpleWalkSetup.destroy();
+		//simpleBethCellManager.destroy();
 	}
 
 	private static boolean hasESMAndBSAFiles(GameConfig gameConfig)
@@ -470,6 +470,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 							prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 						}
+
+						AndyESExplorerActivity.logFireBaseContent("selectedGameConfig", "startCellId " + prevCellformid + " trans " + trans);
 
 						simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
 

@@ -270,6 +270,21 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		}
 	}
 
+	//TODO: this is part of the attempt to get a back button to work, but it's not a good system.
+/*	public void destroy()
+	{
+		if(cameraMouseOver!=null)
+	 		cameraMouseOver.destroy();
+		if(cameraAdminMouseOverHandler!=null)
+			cameraAdminMouseOverHandler.destroy();
+
+
+		stopRenderer();
+		// universe is not simple universe so can't call clean up
+		universe.removeAllLocales();//?
+
+		physicsSystem.destroy();
+	}*/
 
 	/* (non-Javadoc)
 	 * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#closingTime()

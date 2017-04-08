@@ -2,15 +2,20 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.ResultReceiver;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.ingenieur.andyelderscrolls.BuildConfig;
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -25,14 +30,14 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
+import jogamp.newt.driver.android.WindowDriver;
 import tools3d.utils.YawPitch;
-
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
 
 
 public class AndyESExplorerActivity extends NewtBaseActivity
 {
 
+	private static FirebaseAnalytics mFirebaseAnalytics;
 
 	public static boolean antialias = false;
 	private ScrollsExplorer scrollsExplorer;
@@ -41,6 +46,65 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	private int gameConfigId = 1;
 	private boolean scrollsExplorerInitCalled = false;
 
+	/**
+	 * For generally doing day to day things
+	 *
+	 * @param id    short id (method name?)
+	 * @param value optional value
+	 */
+	public static void logFireBaseContent(String id, String value)
+	{
+		logFireBase(FirebaseAnalytics.Event.SELECT_CONTENT, id, value);
+	}
+
+	/**
+	 * For generally doing day to day things
+	 *
+	 * @param id    short id (method name?)
+	 */
+	public static void logFireBaseContent(String id)
+	{
+		logFireBase(FirebaseAnalytics.Event.SELECT_CONTENT, id, null);
+	}
+
+	/**
+	 * For more unusual event that represent exploring/exploiting the system
+	 *
+	 * @param id    short id (method name?)
+	 * @param value optional value
+	 */
+	public static void logFireBaseLevelUp(String id, String value)
+	{
+		logFireBase(FirebaseAnalytics.Event.LEVEL_UP, id, value);
+	}
+
+	/**
+	 * For more unusual event that represent exploring/exploiting the system
+	 *
+	 * @param id    short id (method name?)
+	 */
+	public static void logFireBaseLevelUp(String id)
+	{
+		logFireBase(FirebaseAnalytics.Event.LEVEL_UP, id, null);
+	}
+
+	/**
+	 * @param event Event MUST be FirebaseAnalytics.Event.*
+	 * @param id    short id (method name?)
+	 * @param value optional value
+	 */
+	public static void logFireBase(String event, String id, String value)
+	{
+		System.out.println("logFireBase : " + id + "[" + value + "]");
+		if ( mFirebaseAnalytics != null && !BuildConfig.DEBUG )
+		{
+			Bundle bundle = new Bundle();
+			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+			if (value != null && value.length() > 0)
+				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, value);
+			mFirebaseAnalytics.logEvent(event, bundle);
+		}
+	}
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -53,11 +117,23 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 		SimpleShaderAppearance.setVersionES300();
 
+		if (!BuildConfig.DEBUG)
+		{
+			if(mFirebaseAnalytics == null)
+			{
+				// Obtain the FirebaseAnalytics instance.
+				mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+			}
+		}
+
 		super.onCreate(state);
 
 		Intent intent = getIntent();
 		gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
 		gameConfigId = intent.getIntExtra(ElderScrollsActivity.SELECTED_START_CONFIG, 1);
+
+		logFireBaseContent("SELECTED_GAME", gameName);
+
 
 		createGLWindow();
 
@@ -128,7 +204,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	}
 	private void createGLWindow()
 	{
-		final GLCapabilities caps =	new GLCapabilities(GLProfile.get(GLProfile.GLES2));
+		final GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GLES2));
 		caps.setDoubleBuffered(true);
 		caps.setDepthBits(16);
 		caps.setStencilBits(8);
@@ -144,7 +220,10 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 
 		this.setContentView(this.getWindow(), gl_window);
 
-		gl_window.addGLEventListener(new GLEventListener()
+		gl_window.addGLEventListener(GLEventListener2);
+
+	}
+	GLEventListener GLEventListener2 = new GLEventListener()
 			 {
 				 @Override
 				 public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable)
@@ -195,9 +274,7 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 				 public void dispose(final GLAutoDrawable drawable)
 				 {
 				 }
-			 }
-		);
-	}
+			 };
 
 	@Override
 	public void onPause()
@@ -226,6 +303,27 @@ public class AndyESExplorerActivity extends NewtBaseActivity
 	@Override
 	public void onDestroy()
 	{
+
+		//shitty shityy onDestory doesn't mean destroy at all! god damn it
+		// try to remvoe teh keyboard listener, this is the reverse of setKeyboardVisibleImpl in WindowDriver
+	/*	WindowDriver wd = ((WindowDriver)gl_window.getDelegatedWindow()) ;
+		InputMethodManager var2 = (InputMethodManager)wd.getAndroidView().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		IBinder var3 = wd.getAndroidView().getWindowToken();
+		var2.hideSoftInputFromWindow(var3, 0, new ResultReceiver((Handler)null));
+
+
+
+		// this driver has a keyboard listener that is not destroyed
+		// so the gl_window is not destroyed and the gl_window has a reference to this activity in it
+		((WindowDriver)gl_window.getDelegatedWindow()).registerActivity(null);
+		gl_window.removeGLEventListener(GLEventListener2);
+		GLEventListener2 = null;*/
+		scrollsExplorer.closingTime();
+		scrollsExplorer.destroy();
+		scrollsExplorer = null;
+		gl_window.destroy();
+		gl_window = null;
+		System.out.println("onDestroy called");
 		super.onDestroy();
 	}
 

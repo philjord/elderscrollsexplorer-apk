@@ -3,7 +3,6 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.R;
 
@@ -55,6 +53,7 @@ public class OptionsDialog extends Dialog
 					if (parts.length == 3)
 					{
 						simpleWalkSetup.warp(new Vector3f(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+						AndyESExplorerActivity.logFireBaseContent("simpleWalkSetup.warp " + warp);
 					}
 
 				}
@@ -68,6 +67,7 @@ public class OptionsDialog extends Dialog
 			 @Override
 			 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			 {
+				 AndyESExplorerActivity.logFireBaseContent("setFarLoadGridCount", ""+ progress);
 				 BethRenderSettings.setFarLoadGridCount(progress);
 			 }
 		 });
@@ -80,6 +80,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setNearLoadGridCount", ""+ progress);
 				BethRenderSettings.setNearLoadGridCount(progress);
 			}
 		});
@@ -90,6 +91,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setObjectFade", ""+ progress);
 				BethRenderSettings.setObjectFade(progress);
 			}
 		});
@@ -100,6 +102,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setShowPathGrid", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setShowPathGrid(((CheckBox)v).isChecked());
 			}
 		});
@@ -112,6 +115,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setFogEnabled", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setFogEnabled(((CheckBox)v).isChecked());
 			}
 		});
@@ -147,6 +151,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setEnablePlacedLights", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setEnablePlacedLights(((CheckBox)v).isChecked());
 			}
 		});
@@ -159,6 +164,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineLights", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineLights(((CheckBox)v).isChecked());
 			}
 		});
@@ -169,6 +175,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineChars", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineChars(((CheckBox)v).isChecked());
 			}
 		});
@@ -179,6 +186,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineDoors", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineDoors(((CheckBox)v).isChecked());
 			}
 		});
@@ -189,6 +197,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineConts", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineConts(((CheckBox)v).isChecked());
 			}
 		});
@@ -199,6 +208,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineParts", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineParts(((CheckBox)v).isChecked());
 			}
 		});
@@ -209,6 +219,7 @@ public class OptionsDialog extends Dialog
 			@Override
 			public void onClick(View v)
 			{
+				AndyESExplorerActivity.logFireBaseContent("setOutlineFocused", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineFocused(((CheckBox)v).isChecked());
 			}
 		});
@@ -225,6 +236,7 @@ public class OptionsDialog extends Dialog
 
 	public void display()
 	{
+		AndyESExplorerActivity.logFireBaseContent("OptionsShown");
 		this.setOnDismissListener(new DialogInterface.OnDismissListener()
 		{
 			@Override

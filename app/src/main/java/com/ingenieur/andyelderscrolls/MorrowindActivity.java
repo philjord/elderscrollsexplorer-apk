@@ -79,14 +79,14 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 
 	private GameConfig gameSelected;
 
-	private FirebaseAnalytics mFirebaseAnalytics;
+
 
 	@Override
 	public void onCreate(final Bundle state)
 	{
 		super.onCreate(state);
 
-		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 		// get system out to log
 		PrintStream interceptor = new SopInterceptor(System.out, "sysout");
 		System.setOut(interceptor);
@@ -388,11 +388,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 			{
 				// send the which through and hope they match up
 
-				Bundle bundle = new Bundle();
-				bundle.putString(FirebaseAnalytics.Param.ITEM_ID, ""+which);
-				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, configNames[which]);
-				bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "which_game_config");
-				mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
 
 				Intent intent = new Intent(MorrowindActivity.this, AndyESExplorerActivity.class);
 				intent.putExtra(SELECTED_GAME, gameSelected.gameName);
