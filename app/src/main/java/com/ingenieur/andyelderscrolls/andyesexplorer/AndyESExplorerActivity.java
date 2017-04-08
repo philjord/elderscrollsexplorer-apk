@@ -1,6 +1,5 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,11 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.ResultReceiver;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.BuildConfig;
@@ -30,7 +25,6 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 
 import jogamp.newt.driver.android.NewtBaseActivity;
-import jogamp.newt.driver.android.WindowDriver;
 import tools3d.utils.YawPitch;
 
 
