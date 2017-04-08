@@ -402,8 +402,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 	{
 		// our anonymous class holds a reference to this instance
 		SimpleSounds.mp3SystemMediaPlayer = null;
-		//simpleWalkSetup.destroy();
-		//simpleBethCellManager.destroy();
+		simpleWalkSetup.destroy();
+		simpleBethCellManager.destroy();
 	}
 
 	private static boolean hasESMAndBSAFiles(GameConfig gameConfig)

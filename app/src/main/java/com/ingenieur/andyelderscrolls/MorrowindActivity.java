@@ -388,9 +388,8 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 			{
 				// send the which through and hope they match up
 
-
-
 				Intent intent = new Intent(MorrowindActivity.this, AndyESExplorerActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |	Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
 				intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 				intent.putExtra(SELECTED_START_CONFIG, which);
 				startActivity(intent);

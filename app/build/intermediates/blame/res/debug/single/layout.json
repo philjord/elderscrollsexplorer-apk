@@ -4,12 +4,12 @@
         "source": "C:\\Users\\phil\\.android\\build-cache\\c7cebd2291fe69318b3d48299b57607773819b65\\output\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\settings_button.xml",
-        "source": "C:\\Users\\phil\\.android\\build-cache\\9507c1024cd0fc78d91c5229baa87a14afbbf341\\output\\res\\layout\\settings_button.xml"
-    },
-    {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\Users\\phil\\.android\\build-cache\\c7cebd2291fe69318b3d48299b57607773819b65\\output\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\settings_button.xml",
+        "source": "C:\\Users\\phil\\.android\\build-cache\\9507c1024cd0fc78d91c5229baa87a14afbbf341\\output\\res\\layout\\settings_button.xml"
     },
     {
         "merged": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_item_layout.xml",

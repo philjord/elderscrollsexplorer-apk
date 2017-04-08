@@ -2,8 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="124"
-    android:versionName="1.24">
+    android:versionCode="125"
+    android:versionName="1.25">
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -81,6 +81,7 @@
 
         <activity
             android:name=".ElderScrollsActivity"
+
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Red Mountain Tools"
             android:icon="@drawable/tools"
@@ -121,6 +122,7 @@
         </activity>
         <activity
             android:name=".andyesexplorer.AndyESExplorerActivity"
+            android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="ESExplorer"
             android:parentActivityName=".ElderScrollsActivity"

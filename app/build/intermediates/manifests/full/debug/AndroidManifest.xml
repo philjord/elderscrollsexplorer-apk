@@ -133,6 +133,7 @@
             android:name="com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="ESExplorer"
+            android:launchMode="singleTop"
             android:parentActivityName="com.ingenieur.andyelderscrolls.ElderScrollsActivity"
             android:screenOrientation="sensorLandscape" >
             <meta-data
