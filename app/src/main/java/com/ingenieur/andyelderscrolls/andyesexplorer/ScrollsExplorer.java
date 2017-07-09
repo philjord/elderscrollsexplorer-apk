@@ -176,6 +176,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		}
 		else
 		{
+			AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
 			BethRenderSettings.setFarLoadGridCount(0);
 			BethRenderSettings.setNearLoadGridCount(2);
 			BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
@@ -715,7 +716,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						 @Override
 						 public void run()
 						 {
-							 OptionsDialog od = new OptionsDialog(parentActivity, simpleWalkSetup);
+							 OptionsPanel.OptionsDialog od = new OptionsPanel.OptionsDialog(parentActivity, simpleWalkSetup);
 							 od.display();
 						 }
 					 });

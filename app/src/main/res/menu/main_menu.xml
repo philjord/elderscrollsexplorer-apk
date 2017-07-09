@@ -11,6 +11,9 @@
     <item android:id="@+id/menu_anti_alias"
           android:title="@string/menu_anti_alias"
           android:checkable="true"/>
+    <item android:id="@+id/menu_gyroscope"
+          android:title="@string/menu_gyroscope"
+          android:checkable="true"/>
     <item android:id="@+id/menu_start_tools"
           android:title="@string/menu_start_tools"/>
     <item android:id="@+id/menu_help"

@@ -35,9 +35,8 @@ import com.google.android.vending.expansion.downloader.Helpers;
 import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsDialog;
+import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsPanel;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
@@ -72,6 +71,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
 	private static final String DEOPTOMIZE = "DEOPTOMIZE";
 	private static final String ANTIALIAS = "ANTIALIAS";
+	private static final String GYROSCOPE = "GYROSCOPE";
 
 	public static final String GOOGLE_PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqoEA2+dtSDgAZZhwOIhf67H2xR8rvrLENhrI5zNl8W7+GfGsRxfMmGiwisuOASY8fBh+t5IZumP7WGJ418oML6rUBpUCNihDuZcS/OrNQky7RyFkoY16n1G3v+jm4UwLoEsNQJnEpBWvPy0hptT6qRpRhNI7SVYilzPBc7FQPG2NWKh6kNoqSVoPI3K5hRzIYtqRtkHhFtMvpZhxcQuzKptLDu0ceCyEQLeWJmtiO1yCd57zkG0R+sIWd+69uuORIJGmg8vJWljyBTdhrKB8+sg3SZh4S/6lj0GZpy+M7cpzoJC4aBRVN/YMDxax1c56l7T8AY63pcCou8Ai20ER8QIDAQAB";
 	public static final String[] GOOGLE_CATALOG = new String[]{"corm.donation.1",
@@ -124,6 +124,9 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		boolean antialias = settings.getBoolean(ANTIALIAS, false);
 		menu.findItem(R.id.menu_anti_alias).setChecked(antialias);
 		AndyESExplorerActivity.antialias = antialias;
+		boolean gyroscope = settings.getBoolean(GYROSCOPE, false);
+		menu.findItem(R.id.menu_gyroscope).setChecked(antialias);
+		AndyESExplorerActivity.gyroscope = gyroscope;
 
 
 		return true;
@@ -140,7 +143,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		switch (item.getItemId())
 		{
 			case R.id.menu_options:
-				OptionsDialog od = new OptionsDialog(this, null);
+				OptionsPanel.OptionsDialog od = new OptionsPanel.OptionsDialog(this, null);
 				od.display();
 				return true;
 			case R.id.menu_test_3d:
@@ -160,6 +163,14 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putBoolean(ANTIALIAS, item.isChecked());
 				editor.apply();
+				return true;
+			case R.id.menu_gyroscope:
+				item.setChecked(!item.isChecked());
+				AndyESExplorerActivity.gyroscope = item.isChecked();
+				SharedPreferences settings2 = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor2 = settings2.edit();
+				editor2.putBoolean(GYROSCOPE, item.isChecked());
+				editor2.apply();
 				return true;
 			case R.id.menu_start_tools:
 				Intent intent = new Intent(this, ElderScrollsActivity.class);

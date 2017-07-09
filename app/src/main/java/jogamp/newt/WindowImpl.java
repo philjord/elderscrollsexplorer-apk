@@ -8,9 +8,9 @@ package jogamp.newt;
 import com.jogamp.common.ExceptionUtils;
 import com.jogamp.common.util.ArrayHashSet;
 import com.jogamp.common.util.Bitfield;
+import com.jogamp.common.util.Bitfield.Factory;
 import com.jogamp.common.util.PropertyAccess;
 import com.jogamp.common.util.ReflectionUtil;
-import com.jogamp.common.util.Bitfield.Factory;
 import com.jogamp.common.util.locks.LockFactory;
 import com.jogamp.common.util.locks.RecursiveLock;
 import com.jogamp.nativewindow.AbstractGraphicsConfiguration;
@@ -23,7 +23,6 @@ import com.jogamp.nativewindow.NativeWindowException;
 import com.jogamp.nativewindow.NativeWindowFactory;
 import com.jogamp.nativewindow.OffscreenLayerSurface;
 import com.jogamp.nativewindow.SurfaceUpdatedListener;
-import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import com.jogamp.nativewindow.util.DimensionImmutable;
 import com.jogamp.nativewindow.util.Insets;
 import com.jogamp.nativewindow.util.InsetsImmutable;
@@ -33,48 +32,45 @@ import com.jogamp.nativewindow.util.PointImmutable;
 import com.jogamp.nativewindow.util.Rectangle;
 import com.jogamp.nativewindow.util.RectangleImmutable;
 import com.jogamp.newt.Display;
+import com.jogamp.newt.Display.PointerIcon;
 import com.jogamp.newt.MonitorDevice;
 import com.jogamp.newt.MonitorMode;
 import com.jogamp.newt.NewtFactory;
 import com.jogamp.newt.Screen;
 import com.jogamp.newt.Window;
-import com.jogamp.newt.Display.PointerIcon;
-import com.jogamp.newt.Window.FocusRunnable;
-import com.jogamp.newt.Window.ReparentOperation;
 import com.jogamp.newt.event.DoubleTapScrollGesture;
 import com.jogamp.newt.event.GestureHandler;
+import com.jogamp.newt.event.GestureHandler.GestureEvent;
+import com.jogamp.newt.event.GestureHandler.GestureListener;
 import com.jogamp.newt.event.InputEvent;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MonitorEvent;
 import com.jogamp.newt.event.MonitorModeListener;
 import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseEvent.PointerClass;
+import com.jogamp.newt.event.MouseEvent.PointerType;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.event.NEWTEvent;
 import com.jogamp.newt.event.NEWTEventConsumer;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
 import com.jogamp.newt.event.WindowUpdateEvent;
-import com.jogamp.newt.event.GestureHandler.GestureEvent;
-import com.jogamp.newt.event.GestureHandler.GestureListener;
-import com.jogamp.newt.event.MouseEvent.PointerClass;
-import com.jogamp.newt.event.MouseEvent.PointerType;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
 import jogamp.nativewindow.SurfaceScaleUtils;
 import jogamp.nativewindow.SurfaceUpdatedHelper;
-import jogamp.newt.Debug;
-import jogamp.newt.DisplayImpl;
-import jogamp.newt.OffscreenWindow;
-import jogamp.newt.PointerIconImpl;
-import jogamp.newt.ScreenImpl;
 
 /**
  * EXACT copy from 2.3.2 but a few lines removed from doPointerEvent, as they are buggy
+ * as well as teh NativeWindowExceptionListener system for dealing with failed creation
  */
-public abstract class WindowImpl implements Window, NEWTEventConsumer {
+public abstract class WindowImpl implements Window, NEWTEventConsumer
+{
 	public static final boolean DEBUG_TEST_REPARENT_INCOMPATIBLE;
 	private static final boolean DEBUG_FREEZE_AT_VISIBILITY_FAILURE;
 	protected static final ArrayList<WeakReference<WindowImpl>> windowList;
@@ -601,7 +597,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 				if(var5 < var0.length) {
 					throw new NativeWindowException("WindowClass " + var3 + " constructor mismatch at argument #" + var5 + "; Constructor: " + getTypeStrList(var4) + ", arguments: " + getArgsStrList(var0));
 				} else {
-					WindowImpl var6 = (WindowImpl)ReflectionUtil.createInstance(var3, var4, var0);
+					WindowImpl var6 = (WindowImpl) ReflectionUtil.createInstance(var3, var4, var0);
 					var6.screen = (ScreenImpl)var1;
 					var6.capsRequested = (CapabilitiesImmutable)var2.cloneMutable();
 					var6.instantiationFinished();
@@ -670,6 +666,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 						}
 
 						long var8 = System.currentTimeMillis();
+
 						this.createNativeImpl();
 						this.supportedReconfigStateMask = this.getSupportedReconfigMaskImpl() & 32767;
 						if(DEBUG_IMPLEMENTATION) {
@@ -722,7 +719,19 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 						}
 					}
 				}
-			} finally {
+			}
+			//PJPJPJPJPJPJ when the device is out of resources we allow a registered callback to deal with it
+			catch(NativeWindowException e)
+			{
+				boolean doThrow = true;
+				if(nativeWindowExceptionListener != null)
+				{
+					doThrow = !nativeWindowExceptionListener.handleException(e);
+				}
+				if(doThrow)
+					throw e;
+			}
+			finally {
 				if(null != this.parentWindow) {
 					this.parentWindow.unlockSurface();
 				}
@@ -740,6 +749,17 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 
 			return this.isNativeValid();
 		}
+	}
+
+	private NativeWindowExceptionListener nativeWindowExceptionListener = null;
+	public void setNativeWindowExceptionListener(NativeWindowExceptionListener nativeWindowExceptionListener)
+	{
+		this.nativeWindowExceptionListener = nativeWindowExceptionListener;
+	}
+	public interface NativeWindowExceptionListener
+	{
+		// return true to indicate success, false will throw the exception
+		boolean handleException(NativeWindowException nwp);
 	}
 
 	private void removeScreenReference() {
@@ -1558,7 +1578,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 	}
 
 	public final InsetsImmutable getInsets() {
-		return (InsetsImmutable)(this.isUndecorated()?Insets.getZero():this.insets);
+		return (InsetsImmutable)(this.isUndecorated()? Insets.getZero():this.insets);
 	}
 
 	public final int getX() {
@@ -2142,7 +2162,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 
 						this.pState1.buttonPressedMask |= var23;
 						if(1 == var17) {
-							if(var15 - this.pState1.lastButtonPressTime < (long)MouseEvent.getClickTimeout()) {
+							if(var15 - this.pState1.lastButtonPressTime < (long) MouseEvent.getClickTimeout()) {
 								++this.pState1.lastButtonClickCount;
 							} else {
 								this.pState1.lastButtonClickCount = 1;
@@ -2159,7 +2179,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 						this.pState1.buttonPressedMask &= ~var23;
 						if(1 == var17) {
 							var24 = new MouseEvent(var4, this, var15, var5, var3, var7, var9, var10, var11, var12, var25, this.pState1.lastButtonClickCount, var13, var14);
-							if(var15 - this.pState1.lastButtonPressTime >= (long)MouseEvent.getClickTimeout()) {
+							if(var15 - this.pState1.lastButtonPressTime >= (long) MouseEvent.getClickTimeout()) {
 								this.pState1.lastButtonClickCount = 0;
 								this.pState1.lastButtonPressTime = 0L;
 							}
@@ -2367,7 +2387,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 				}
 				break;
 			case 204:
-				if(1 == var1.getPointerCount() && var2 - this.pState0.lastButtonPressTime < (long)MouseEvent.getClickTimeout()) {
+				if(1 == var1.getPointerCount() && var2 - this.pState0.lastButtonPressTime < (long) MouseEvent.getClickTimeout()) {
 					var16 = var1.createVariant((short)200);
 				} else {
 					this.pState0.lastButtonPressTime = 0L;
@@ -2959,7 +2979,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 
 	public final boolean windowDestroyNotify(boolean var1) {
 		WindowClosingMode var2 = this.getDefaultCloseOperation();
-		WindowClosingMode var3 = var1?WindowClosingMode.DISPOSE_ON_CLOSE:var2;
+		WindowClosingMode var3 = var1? WindowClosingMode.DISPOSE_ON_CLOSE:var2;
 		if(DEBUG_IMPLEMENTATION) {
 			System.err.println("Window.windowDestroyNotify(isNativeValid: " + this.isNativeValid() + ", force: " + var1 + ", mode " + var2 + " -> " + var3 + ") " + getThreadName() + ": " + this);
 		}
@@ -3167,7 +3187,8 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 		quirks = Factory.synchronize(Factory.create(32));
 	}
 
-	private class MonitorModeListenerImpl implements MonitorModeListener {
+	private class MonitorModeListenerImpl implements MonitorModeListener
+	{
 		boolean animatorPaused;
 		boolean hidden;
 		boolean hadFocus;
@@ -3856,7 +3877,7 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer {
 								if(null != var30) {
 									WindowImpl.this.setScreen((ScreenImpl)var30.getScreen());
 								} else {
-									WindowImpl.this.setScreen((ScreenImpl)NewtFactory.createCompatibleScreen(this.newParentWindow, WindowImpl.this.screen));
+									WindowImpl.this.setScreen((ScreenImpl) NewtFactory.createCompatibleScreen(this.newParentWindow, WindowImpl.this.screen));
 								}
 
 								this.operation = ReparentOperation.ACTION_NATIVE_CREATION;

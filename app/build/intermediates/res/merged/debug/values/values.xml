@@ -444,14 +444,17 @@
     <string name="google_app_id" translatable="false">1:702485706049:android:b03ecb0045344a46</string>
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo</string>
     <string name="google_storage_bucket" translatable="false">call-of-red-mountain.appspot.com</string>
+    <string name="gt">></string>
     <string description="Google VR component name used for enabling VR mode" name="gvr_vr_mode_component" translatable="false">com.google.vr.vrcore/com.google.vr.vrcore.common.VrCoreListenerService</string>
     <string name="jbulletdisplaytext">JBullet Display</string>
     <string name="kfdisplaytext">Kf Display</string>
     <string name="kilobytes_per_second">%1$s KB/s</string>
+    <string name="lt">&lt;</string>
     <string name="menu_about">About</string>
     <string name="menu_anti_alias">x2 AA</string>
     <string name="menu_deoptomize">Deoptomize</string>
     <string name="menu_donate">Donate</string>
+    <string name="menu_gyroscope">gyroscope</string>
     <string name="menu_help">Help</string>
     <string name="menu_options">Options</string>
     <string name="menu_start_tools">Start Tools</string>

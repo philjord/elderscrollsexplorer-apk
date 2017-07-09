@@ -4,10 +4,14 @@ import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
+import com.jogamp.graph.font.FontFactory;
+import com.jogamp.newt.event.GestureHandler;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
+import com.jogamp.opengl.hudbasics.graph.demos.ui.UIShape;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.BoundingSphere;
@@ -25,6 +29,8 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
 
+
+import java.io.IOException;
 
 import esmj3d.j3d.BethRenderSettings;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
@@ -224,9 +230,12 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		hudcompass = new AndyHUDCompass();
 		hudCrossHair = new HUDCrossHair();
 
+
+
+
 		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
-		loadInfo = new HUDText(new Point2f(-0.95f, 0f), 18, "Loading...");
+		loadInfo = new HUDText(new Point2f(-0.95f, -0.1f), 18, "Loading...");
 		loadingInfoBehavior = new LoadingInfoBehavior(loadInfo);
 		behaviourBranch.addChild(loadingInfoBehavior);
 
@@ -302,6 +311,10 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	public GLWindow getWindow()
 	{
 		return cameraPanel.getCanvas3D2D().getGLWindow();
+	}
+	public Canvas3D2D getCanvas2D3D()
+	{
+		return cameraPanel.getCanvas3D2D();
 	}
 
 	/* (non-Javadoc)
@@ -437,6 +450,25 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			hudcompass.addToCanvas(canvas3D2D);
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
+
+			float pixelSizeFPS = 0.00016F * (float) canvas3D2D.getGLWindow().getSurfaceHeight();
+			try
+			{
+				Label label = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, ">");
+				canvas3D2D.addUIShape(label);
+				label.setEnabled(true);
+				label.translate(-1F, 0F, 0f);
+				label.setColor(1f, 1f, 1f, 0.85f);
+				label = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "<");
+				canvas3D2D.addUIShape(label);
+				label.setEnabled(true);
+				label.translate(0.92F, 0F, 0f);
+				label.setColor(1f, 1f, 1f, 0.85f);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 
 
 			if (isLive)
@@ -709,5 +741,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			return 1f;
 		}
 	}
+
+
+
+
 }
 

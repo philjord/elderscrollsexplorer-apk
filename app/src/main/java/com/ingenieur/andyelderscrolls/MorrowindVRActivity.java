@@ -551,7 +551,7 @@ public class MorrowindVRActivity extends GvrActivity implements GvrView.Renderer
     }
 
     // Always give user feedback.
-    vibrator.vibrate(50);
+  //FIXME: must request access right in manifest otherwise fails  vibrator.vibrate(50);
   }
 
   /**
