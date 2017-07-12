@@ -13,18 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <EditText
-                android:id="@+id/optionsAvatarLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="optionsAvatarLocation"/>
-
-            <Button
-                android:id="@+id/optionsAvatarLocationGo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Go"/>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

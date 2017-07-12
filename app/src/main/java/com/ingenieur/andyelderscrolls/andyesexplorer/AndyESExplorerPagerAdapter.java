@@ -44,7 +44,7 @@ public class AndyESExplorerPagerAdapter extends FragmentPagerAdapter
 		}
 		else if (position == 3)
 		{
-			return  new SettingsFragment();
+			return  new InteriorListFragment();
 		}
 
 		// it is safest by far to always return something here

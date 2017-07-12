@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
@@ -374,6 +375,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		}
 		else
 		{
+			Looper.prepare();
 			Toast.makeText(parentActivity2, "But it's not setup correctly! where are teh bsa and esm files?", Toast.LENGTH_LONG)
 					.show();
 		}
@@ -716,7 +718,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 						 @Override
 						 public void run()
 						 {
-							 OptionsPanel.OptionsDialog od = new OptionsPanel.OptionsDialog(parentActivity, simpleWalkSetup);
+							 OptionsDialog od = new OptionsDialog(parentActivity, simpleWalkSetup);
 							 od.display();
 						 }
 					 });

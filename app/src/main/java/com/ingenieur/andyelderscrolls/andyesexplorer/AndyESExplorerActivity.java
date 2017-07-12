@@ -19,8 +19,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.BuildConfig;
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.R;
+import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
+
+import java.io.PrintStream;
 
 
 public class AndyESExplorerActivity extends FragmentActivity
@@ -51,7 +54,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 	/**
 	 * For generally doing day to day things
 	 *
-	 * @param id    short id (method name?)
+	 * @param id short id (method name?)
 	 */
 	public static void logFireBaseContent(String id)
 	{
@@ -72,7 +75,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 	/**
 	 * For more unusual event that represent exploring/exploiting the system
 	 *
-	 * @param id    short id (method name?)
+	 * @param id short id (method name?)
 	 */
 	public static void logFireBaseLevelUp(String id)
 	{
@@ -87,7 +90,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 	public static void logFireBase(String event, String id, String value)
 	{
 		System.out.println("logFireBase : " + id + "[" + value + "]");
-		if ( mFirebaseAnalytics != null && !BuildConfig.DEBUG )
+		if (mFirebaseAnalytics != null && !BuildConfig.DEBUG)
 		{
 			Bundle bundle = new Bundle();
 			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
@@ -109,6 +112,11 @@ public class AndyESExplorerActivity extends FragmentActivity
 
 		SimpleShaderAppearance.setVersionES300();
 
+		// get system out to log
+		PrintStream interceptor = new SopInterceptor(System.out, "sysout");
+		System.setOut(interceptor);
+		PrintStream interceptor2 = new SopInterceptor(System.err, "syserr");
+		System.setErr(interceptor2);
 
 		super.onCreate(savedInstanceState);
 
@@ -116,7 +124,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 
 		if (!BuildConfig.DEBUG)
 		{
-			if(mFirebaseAnalytics == null)
+			if (mFirebaseAnalytics == null)
 			{
 				// Obtain the FirebaseAnalytics instance.
 				mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -159,8 +167,6 @@ public class AndyESExplorerActivity extends FragmentActivity
 	}
 
 
-
-
 	@Override
 	public void onPause()
 	{
@@ -175,9 +181,9 @@ public class AndyESExplorerActivity extends FragmentActivity
 	}
 
 
-
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		super.onResume();
 	}
 
@@ -231,9 +237,17 @@ public class AndyESExplorerActivity extends FragmentActivity
 		switch (item.getItemId())
 		{
 			case R.id.es_menu_options:
-				Toast.makeText(this,"options",Toast.LENGTH_LONG);
+				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null)
+				{
+					OptionsDialog od = new OptionsDialog(this, scrollsExplorer.simpleWalkSetup);
+					od.display();
+				}
+				else
+				{
+					OptionsDialog od = new OptionsDialog(this, null);
+					od.display();
+				}
 				return true;
-
 			default:
 				return super.onOptionsItemSelected(item);
 		}

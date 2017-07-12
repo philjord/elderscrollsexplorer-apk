@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import com.ingenieur.andyelderscrolls.R;
 
@@ -33,6 +34,18 @@ public class CharacterFragment extends Fragment
 			public void onClick(View v)
 			{
 				((AndyESExplorerActivity)getActivity()).mViewPager.setCurrentItem(1, true);
+			}
+		});
+
+
+		final ToggleButton freeflybutton = (ToggleButton)rootView.findViewById(R.id.freeflybutton);
+		freeflybutton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				freeflybutton.setChecked(freeflybutton.isChecked());
+				((AndyESExplorerActivity)getActivity()).scrollsExplorer.simpleWalkSetup.setFreeFly(freeflybutton.isChecked());
 			}
 		});
 

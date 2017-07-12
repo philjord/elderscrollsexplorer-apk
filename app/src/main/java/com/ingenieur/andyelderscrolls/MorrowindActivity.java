@@ -36,7 +36,7 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsPanel;
+import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsDialog;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
@@ -142,10 +142,6 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 	{
 		switch (item.getItemId())
 		{
-			case R.id.menu_options:
-				OptionsPanel.OptionsDialog od = new OptionsPanel.OptionsDialog(this, null);
-				od.display();
-				return true;
 			case R.id.menu_test_3d:
 				test3d();
 				return true;

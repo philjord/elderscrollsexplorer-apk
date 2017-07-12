@@ -33,7 +33,7 @@ public class SopInterceptor extends PrintStream
 	{
 		Log.w(tag, s);
 
-		if (logFile != null && s.trim().length() > 0)
+	/*	if (logFile != null && s.trim().length() > 0)
 		{
 			if (!logFile.exists())
 			{
@@ -70,7 +70,7 @@ public class SopInterceptor extends PrintStream
 				{//ignore
 				}
 			}
-		}
+		}*/
 	}
 
 	private String header()
