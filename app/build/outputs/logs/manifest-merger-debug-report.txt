@@ -17,7 +17,6 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidM
 		ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:4:5-63
 uses-sdk
 ADDED from C:\Users\phil\AndroidStudioProjects\ese-android\app\src\main\AndroidManifest.xml:8:5-10:40
-MERGED from [com.android.support:multidex:1.0.1] C:\Users\phil\.android\build-cache\c22f0dd513af90b5083bd8ff2ffa1d6a2369fa6c\output\AndroidManifest.xml:18:5-42
 MERGED from [ese-android:downloader_library:unspecified] C:\Users\phil\AndroidStudioProjects\ese-android\downloader_library\build\intermediates\bundles\default\AndroidManifest.xml:7:5-9:41
 MERGED from [ese-android:market_licensing:unspecified] C:\Users\phil\AndroidStudioProjects\ese-android\market_licensing\build\intermediates\bundles\default\AndroidManifest.xml:21:5-23:41
 MERGED from [com.google.firebase:firebase-core:10.0.1] C:\Users\phil\.android\build-cache\af8dd10a35434e993da8700184e853ddfc15f83c\output\AndroidManifest.xml:4:5-42

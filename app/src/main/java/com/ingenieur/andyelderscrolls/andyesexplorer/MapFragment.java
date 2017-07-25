@@ -101,9 +101,18 @@ public class MapFragment extends Fragment
 				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null)
 				{
 					Vector3f warpTo = map.transformToMWCoords(new PointF(e.getX(), e.getY()));
+
+
 					//FIXME: very much need to work out a good height to warp to
 					warpTo.y = 100;
 					scrollsExplorer.simpleWalkSetup.warp(warpTo);
+
+					// tes out does warp work inside, it should really teleport you outside just like a door! look into teleport to target of
+					// wow this guy causes memory build and death!
+					// in fact moving inside and out cause memory build up too!
+					//scrollsExplorer.getSimpleBethCellManager().changeToCell(null, warpTo, new Quat4f(0, 0, 0, 1));//null for cell 0
+
+
 					AndyESExplorerActivity.logFireBaseContent("simpleWalkSetup.warp " + warpTo);
 				}
 
@@ -193,46 +202,46 @@ public class MapFragment extends Fragment
 					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
 					//zero
-			/*		p = transformToImageCoords(new Vector3f(0, 0, 0));
+					p = transformToImageCoords(new Vector3f(0, 0, 0));
 					defaultPaint.setARGB(255, 255, 255, 255);
 					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
 					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 					//sydaneen
-				Random rnd = new Random();
-				p = transformToImageCoords(new Vector3f(-108, 3, 936));
-				defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-				//vivec
-				p = transformToImageCoords(new Vector3f(423, 8, 1079));
-				defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-				//vos
-				p = transformToImageCoords(new Vector3f(1225, 19, -1465));
-				defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-				//center right
-				p = transformToImageCoords(new Vector3f(2500, 19, -465));
-				defaultPaint.setARGB(255, 255, 0, 0);
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-				//2/3rds up left
-				p = transformToImageCoords(new Vector3f(-1880, 19, -1330));
-				defaultPaint.setARGB(255, 0, 255, 0);
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+					Random rnd = new Random();
+					p = transformToImageCoords(new Vector3f(-108, 3, 936));
+					defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+					//vivec
+					p = transformToImageCoords(new Vector3f(423, 8, 1079));
+					defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+					//vos
+					p = transformToImageCoords(new Vector3f(1225, 19, -1465));
+					defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+					//center right
+					p = transformToImageCoords(new Vector3f(2500, 19, -465));
+					defaultPaint.setARGB(255, 255, 0, 0);
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+					//2/3rds up left
+					p = transformToImageCoords(new Vector3f(-1880, 19, -1330));
+					defaultPaint.setARGB(255, 0, 255, 0);
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 					//top center
 					p = transformToImageCoords(new Vector3f(450, 19, -2660));
 					defaultPaint.setARGB(255, 0, 255, 255);
 					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
 					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 					//bottom center
-				p = transformToImageCoords(new Vector3f(450, 19, 1660));
-				defaultPaint.setARGB(255, 255, 0, 255);
-				canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-				canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);*/
+					p = transformToImageCoords(new Vector3f(450, 19, 1660));
+					defaultPaint.setARGB(255, 255, 0, 255);
+					canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+					canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 				}
 			}
 		}

@@ -441,9 +441,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 		simpleBethCellManager.updateBranches();
 	}
 
-	/**
-
-	 */
 	private void setSelectedGameConfig(GameConfig newGameConfig)
 	{
 		selectedGameConfig = newGameConfig;

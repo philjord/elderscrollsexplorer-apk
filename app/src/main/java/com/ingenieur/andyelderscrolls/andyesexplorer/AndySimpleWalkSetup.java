@@ -5,13 +5,11 @@ import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
 import com.jogamp.graph.font.FontFactory;
-import com.jogamp.newt.event.GestureHandler;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.UIShape;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.BoundingSphere;
@@ -230,9 +228,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		hudcompass = new AndyHUDCompass();
 		hudCrossHair = new HUDCrossHair();
 
-
-
-
 		behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
 		loadInfo = new HUDText(new Point2f(-0.95f, -0.1f), 18, "Loading...");
@@ -340,7 +335,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		{
 			physicsSystem.getNBControlledChar().getCharacterController().warp(origin);
 		}
-
 	}
 
 	/* (non-Javadoc)
@@ -369,8 +363,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	@Override
 	public void configure(MeshSource meshSource, SimpleBethCellManager simpleBethCellManager)
 	{
-		// set up and run the physics system************************************************
-
+		// set up and run the physics system
 		physicsSystem = new PhysicsSystem(simpleBethCellManager, avatarCollisionInfo, behaviourBranch, meshSource);
 
 		IDashboard.dashboard.setPhysicSystem(physicsSystem);
@@ -389,12 +382,9 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 					super.doMouseReleased(e);
 				}
 			}
-		}
-
-		;
+		};
 
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem, true);
-
 	}
 
 	private void setupGraphicsSetting(GLWindow gl_window)
@@ -426,7 +416,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 				// and the dolly it rides on
 				if (TRAILER_CAM)
 				{
-					TrailerCamDolly trailerCamDolly = new TrailerCamDolly(avatarCollisionInfo, new WalkTrailorCamCollider());
+					TrailerCamDolly trailerCamDolly = new TrailerCamDolly(avatarCollisionInfo, new WalkTrailerCamCollider());
 					cameraPanel.setDolly(trailerCamDolly);
 				}
 				else
@@ -714,7 +704,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 
 		}
 	}
-	private class WalkTrailorCamCollider implements TrailerCamDolly.TrailorCamCollider
+	private class WalkTrailerCamCollider implements TrailerCamDolly.TrailorCamCollider
 	{
 		private Vector3f rayFrom = new Vector3f();
 
@@ -741,9 +731,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			return 1f;
 		}
 	}
-
-
-
 
 }
 

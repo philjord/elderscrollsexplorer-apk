@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import static android.R.attr.text;
 
 /**
  * Created by phil on 3/7/2016.
@@ -20,7 +17,8 @@ public class SopInterceptor extends PrintStream
 {
 	private String tag;
 
-	private File logFile = null;
+	// note static anyone can set this guy and it is used by all
+	private static File logFile = null;
 
 	public SopInterceptor(OutputStream out, String tag)
 	{
@@ -33,7 +31,7 @@ public class SopInterceptor extends PrintStream
 	{
 		Log.w(tag, s);
 
-	/*	if (logFile != null && s.trim().length() > 0)
+		if (logFile != null && s.trim().length() > 0)
 		{
 			if (!logFile.exists())
 			{
@@ -44,7 +42,7 @@ public class SopInterceptor extends PrintStream
 				catch (IOException e)
 				{
 					// could use String st = Log.getStackTraceString(e)
-					Log.e("LogwritingNew", e.toString());
+					Log.e("LogWritingNew", e.toString());
 				}
 			}
 			BufferedWriter buf = null;
@@ -58,7 +56,7 @@ public class SopInterceptor extends PrintStream
 			}
 			catch (IOException e)
 			{
-				Log.e("Logwriting", e.toString());
+				Log.e("LogWriting", e.toString());
 			}
 			finally
 			{
@@ -70,7 +68,7 @@ public class SopInterceptor extends PrintStream
 				{//ignore
 				}
 			}
-		}*/
+		}
 	}
 
 	private String header()
@@ -80,8 +78,8 @@ public class SopInterceptor extends PrintStream
 				android.os.Process.myPid()+" ";
 	}
 
-	public void setLogFile(File logFile)
+	public static void setLogFile(File f)
 	{
-		this.logFile = logFile;
+		logFile = f;
 	}
 }

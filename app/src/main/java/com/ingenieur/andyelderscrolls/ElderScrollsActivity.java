@@ -23,12 +23,10 @@ import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
-import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.JoglesPipeline;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 import nif.j3d.J3dNiTriBasedGeom;
@@ -356,7 +354,7 @@ public class ElderScrollsActivity extends Activity
 		if (setLogFile)
 		{
 			// just go for downloads, always there
-			File logFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CallOfMorrowindLog.log");
+			File logFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CallOfRedMountainLog.log");
 			sysoutInterceptor.setLogFile(logFile);
 			syserrInterceptor.setLogFile(logFile);
 		}
