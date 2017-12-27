@@ -3,8 +3,8 @@
       >
     <item android:id="@+id/menu_test_3d"
           android:title="@string/menu_test_3d" />
-    <item android:id="@+id/menu_deoptomize"
-          android:title="@string/menu_deoptomize"
+    <item android:id="@+id/menu_optomize"
+          android:title="@string/menu_optomize"
           android:checkable="true"/>
     <item android:id="@+id/menu_anti_alias"
           android:title="@string/menu_anti_alias"

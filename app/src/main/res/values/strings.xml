@@ -52,7 +52,7 @@ To do that please follow these instructions:<br>
     <string name="menu_help">Help</string>
     <string name="menu_about">About</string>
     <string name="menu_donate">Donate</string>
-    <string name="menu_deoptomize">Deoptomize</string>
+    <string name="menu_optomize">Optomize</string>
     <string name="menu_anti_alias">x2 AA</string>
     <string name="donations__description">Do you love Morrowind?\nAny support would be gratefully appreciated and may assist in speeding up development!</string>
     <string name="menu_options">Options</string>

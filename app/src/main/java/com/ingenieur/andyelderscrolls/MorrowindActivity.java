@@ -36,7 +36,6 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.andyesexplorer.OptionsDialog;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService;
@@ -69,7 +68,7 @@ import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.conf
 public class MorrowindActivity extends Activity implements IDownloaderClient
 {
 	private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
-	private static final String DEOPTOMIZE = "DEOPTOMIZE";
+	private static final String OPTOMIZE = "OPTOMIZE";
 	private static final String ANTIALIAS = "ANTIALIAS";
 	private static final String GYROSCOPE = "GYROSCOPE";
 
@@ -118,9 +117,9 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		inflater.inflate(R.menu.main_menu, menu);
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		boolean deoptomize = settings.getBoolean(DEOPTOMIZE, false);
-		menu.findItem(R.id.menu_deoptomize).setChecked(deoptomize);
-		setDeoptomize(deoptomize);
+		boolean optomize = settings.getBoolean(OPTOMIZE, false);
+		menu.findItem(R.id.menu_optomize).setChecked(optomize);
+		setOptomize(optomize);
 		boolean antialias = settings.getBoolean(ANTIALIAS, false);
 		menu.findItem(R.id.menu_anti_alias).setChecked(antialias);
 		AndyESExplorerActivity.antialias = antialias;
@@ -148,9 +147,9 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 			case R.id.menu_donate:
 				donate();
 				return true;
-			case R.id.menu_deoptomize:
+			case R.id.menu_optomize:
 				item.setChecked(!item.isChecked());
-				setDeoptomize(item.isChecked());
+				setOptomize(item.isChecked());
 				return true;
 			case R.id.menu_anti_alias:
 				item.setChecked(!item.isChecked());
@@ -667,19 +666,20 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 		return true;
 	}
 
-	public void setDeoptomize(boolean deoptomize)
+	public void setOptomize(boolean optomize)
 	{
-		//DEBUG to fix Nexus 5
-		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = !deoptomize;
-		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = !deoptomize;
-		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = !deoptomize;
-		JoglesPipeline.LATE_RELEASE_CONTEXT = !deoptomize;
-		JoglesPipeline.MINIMISE_NATIVE_CALLS_TRANSPARENCY = !deoptomize;
-		JoglesPipeline.MINIMISE_NATIVE_CALLS_TEXTURE = !deoptomize;
+		J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = optomize;
+		JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = optomize;
+		JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = optomize;
+
+		// these don't seem to cause trouble often, but the above three do constantly
+		//JoglesPipeline.LATE_RELEASE_CONTEXT = optomize;
+		//JoglesPipeline.MINIMISE_NATIVE_CALLS_TRANSPARENCY = optomize;
+		//JoglesPipeline.MINIMISE_NATIVE_CALLS_TEXTURE = optomize;
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(DEOPTOMIZE, deoptomize);
+		editor.putBoolean(OPTOMIZE, optomize);
 		editor.apply();
 	}
 
