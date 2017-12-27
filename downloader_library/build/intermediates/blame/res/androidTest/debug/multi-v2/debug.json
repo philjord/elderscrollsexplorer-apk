@@ -1,0 +1,51 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-v11_values-v11.arsc.flat",
+            "map": [
+                {
+                    "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\bundles\\debug\\res\\values-v11\\values-v11.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "184"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,28,31,38",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,114,191,270,332,411,479,536,606,717,823,935,1016,1085,1153,1259,1368,1457,1577,1673,1775,1830,1894,1960,2087,2213,2599",
+                        "endLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,27,30,37,41",
+                        "endColumns": "58,76,78,61,78,67,56,69,110,105,111,80,68,67,105,108,88,119,95,101,54,63,65,12,12,12,12",
+                        "endOffsets": "109,186,265,327,406,474,531,601,712,818,930,1011,1080,1148,1254,1363,1452,1572,1668,1770,1825,1889,1955,2082,2208,2594,2772"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-v9_values-v9.arsc.flat",
+            "map": [
+                {
+                    "source": "C:\\Users\\phil\\AndroidStudioProjects\\ese-android\\downloader_library\\build\\intermediates\\bundles\\debug\\res\\values-v9\\values-v9.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,147",
+                        "endColumns": "91,98",
+                        "endOffsets": "142,241"
+                    }
+                }
+            ]
+        }
+    ]
+}

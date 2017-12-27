@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="esmmanager">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/esmmanager.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

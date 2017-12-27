@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="jogamp-natives">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/jogamp-natives.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

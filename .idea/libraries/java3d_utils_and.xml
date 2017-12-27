@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="java3d-utils-and">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/java3d-utils-and.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "702485706049",
+    "firebase_url": "https://call-of-red-mountain.firebaseio.com",
+    "project_id": "call-of-red-mountain",
+    "storage_bucket": "call-of-red-mountain.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702485706049:android:b03ecb0045344a46",
+        "android_client_info": {
+          "package_name": "com.ingenieur.ese.eseandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702485706049-1bsq37fo4a8qac26li684jvi97ra9aqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ingenieur.ese.eseandroid",
+            "certificate_hash": "4B79B71539F7EE5BB1F10F510F284CCB6354EB8C"
+          }
+        },
+        {
+          "client_id": "702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCogUwA1tjVkJomS3Ax8fQ8Ko2Yr20WgVo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702485706049-sdf71m4gquibvh6sd7uif0r2eqgrd2ur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
