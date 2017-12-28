@@ -24,7 +24,7 @@ The app can actually run all of the elder scrolls series games, and the fallout 
 
 This repo is built on a common base repo called
 
-ElderScrollsExplorerBase (https://philjord@bitbucket.org/philjord/ElderScrollsExplorerBase) 
+ElderScrollsExplorerBase (https://bitbucket.org/philjord/ElderScrollsExplorerBase) 
 
 This project is common between both the Android build and the desktop build
 
