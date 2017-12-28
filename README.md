@@ -1,45 +1,62 @@
-# README #
+# The Code for the app Call of Red Mountain #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Call of Red Mountain is an Android app that runs on the media files of the amazing Morrowind game.
 
-### What is this repository for? ###
+There is an equivilent app for running on any desktop called ElderScrollsExplorer
+https://github.com/philjord/ElderScrollsExplorer
+
+Both repos are built on a common base project that is built on many sub projects.
+
+In order to make changes to the user interface on Android you only need this repo imported into Android Studio. 
+It comes with all the libraries needed to get the game running.
+
+If you want to make changes to the underlying game itself then you need to follow the instructions in ElderScrollsExplorer, that will set up an environment that will allow you to recompile
+all the libraries that are used by this project. But be warned this is a huge amount of code written over the past 20 years.
+
+The good news is I'm always happy to help out and any feedback is very welcome (p.j.nz@outlook.com).
+
+
+### Why is this repo called such a strange name? ###
 
 This repo will build the Call of Red Mountain apk file, which can then be run on any Android device
 
-The app in fact runs all of the elder scrolls series games, and the fallout series as well. So this repo is call
+The app can actually run all of the elder scrolls series games, and the fallout series as well. 
 
-ESE (for elder Scrolls Explorer)
-Android (for the code line which is compatible with Android i.e. no awt code)
--apk for the portion of code that puts together an Android Activity
+This repo is built on a common base repo called
+
+ESEAndroid (https://bitbucket.org/philjord/eseandroid) 
+
+ * ESE (for Elder Scrolls Explorer)
+
+ * Android (for the code line which is compatible with Android i.e. no awt code)
+
+This project is common between both the Android build and the desktop build
+
 
 Hence ESEAndroid-apk
 
-By comparision the project ESEAndroid (https://bitbucket.org/philjord/eseandroid) is 
-ESE (for elder Scrolls Explorer)
-Android (for the code line which is compatible with Android i.e. no awt code)
-
-But that runs on the desktop jre not the android RT
-
-ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
-Is an AWT version of ESEAndroid that's actually built on ESEAndroid but that uses AWT components to show itself and be navigable.
+-apk for the portion of code that puts together an Android Activity
 
 
-### How do I get set up? ###
+By comparision the project ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
 
-To actually improve teh Call of Red Mountain at a game play level you would need to develop the full stack of code. However to get teh apk building and be
-able to do Android style changes this project will get you there.
-* Configuration
-* Dependencies
-* Deployment instructions
+Is an AWT version of ESEAndroid-apk that's built on ESEAndroid but that uses AWT components to show itself and be navigable.
+
+
+
+ElderScrollsExplorer was the original project so it got the original name. I should rename them
+
+ESEAndroid => ElderScrollsExplorer
+ElderScrollsExplorer => ElderScrollsExplorer-Desktop
+ESEAndroid-apk => ElderScrollsExplorer-apk
+
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+There are no guideline as yet becuase very few people have contributed so far.
 
 ### Who do I talk to? ###
 
 If you need help send me (Phil) an email, I'm always glad to help p.j.nz@outlook.com
 
-For help with Java3D or java openGl see the great guys at jogamp.org
+For help with Java3D or Java OpenGL see the great guys at jogamp.org
