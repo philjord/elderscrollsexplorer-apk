@@ -2,8 +2,7 @@
 
 Call of Red Mountain is an Android app that runs on the media files of the amazing Morrowind game.
 
-There is an equivilent app for running on any desktop called ElderScrollsExplorer
-https://github.com/philjord/ElderScrollsExplorer
+There is an equivilent app for running on any desktop called ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
 
 Both repos are built on a common base project that is built on many sub projects.
 
@@ -12,6 +11,7 @@ It comes with all the libraries needed to get the game running.
 
 If you want to make changes to the underlying game itself then you need to follow the instructions in ElderScrollsExplorer, that will set up an environment that will allow you to recompile
 all the libraries that are used by this project. But be warned this is a huge amount of code written over the past 20 years.
+
 
 The good news is I'm always happy to help out and any feedback is very welcome (p.j.nz@outlook.com).
 
@@ -24,31 +24,26 @@ The app can actually run all of the elder scrolls series games, and the fallout 
 
 This repo is built on a common base repo called
 
-ESEAndroid (https://bitbucket.org/philjord/eseandroid) 
-
- * ESE (for Elder Scrolls Explorer)
-
- * Android (for the code line which is compatible with Android i.e. no awt code)
+ElderScrollsExplorerBase (https://philjord@bitbucket.org/philjord/ElderScrollsExplorerBase) 
 
 This project is common between both the Android build and the desktop build
 
 
-Hence ESEAndroid-apk
+This repo is currently called ESEAndroid-apk
+
+ * ESE (for Elder Scrolls Explorer)
+
+ * Android (for the code line which is compatible with Android i.e. no awt code)
 
 -apk for the portion of code that puts together an Android Activity
 
 
 By comparision the project ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
 
-Is an AWT version of ESEAndroid-apk that's built on ESEAndroid but that uses AWT components to show itself and be navigable.
+Is an AWT version of ESEAndroid-apk that's built on ElderScrollsExplorerBase but that uses AWT components to show itself and be navigable.
 
 
-
-ElderScrollsExplorer was the original project so it got the original name. I should rename them
-
-ESEAndroid => ElderScrollsExplorer
-ElderScrollsExplorer => ElderScrollsExplorer-Desktop
-ESEAndroid-apk => ElderScrollsExplorer-apk
+ElderScrollsExplorer was the original project so it got the original name. I should rename this ElderScrollsExplorer-apk
 
 
 ### Contribution guidelines ###
