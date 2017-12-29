@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
+import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity2;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
@@ -305,7 +306,7 @@ public class ElderScrollsActivity extends Activity
 		if (gameSelected != null)
 		{
 			setUpLogFile(gameSelected);
-			Intent intent = new Intent(this, KfDisplayActivity.class);
+			Intent intent = new Intent(this, KfDisplayActivity2.class);
 			intent.putExtra(SELECTED_GAME, gameSelected.gameName);
 			startActivity(intent);
 		}
