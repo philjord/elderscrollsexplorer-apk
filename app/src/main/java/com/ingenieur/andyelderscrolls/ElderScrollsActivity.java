@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
-import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
