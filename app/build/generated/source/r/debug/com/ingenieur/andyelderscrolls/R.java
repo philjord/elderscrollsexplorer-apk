@@ -2021,7 +2021,7 @@ public final class R {
     public static final int quantum_ic_close_white_24=0x7f070061;
     public static final int quantum_ic_settings_white_24=0x7f070062;
     public static final int rippleable=0x7f070063;
-    public static final int tools=0x7f070064;
+    public static final int ic_tools =0x7f070064;
     public static final int transition=0x7f070065;
     public static final int vr_icon=0x7f070066;
   }

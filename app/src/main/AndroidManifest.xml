@@ -83,7 +83,7 @@
             android:name=".ElderScrollsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Red Mountain Tools"
-            android:icon="@drawable/tools"
+            android:icon="@drawable/ic_tools"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

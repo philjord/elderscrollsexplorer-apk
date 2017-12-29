@@ -30,7 +30,7 @@ android {
         }
         debug {
             minifyEnabled false
-            //see ${sdk.dir}/tools/proguard/proguard-android-optimize.txt
+            //see ${sdk.dir}/ic_tools/proguard/proguard-android-optimize.txt
             proguardFiles 'proguard-rules-debug.pro'
             zipAlignEnabled true
         }

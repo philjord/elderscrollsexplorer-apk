@@ -45,7 +45,7 @@ public class ElderScrollsActivity extends Activity
 	 * esm files will be identified by filename these are fixed
 	 * Tools will ahve an add button to add as many as you like, if a different location
 	 * is selected for a current folder it is simply overwritten
-	 * Morrowind will look for it's folder and ask for it if not found, tools is how you change this if needed
+	 * Morrowind will look for it's folder and ask for it if not found, ic_tools is how you change this if needed
 	 * the esm names that are stored come from the gameconfig list key is folderKey esm name is mainESMFile
 	 * So note Andy root must disappear totally? yes I think that's right
 	 */

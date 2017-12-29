@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <view class="com.ingenieur.andyelderscrolls.andyesexplorer.MapFragment$MapImage"
+        android:id="@+id/map"
+        android:src="@drawable/mw_map_vvardenfell"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+        />
+
+    <Button
+        android:id="@+id/furnitureCatalogLeftSwiper"
+        android:layout_width = "30dp"
+        android:layout_height = "100dp"
+        android:layout_gravity="center_vertical"
+        android:text="@string/gt"
+        android:layout_marginLeft="-5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        />
+    <Button
+        android:id="@+id/furnitureCatalogRightSwiper"
+        android:layout_width = "30dp"
+        android:layout_height = "100dp"
+        android:layout_gravity="center_vertical"
+        android:text="@string/lt"
+        android:layout_marginRight="-5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        />
+</RelativeLayout>
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+
+            <LinearLayout
+                android:id="@+id/header2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                >
+                <!-- filled by code-->
+            </LinearLayout>
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/header2">
+                <TableLayout
+                    android:id="@+id/table2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+                    <!-- filled by code-->
+                </TableLayout>
+            </ScrollView>
+
+
+    <Button
+        android:id="@+id/furnitureCatalogLeftSwiper2"
+        android:layout_width = "30dp"
+        android:layout_height = "100dp"
+        android:layout_gravity="center_vertical"
+        android:text="@string/gt"
+        android:layout_marginLeft="-5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        />
+</RelativeLayout>
