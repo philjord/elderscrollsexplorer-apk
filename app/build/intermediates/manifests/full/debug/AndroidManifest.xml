@@ -120,15 +120,6 @@
                 android:value=".ElderScrollsActivity" />
         </activity>
         <activity
-            android:name="com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="Kf Display"
-            android:parentActivityName="com.ingenieur.andyelderscrolls.ElderScrollsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ElderScrollsActivity" />
-        </activity>
-        <activity
             android:name="com.ingenieur.andyelderscrolls.jbullet.JBulletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="JBullet"

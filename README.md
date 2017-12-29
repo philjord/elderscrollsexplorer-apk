@@ -15,6 +15,25 @@ all the libraries that are used by this project. But be warned this is a huge am
 
 The good news is I'm always happy to help out and any feedback is very welcome (p.j.nz@outlook.com).
 
+### How to install and run ###
+
+Install Android Studio
+
+Open it, Select New -> Project from Version Control -> Git
+
+URL = https://philjord@bitbucket.org/philjord/ElderScrollsExplorer-apk.git
+
+Select a location and name (or leave as default)
+
+Press Clone
+
+Wait for some time while it downloads and installs
+
+If it asks seemlingly random questions clicking OK appears to work fine
+
+Once installed you need to click Tools -> Android -> Sync Project with Gradle File
+
+Then click the run arrow
 
 ### Why is this repo called such a strange name? ###
 

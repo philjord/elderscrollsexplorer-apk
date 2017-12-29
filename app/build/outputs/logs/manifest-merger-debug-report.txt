@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
 MERGED from [:downloader_library] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\downloader_library\build\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.firebase:firebase-core:10.0.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\firebase-core-10.0.1.aar\1ea079a23fac4c6858e06590a653be51\AndroidManifest.xml:2:1-6:12
 MERGED from [org.sufficientlysecure:donations:2.5] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\donations-2.5.aar\5e3c78f98b64731b666365312cc17d1d\AndroidManifest.xml:2:1-13:12
@@ -27,9 +27,9 @@ MERGED from [com.android.support:support-media-compat:25.3.1] C:\Users\phil\.gra
 MERGED from [com.android.support:support-core-utils:25.3.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.1.aar\5055543d3cd2e4b51733a03b2bb92cdd\AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-core-ui:25.3.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.1.aar\f74d9da022ad499af2cea63ac1bd915c\AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-compat:25.3.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.1.aar\98d37435f80caa42594092d0b98649d0\AndroidManifest.xml:17:1-31:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
-INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
+INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12
 	package
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:3:5-45
 		INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml
@@ -179,7 +179,7 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:49:22-64
 application
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:51:5-139:19
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:51:5-129:19
 MERGED from [com.google.firebase:firebase-core:10.0.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\firebase-core-10.0.1.aar\1ea079a23fac4c6858e06590a653be51\AndroidManifest.xml:5:5-20
 MERGED from [com.google.firebase:firebase-core:10.0.1] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\firebase-core-10.0.1.aar\1ea079a23fac4c6858e06590a653be51\AndroidManifest.xml:5:5-20
 MERGED from [org.sufficientlysecure:donations:2.5] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\donations-2.5.aar\5e3c78f98b64731b666365312cc17d1d\AndroidManifest.xml:11:5-20
@@ -288,52 +288,42 @@ ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:100:17-54
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:99:17-63
-activity#com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity
+activity#com.ingenieur.andyelderscrolls.jbullet.JBulletActivity
 ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:102:9-111:20
 	android:parentActivityName
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:106:13-63
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:105:13-39
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:105:13-36
 	android:configChanges
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:104:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:103:13-56
-activity#com.ingenieur.andyelderscrolls.jbullet.JBulletActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:112:9-121:20
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:103:13-52
+activity#com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:112:9-122:20
+	android:screenOrientation
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:117:13-56
 	android:parentActivityName
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:116:13-63
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:115:13-36
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:115:13-39
 	android:configChanges
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:114:13-74
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:113:13-52
-activity#com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:122:9-132:20
-	android:screenOrientation
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:127:13-56
-	android:parentActivityName
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:126:13-63
-	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:125:13-39
-	android:configChanges
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:124:13-74
-	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:123:13-66
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:113:13-66
 activity#simpleandroid.JoglStatusActivity
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:133:9-134:68
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:123:9-124:68
 	android:label
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:133:19-51
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:123:19-51
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:134:19-66
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:124:19-66
 service#com.ingenieur.andyelderscrolls.utils.obb.ObbDownloaderService
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:136:9-67
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:126:9-67
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:136:18-64
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:126:18-64
 receiver#com.ingenieur.andyelderscrolls.utils.obb.ObbAlarmServiceReceiver
-ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:137:9-71
+ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:127:9-71
 	android:name
-		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:137:19-68
+		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:127:19-68
 uses-feature#0x00020000
 ADDED from [com.google.vr:sdk-base:1.10.0] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\sdk-base-1.10.0.aar\537e3d93307cd7eba40ea3a2ea9aa77c\AndroidManifest.xml:6:5-77
 REJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:6:5-77
@@ -343,7 +333,7 @@ REJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\s
 		ADDED from [com.google.vr:sdk-base:1.10.0] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\sdk-base-1.10.0.aar\537e3d93307cd7eba40ea3a2ea9aa77c\AndroidManifest.xml:6:52-75
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from [com.google.vr:sdk-base:1.10.0] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\sdk-base-1.10.0.aar\537e3d93307cd7eba40ea3a2ea9aa77c\AndroidManifest.xml:9:5-79
-IMPLIED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-140:12 reason: com.google.vr.sdk.base requested WRITE_EXTERNAL_STORAGE
+IMPLIED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-130:12 reason: com.google.vr.sdk.base requested WRITE_EXTERNAL_STORAGE
 	android:name
 		ADDED from [com.google.vr:sdk-base:1.10.0] C:\Users\phil\.gradle\caches\transforms-1\files-1.1\sdk-base-1.10.0.aar\537e3d93307cd7eba40ea3a2ea9aa77c\AndroidManifest.xml:9:22-77
 uses-feature#android.software.vr.mode
