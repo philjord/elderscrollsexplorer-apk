@@ -2,7 +2,7 @@
 
 Call of Red Mountain is an Android app that runs on the media files of the amazing Morrowind game.
 
-There is an equivilent app for running on any desktop called ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
+There is an equivalent app for running on any desktop called ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
 
 Both repos are built on a common base project that is built on many sub projects.
 
@@ -26,24 +26,7 @@ This repo is built on a common base repo called
 
 ElderScrollsExplorerBase (https://bitbucket.org/philjord/ElderScrollsExplorerBase) 
 
-This project is common between both the Android build and the desktop build
-
-
-This repo is currently called ESEAndroid-apk
-
- * ESE (for Elder Scrolls Explorer)
-
- * Android (for the code line which is compatible with Android i.e. no awt code)
-
--apk for the portion of code that puts together an Android Activity
-
-
-By comparision the project ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
-
-Is an AWT version of ESEAndroid-apk that's built on ElderScrollsExplorerBase but that uses AWT components to show itself and be navigable.
-
-
-ElderScrollsExplorer was the original project so it got the original name. I should rename this ElderScrollsExplorer-apk
+Which is common between both this Android project and the desktop project ElderScrollsExplorer (https://github.com/philjord/ElderScrollsExplorer)
 
 
 ### Contribution guidelines ###

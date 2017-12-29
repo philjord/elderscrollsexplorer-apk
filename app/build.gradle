@@ -46,26 +46,7 @@ android {
 }
 dependencies {
 
-    //compile fileTree(include: '*.jar', dir: 'libs')
-    compile files('libs/eseandroid.jar')
-    compile files('libs/vecmath.jar')
-    compile files('libs/jbullet1.1.jar')
-    compile files('libs/gluegen-rt-android.jar')
-    compile files('libs/java3d-utils-and.jar')
-    compile files('libs/java3d-core-and.jar')
-    compile files('libs/jogl-all-android.jar')
-    compile files('libs/3dtools.jar')
-    compile files('libs/tools.jar')
-    compile files('libs/jnif.jar')
-    compile files('libs/esmmanager.jar')
-    compile files('libs/jogamp-natives.jar')
-    compile files('libs/jnifj3d.jar')
-    compile files('libs/bsamanager.jar')
-    compile files('libs/jnifjbullet.jar')
-    compile files('libs/joal-android.jar')
-    compile files('libs/tritonus_share.jar')
-    compile files('libs/mp3spi1.9.5.jar')
-    compile files('libs/jl1.0.1.jar')
+    compile fileTree(include: '*.jar', dir: 'libs')
     compile project(path: ':downloader_library')
     compile 'com.google.firebase:firebase-core:10.0.1'
     releaseCompile 'com.google.firebase:firebase-crash:10.2.0'

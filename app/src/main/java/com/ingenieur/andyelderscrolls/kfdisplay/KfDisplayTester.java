@@ -23,6 +23,7 @@ import org.jogamp.java3d.Node;
 import org.jogamp.java3d.PointLight;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.java3d.utils.shader.Cube;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.vecmath.Color3f;
@@ -34,8 +35,8 @@ import org.jogamp.vecmath.Vector3f;
 import java.io.File;
 import java.util.ArrayList;
 
-import archive.ArchiveFile;
-import archive.BSArchiveSet;
+import bsaio.ArchiveFile;
+import bsaio.BSArchiveSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import nif.BgsmSource;
@@ -48,7 +49,6 @@ import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
 import scrollsexplorer.GameConfig;
-import tools.compressedtexture.dds.DDSTextureLoader;
 import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.ShaderSourceIO;
@@ -135,7 +135,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		canvas3D2D = new Canvas3D2D(gl_window);
 
 		simpleUniverse = new SimpleUniverse(canvas3D2D);
-		DDSTextureLoader.setAnisotropicFilterDegree(8);
+		CompressedTextureLoader.setAnisotropicFilterDegree(8);
 
 		fpsCounter = new AndyFPSCounter();
 
