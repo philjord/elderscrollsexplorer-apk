@@ -18,11 +18,7 @@ import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 import jogamp.newt.driver.android.NewtBaseActivity;
 import scrollsexplorer.GameConfig;
 
-/**
- * Be different!!
- */
-public class KfDisplayActivity
-		extends NewtBaseActivity
+public class KfDisplayActivity extends NewtBaseActivity
 {
 	private KfDisplayTester kfDisplay;
 	private GLWindow gl_window;
