@@ -18,7 +18,7 @@ import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 import jogamp.newt.driver.android.NewtBaseActivity;
 import scrollsexplorer.GameConfig;
 
-public class KfDisplayActivity extends NewtBaseActivity
+public class KfDisplayActivity2 extends NewtBaseActivity
 {
 	private KfDisplayTester kfDisplay;
 	private GLWindow gl_window;
@@ -77,7 +77,7 @@ public class KfDisplayActivity extends NewtBaseActivity
 											 {
 												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
 												 //KfDisplayTester from this init function
-												 kfDisplay = new KfDisplayTester(KfDisplayActivity.this, gl_window, gameConfigToLoad);
+												 kfDisplay = new KfDisplayTester(KfDisplayActivity2.this, gl_window, gameConfigToLoad);
 
 												 // addNotify will start up the renderer and kick things off
 												 kfDisplay.canvas3D2D.addNotify();
