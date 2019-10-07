@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ingenieur.ese.eseandroid"
-    android:versionCode="132"
-    android:versionName="1.32" >
+    android:versionCode="135"
+    android:versionName="1.35" >
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="25" />
+        android:targetSdkVersion="26" />
 
     <supports-screens
         android:anyDensity="true"

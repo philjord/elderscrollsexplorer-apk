@@ -1,13 +1,14 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ingenieur.andyelderscrolls.R;
+
+import androidx.fragment.app.Fragment;
 
 public class InteriorListFragment extends Fragment
 {

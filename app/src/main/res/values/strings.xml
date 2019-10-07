@@ -60,6 +60,7 @@ To do that please follow these instructions:<br>
     <string name="lt"><![CDATA[<]]></string>
     <string name="gt"><![CDATA[>]]></string>
     <string name="menu_gyroscope">gyroscope</string>
+    <string name="menu_privacy">Privacy Policy</string>
     <string-array name="donation_google_catalog_values">
         <item>Donation 1</item>
         <item>Donation 2</item>

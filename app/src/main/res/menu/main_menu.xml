@@ -14,10 +14,24 @@
           android:checkable="true"/>
     <item android:id="@+id/menu_start_tools"
           android:title="@string/menu_start_tools"/>
-    <item android:id="@+id/menu_help"
-          android:title="@string/menu_help" />
-    <item android:id="@+id/menu_about"
-          android:title="@string/menu_about" />
-    <item android:id="@+id/menu_donate"
-          android:title="@string/menu_donate" />
+
+
+    <item
+        android:id="@+id/menu_help"
+        android:orderInCategory="991"
+        android:title="@string/menu_help">
+        <menu>
+            <item
+                android:id="@+id/menu_help_screen"
+                android:title="@string/menu_help"/>
+            <item
+                android:id="@+id/menu_about"
+                android:title="@string/menu_about"/>
+            <item
+                android:id="@+id/menu_privacy"
+                android:title="@string/menu_privacy"/>
+            <item android:id="@+id/menu_donate"
+                  android:title="@string/menu_donate" />
+        </menu>
+    </item>
 </menu>

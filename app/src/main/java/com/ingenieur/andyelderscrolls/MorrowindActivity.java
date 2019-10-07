@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Messenger;
@@ -144,9 +145,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 			case R.id.menu_test_3d:
 				test3d();
 				return true;
-			case R.id.menu_donate:
-				donate();
-				return true;
+
 			case R.id.menu_optomize:
 				item.setChecked(!item.isChecked());
 				setOptomize(item.isChecked());
@@ -172,7 +171,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 				return true;
-			case R.id.menu_help:
+			case R.id.menu_help_screen:
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				String welcomeMessage = this.getString(R.string.welcometext);
 				TextView textView = new TextView(this);
@@ -182,6 +181,17 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 				builder.setView(textView);
 				AlertDialog dialog = builder.create();
 				dialog.show();
+				return true;
+			case R.id.menu_donate:
+				donate();
+				return true;
+			case R.id.menu_privacy:
+				String urlStr = "https://sites.google.com/view/corm-privacy/home";
+				Uri webpage = Uri.parse(urlStr);
+				Intent intent2 = new Intent(Intent.ACTION_VIEW, webpage);
+				if (intent2.resolveActivity(getPackageManager()) != null) {
+					startActivity(intent2);
+				}
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -733,7 +743,7 @@ public class MorrowindActivity extends Activity implements IDownloaderClient
 	private static final XAPKFile[] xAPKS = {
 			new XAPKFile(
 					true, // true signifies a main file
-					3, // the version of the APK that the file was uploaded against
+					135, // the version of the APK that the file was uploaded against
 					91969003L // the length of the file in bytes
 			),
 		/*	new XAPKFile(

@@ -5,10 +5,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.opengl.Matrix;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -30,6 +30,8 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import jogamp.newt.WindowImpl;
 import jogamp.newt.driver.android.NewtBaseFragment;
@@ -43,6 +45,8 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 	private GLWindow gl_window;
 	private ScrollsExplorer scrollsExplorer;
 	private boolean scrollsExplorerInitCalled = false;
+
+	private NavigationPanel navigationPanel;
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -316,8 +320,83 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 				getActivity().getActionBar().show();
 				//	scrollsExplorer.stopRenderer();
 			}
+
+			if( navigationPanel != null) {
+				if(isVisibleToUser)
+					navigationPanel.showTooltip();
+				else
+					navigationPanel.hideTooltip();
+			}
 		}
 
 		super.setUserVisibleHint(isVisibleToUser);
 	}
+
+
+	/**
+
+	private NavigationPanel createNavigationPanel(Home home,
+																								UserPreferences preferences,
+																								HomeController3D controller) {
+
+		NavigationPanel navigationPanel = new NavigationPanel(getContext(), getView());
+		new NavigationButton(0, -(float) Math.PI / 36, 0, "TURN_LEFT", preferences, controller, navigationPanel.getLeftButton());
+		new NavigationButton(12.5f, 0, 0, "GO_FORWARD", preferences, controller, navigationPanel.getForwardButton());
+		new NavigationButton(0, (float) Math.PI / 36, 0, "TURN_RIGHT", preferences, controller, navigationPanel.getRightButton());
+		new NavigationButton(-12.5f, 0, 0, "GO_BACKWARD", preferences, controller, navigationPanel.getBackButton());
+		new NavigationButton(0, 0, -(float) Math.PI / 100, "TURN_UP", preferences, controller, navigationPanel.getUpButton());
+		new NavigationButton(0, 0, (float) Math.PI / 100, "TURN_DOWN", preferences, controller, navigationPanel.getDownButton());
+		return navigationPanel;
+	}
+
+
+	private static class NavigationButton  {
+		private boolean shiftDown;
+
+		public NavigationButton(final float moveDelta,
+														final float yawDelta,
+														final float pitchDelta,
+														String actionName,
+														UserPreferences preferences,
+														final HomeController3D controller,
+														android.view.View button) {
+
+
+			button.setOnKeyListener(new android.view.View.OnKeyListener() {
+				@Override
+				public boolean onKey(android.view.View v, int keyCode, KeyEvent event) {
+					if(event.getKeyCode() == KeyEvent.KEYCODE_SHIFT_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+						shiftDown = event.getAction() == KeyEvent.ACTION_DOWN;
+					}
+					return false;
+				}
+			});
+			// Update camera when button is armed
+			button.setOnTouchListener(new android.view.View.OnTouchListener() {
+				// Create a timer that will update camera angles and location
+				Timer timer;
+				@Override
+				public boolean onTouch(android.view.View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) {
+						if(timer != null){
+							timer.cancel();
+						}
+						timer = new Timer("",true);
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								controller.moveCamera(shiftDown ? moveDelta : moveDelta / 5);
+								controller.rotateCameraYaw(shiftDown ? yawDelta : yawDelta / 5);
+								controller.rotateCameraPitch(pitchDelta);
+							}
+						},50, 50 );
+					} else if (event.getAction() == MotionEvent.ACTION_UP && timer != null) {
+						timer.cancel();
+					}
+					return true;
+				}
+
+			});
+		}
+	}*/
 }

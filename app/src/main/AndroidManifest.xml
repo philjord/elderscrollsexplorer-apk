@@ -2,12 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="132"
-    android:versionName="1.32">
-
-    <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="25"/>
+    android:versionCode="136"
+    android:versionName="1.36">
 
     <supports-screens
         android:anyDensity="true"
@@ -53,6 +49,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:hardwareAccelerated="false">
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
         <activity
             android:name=".MorrowindActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -1,10 +1,11 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.core.view.MotionEventCompat;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by phil on 1/6/2017.

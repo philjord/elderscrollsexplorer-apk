@@ -1,12 +1,11 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.ingenieur.ese.eseandroid"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 28
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
@@ -46,14 +45,19 @@ android {
 }
 dependencies {
 
-    compile fileTree(include: '*.jar', dir: 'libs')
-    compile project(path: ':downloader_library')
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    releaseCompile 'com.google.firebase:firebase-crash:10.2.0'
-    compile 'org.sufficientlysecure:donations:2.5'
-    compile 'com.google.vr:sdk-audio:1.10.0'
-    compile 'com.google.vr:sdk-base:1.10.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    implementation fileTree(include: '*.jar', dir: 'libs')
+    implementation project(path: ':downloader_library')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    // all firebase libs versions must match
+    implementation 'com.google.firebase:firebase-ads:18.0.0'
+    implementation 'com.google.firebase:firebase-config:18.0.0'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'org.sufficientlysecure:donations:2.5'
+    implementation 'com.google.vr:sdk-audio:1.10.0'
+    implementation 'com.google.vr:sdk-base:1.10.0'
+    implementation ('org.jogamp.java3d:java3d-core-and:1.7.0')
+    implementation ('org.jogamp.java3d:java3d-utils-and:1.7.0')
 }
 repositories {
 }

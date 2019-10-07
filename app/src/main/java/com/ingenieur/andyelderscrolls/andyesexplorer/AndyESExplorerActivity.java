@@ -3,9 +3,6 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +17,10 @@ import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 
 import java.io.PrintStream;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class AndyESExplorerActivity extends FragmentActivity

@@ -7,8 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import org.jogamp.vecmath.Vector3f;
 
 import java.util.Random;
 
+import androidx.fragment.app.Fragment;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 
 public class MapFragment extends Fragment
