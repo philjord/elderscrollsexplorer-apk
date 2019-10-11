@@ -20,7 +20,7 @@
 #-ignorewarnings
 
 #http://stackoverflow.com/questions/35321742/android-proguard-most-aggressive-optimizations
--optimizationpasses 5
+-optimizationpasses 3
 -allowaccessmodification
 -overloadaggressively
 -repackageclasses ''
