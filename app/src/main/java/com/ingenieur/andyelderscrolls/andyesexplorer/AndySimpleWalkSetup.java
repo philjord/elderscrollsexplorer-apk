@@ -35,7 +35,6 @@ import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.IDashboard;
-import scrollsexplorer.simpleclient.NewtJumpKeyListener;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
@@ -52,8 +51,6 @@ import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
 import tools3d.navigation.NavigationTemporalBehaviour;
-import tools3d.navigation.twocircles.NavigationInputNewtLook;
-import tools3d.navigation.twocircles.NavigationInputNewtMove;
 import tools3d.universe.VisualPhysicalUniverse;
 import utils.source.MeshSource;
 
@@ -94,17 +91,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	private AvatarLocation avatarLocation = new AvatarLocation();
 
 	private AvatarCollisionInfo avatarCollisionInfo = new AvatarCollisionInfo(avatarLocation, 0.5f, 1.8f, 0.35f, 0.8f);
-
-	//private NavigationInputNewtKey keyNavigationInputNewt;
-	private NavigationInputNewtMove keyNavigationInputNewt;
-
-	//private NavigationInputNewtMouseDraggedLocked newtMouseInputListener;
-	private NavigationInputNewtLook newtMouseInputListener;
-
-	//private NavigationInputNewtLookMove newtMouseInputListener;
-
-
-	private NewtJumpKeyListener jumpKeyListener;
 
 	private NewtMiscKeyHandler newtMiscKeyHandler = new NewtMiscKeyHandler();
 
@@ -207,20 +193,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		navigationTemporalBehaviour.addNavigationProcessor(navigationProcessor);
 		behaviourBranch.addChild(navigationTemporalBehaviour);
 
-		//add mouse and keyboard inputs ************************
-		keyNavigationInputNewt = new NavigationInputNewtMove();
-		keyNavigationInputNewt.setNavigationProcessor(navigationProcessor);
-		NavigationInputNewtMove.VERTICAL_RATE = 50f;
+		// controls are added externally by the fragment, which requests the navigation processor
 
-
-		//mouseInputListener = new NavigationInputAWTMouseLocked();
-		//mouseInputListener.setNavigationProcessor(navigationProcessor);
-		newtMouseInputListener = new NavigationInputNewtLook();
-		newtMouseInputListener.setNavigationProcessor(navigationProcessor);
-		NavigationInputNewtMove.VERTICAL_RATE = 50f;
-
-		//add jump key and vis/phy toggle key listeners for fun ************************
-		jumpKeyListener = new NewtJumpKeyListener(nbccProvider);
 
 		//some hud gear
 		fpsCounter = new AndyFPSCounter();
@@ -431,8 +405,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
 
 			Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
-			//canvas3D2D.getGLWindow().addKeyListener(keyNavigationInputNewt);
-			canvas3D2D.getGLWindow().addKeyListener(jumpKeyListener);
 			canvas3D2D.getGLWindow().addKeyListener(newtMiscKeyHandler);
 
 			fpsCounter.addToCanvas(canvas3D2D);
@@ -521,8 +493,10 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		{
 			physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
 		}
-		keyNavigationInputNewt.setAllowVerticalMovement(ff);
+	}
 
+	public NavigationProcessorBullet getNavigationProcessor() {
+		return navigationProcessor;
 	}
 
 	/* (non-Javadoc)
@@ -657,16 +631,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 	@Override
 	public void setMouseLock(boolean mouseLock)
 	{
-		if (!mouseLock)
-		{
-			keyNavigationInputNewt.setWindow(null);
-			newtMouseInputListener.setWindow(null);
-		}
-		else
-		{
-			newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
-			keyNavigationInputNewt.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
-		}
+
 	}
 
 	@Override

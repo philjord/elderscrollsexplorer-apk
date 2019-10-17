@@ -56,13 +56,7 @@ dependencies {
     // Can't be added until bugs are fixed in jogamp android line
     //implementation ('org.jogamp.java3d:java3d-core-and:1.7.0')
     //implementation ('org.jogamp.java3d:java3d-utils-and:1.7.0')
-    implementation files('libs/gluegen-rt-android.jar')
-    //implementation files('libs/jogamp-natives.jar')
-    implementation files('libs/jogl-all-android.jar')
-    implementation files('libs/joal-android.jar')
-    implementation files('libs/java3d-core-and-1.7.0-shaded.jar')
-    implementation files('libs/java3d-utils-and-1.7.0-shaded.jar')
-    implementation files('libs/vecmath-1.7.0.jar')
+
 }
 repositories {
 }

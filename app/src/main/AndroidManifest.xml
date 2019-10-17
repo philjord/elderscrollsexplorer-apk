@@ -2,8 +2,8 @@
 <manifest
     package="com.ingenieur.andyelderscrolls"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="136"
-    android:versionName="1.36">
+    android:versionCode="137"
+    android:versionName="1.37">
 
     <supports-screens
         android:anyDensity="true"

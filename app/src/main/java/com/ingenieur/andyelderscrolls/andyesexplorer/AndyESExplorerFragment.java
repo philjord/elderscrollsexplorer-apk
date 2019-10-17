@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.ingenieur.andyelderscrolls.R;
 import com.jogamp.graph.font.FontFactory;
 import com.jogamp.nativewindow.NativeWindowException;
 import com.jogamp.newt.Window;
@@ -30,13 +31,13 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import jogamp.newt.WindowImpl;
 import jogamp.newt.driver.android.NewtBaseFragment;
 import jogamp.newt.driver.android.WindowDriver;
+import nifbullet.NavigationProcessorBullet;
 import tools3d.mixed3d2d.Canvas3D2D;
+import tools3d.navigation.twocircles.NavigationInputNewtMove;
 import tools3d.utils.YawPitch;
 
 
@@ -46,7 +47,8 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 	private ScrollsExplorer scrollsExplorer;
 	private boolean scrollsExplorerInitCalled = false;
 
-	private NavigationPanel navigationPanel;
+	private NavigationPanel moveNavigationPanel;
+	private NavigationPanel lookNavigationPanel;
 
 	@Override
 	public void onCreate(final Bundle state)
@@ -55,6 +57,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 
 
 		createGLWindow();
+
 
 
 		//PHIL DO THIS http://mesai0.blogspot.co.nz/2013/03/outdoorgeo-augmented-reality-camera.html
@@ -223,10 +226,20 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 				if (!scrollsExplorerInitCalled)
 				{
 					scrollsExplorerInitCalled = true;
-					AndyESExplorerActivity act = (AndyESExplorerActivity) AndyESExplorerFragment.this.getActivity();
+					AndyESExplorerActivity activity = (AndyESExplorerActivity) AndyESExplorerFragment.this.getActivity();
 
-					scrollsExplorer = new ScrollsExplorer(act, gl_window, act.gameName, act.gameConfigId);
-					act.scrollsExplorer = scrollsExplorer;
+					scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId);
+					activity.scrollsExplorer = scrollsExplorer;
+
+					moveNavigationPanel = createMoveNavigationPanel(scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+					lookNavigationPanel = createLookNavigationPanel(scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+					// showing the nav panel can only be done on the UI thread
+					activity.runOnUiThread(new Runnable() {
+						public void run() {
+							moveNavigationPanel.showTooltip();
+							lookNavigationPanel.showTooltip();
+						}
+					});
 				}
 				else
 				{
@@ -257,6 +270,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 
 		View rootView = getContentView(this.getWindow(), gl_window);
 		getActivity().getActionBar().hide();
+
 		return rootView;
 	}
 
@@ -306,7 +320,6 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-
 		if (scrollsExplorer != null)
 		{
 			if (isVisibleToUser)
@@ -320,83 +333,115 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 				getActivity().getActionBar().show();
 				//	scrollsExplorer.stopRenderer();
 			}
-
-			if( navigationPanel != null) {
+			moveNavigationPanel.showTooltip();
+			if( moveNavigationPanel != null) {
 				if(isVisibleToUser)
-					navigationPanel.showTooltip();
+					moveNavigationPanel.showTooltip();
 				else
-					navigationPanel.hideTooltip();
+					moveNavigationPanel.hideTooltip();
 			}
+			if( lookNavigationPanel != null) {
+				if(isVisibleToUser)
+					lookNavigationPanel.showTooltip();
+				else
+					lookNavigationPanel.hideTooltip();
+			}
+
 		}
 
 		super.setUserVisibleHint(isVisibleToUser);
 	}
 
 
-	/**
 
-	private NavigationPanel createNavigationPanel(Home home,
-																								UserPreferences preferences,
-																								HomeController3D controller) {
 
-		NavigationPanel navigationPanel = new NavigationPanel(getContext(), getView());
-		new NavigationButton(0, -(float) Math.PI / 36, 0, "TURN_LEFT", preferences, controller, navigationPanel.getLeftButton());
-		new NavigationButton(12.5f, 0, 0, "GO_FORWARD", preferences, controller, navigationPanel.getForwardButton());
-		new NavigationButton(0, (float) Math.PI / 36, 0, "TURN_RIGHT", preferences, controller, navigationPanel.getRightButton());
-		new NavigationButton(-12.5f, 0, 0, "GO_BACKWARD", preferences, controller, navigationPanel.getBackButton());
-		new NavigationButton(0, 0, -(float) Math.PI / 100, "TURN_UP", preferences, controller, navigationPanel.getUpButton());
-		new NavigationButton(0, 0, (float) Math.PI / 100, "TURN_DOWN", preferences, controller, navigationPanel.getDownButton());
-		return navigationPanel;
+	private NavigationPanel createMoveNavigationPanel(NavigationProcessorBullet npb) {
+		NavigationInputNewtMove.VERTICAL_RATE = 50f;// allow jumping
+		NavigationPanel navigationMovePanel = new NavigationPanel(getContext(), getView(), R.layout.navigationpanelmovepopup,Gravity.LEFT | Gravity.BOTTOM);
+
+		new MoveNavigationButton(NavigationInputNewtMove.FORWARD_RATE, 0, 0, npb, navigationMovePanel.getButton(R.id.navPanelForwardButton));
+		new MoveNavigationButton(-NavigationInputNewtMove.BACKWARD_RATE, 0, 0, npb, navigationMovePanel.getButton(R.id.navPanelBackButton));
+		new MoveNavigationButton(0, -NavigationInputNewtMove.STRAFF_RATE, 0,  npb, navigationMovePanel.getButton(R.id.navPanelLeftButton));
+		new MoveNavigationButton(0, NavigationInputNewtMove.STRAFF_RATE, 0, npb, navigationMovePanel.getButton(R.id.navPanelRightButton));
+		new MoveNavigationButton(0, 0, NavigationInputNewtMove.VERTICAL_RATE, npb, navigationMovePanel.getButton(R.id.navPanelUpButton));
+		new MoveNavigationButton(0, 0, -NavigationInputNewtMove.VERTICAL_RATE, npb, navigationMovePanel.getButton(R.id.navPanelDownButton));
+		return navigationMovePanel;
 	}
 
+	private static class MoveNavigationButton  {
 
-	private static class NavigationButton  {
-		private boolean shiftDown;
-
-		public NavigationButton(final float moveDelta,
-														final float yawDelta,
-														final float pitchDelta,
-														String actionName,
-														UserPreferences preferences,
-														final HomeController3D controller,
+		public MoveNavigationButton(final float zRate,
+														final float xRate,
+														final float yRate,
+														final NavigationProcessorBullet npb,
 														android.view.View button) {
-
-
-			button.setOnKeyListener(new android.view.View.OnKeyListener() {
-				@Override
-				public boolean onKey(android.view.View v, int keyCode, KeyEvent event) {
-					if(event.getKeyCode() == KeyEvent.KEYCODE_SHIFT_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_SHIFT_RIGHT) {
-						shiftDown = event.getAction() == KeyEvent.ACTION_DOWN;
-					}
-					return false;
-				}
-			});
-			// Update camera when button is armed
 			button.setOnTouchListener(new android.view.View.OnTouchListener() {
-				// Create a timer that will update camera angles and location
-				Timer timer;
 				@Override
 				public boolean onTouch(android.view.View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						if(timer != null){
-							timer.cancel();
-						}
-						timer = new Timer("",true);
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								controller.moveCamera(shiftDown ? moveDelta : moveDelta / 5);
-								controller.rotateCameraYaw(shiftDown ? yawDelta : yawDelta / 5);
-								controller.rotateCameraPitch(pitchDelta);
-							}
-						},50, 50 );
-					} else if (event.getAction() == MotionEvent.ACTION_UP && timer != null) {
-						timer.cancel();
+						if(zRate!=0)
+							npb.setZChange(zRate);
+						if(xRate!=0)
+							npb.setXChange(xRate);
+						if(yRate!=0)
+							npb.setYChange(yRate);
+					} else if (event.getAction() == MotionEvent.ACTION_UP) {
+						if(zRate!=0)
+							npb.setZChange(0);
+						if(xRate!=0)
+							npb.setXChange(0);
+						if(yRate!=0)
+							npb.setYChange(0);
 					}
 					return true;
 				}
 
 			});
 		}
-	}*/
+	}
+	private NavigationPanel createLookNavigationPanel(NavigationProcessorBullet npb) {
+
+		NavigationPanel navigationLookPanel = new NavigationPanel(getContext(), getView(), R.layout.navigationpanellookpopup, Gravity.RIGHT | Gravity.BOTTOM);
+
+		new LookNavigationButton(npb, navigationLookPanel.getButton(R.id.looky));
+		return navigationLookPanel;
+	}
+
+	private static class LookNavigationButton  {
+		private static final float FREE_LOOK_GROSS_ROTATE_FACTOR = -0.005f;
+		private float mouseDownLocationx;
+		private float mouseDownLocationy;
+		public LookNavigationButton(	final NavigationProcessorBullet npb,
+														android.view.View button) {
+			button.setOnTouchListener(new android.view.View.OnTouchListener() {
+				@Override
+				public boolean onTouch(android.view.View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) {
+							mouseDownLocationx = event.getX();
+							mouseDownLocationy = event.getY();
+					} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+						float ex = event.getX();
+						float ey = event.getY();
+
+						float dx = ex - mouseDownLocationx;
+						float dy = ey - mouseDownLocationy;
+
+						if (dx != 0 || dy != 0) {
+							double scaledDeltaX = (double) dx * FREE_LOOK_GROSS_ROTATE_FACTOR;
+							double scaledDeltaY = (double) dy * FREE_LOOK_GROSS_ROTATE_FACTOR;
+
+							if (npb != null) {
+								npb.changeRotation(scaledDeltaY, scaledDeltaX);
+							}
+
+							mouseDownLocationx = ex;
+							mouseDownLocationy = ey;
+						}
+					}
+					return true;
+				}
+
+			});
+		}
+	}
 }

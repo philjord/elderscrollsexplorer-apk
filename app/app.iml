@@ -94,8 +94,9 @@
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\3dtools.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\eseandroid.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\gluegen-rt-android.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\java3d-core-and-1.7.0-shaded.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\java3d-utils-and-1.7.0-shaded.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\java3d-core-and-1.7.0.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\java3d-utils-and-1.7.0.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\jbullet1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\jl1.0.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\joal-android.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\libs\jogl-all-android.jar:unspecified@jar" level="project" />
@@ -166,7 +167,6 @@
     <orderEntry type="library" name="Gradle: com.google.vr:sdk-audio:1.10.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.vr:sdk-base:1.10.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.vr:sdk-common:1.10.0@aar" level="project" />
-    <orderEntry type="module" module-name="downloader_library" />
     <orderEntry type="module" module-name="downloader_library" />
   </component>
 </module>
