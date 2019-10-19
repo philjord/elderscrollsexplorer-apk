@@ -361,40 +361,31 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 		cameraAdminMouseOverHandler = new AdminMouseOverHandler(physicsSystem, true);
 	}
 
-	private void setupGraphicsSetting(GLWindow gl_window)
-	{
+	private void setupGraphicsSetting(GLWindow gl_window) {
 
-		if (cameraPanel == null)
-		{
+		if (cameraPanel == null) {
 			// must record start state to restore later
 			boolean isLive = enabled;
 
-			if (isLive)
-			{
+			if (isLive) {
 				setEnabled(false);
 			}
 
 			//if HMD fails or not HMD
-			if (cameraPanel == null)
-			{
+			if (cameraPanel == null) {
 
 				if (gl_window == null)
 				{
 					cameraPanel = new CameraPanel(universe);
-				}
-				else
-				{
+				} else {
 					cameraPanel = new CameraPanel(universe, gl_window);
 				}
 
 				// and the dolly it rides on
-				if (TRAILER_CAM)
-				{
+				if (TRAILER_CAM) {
 					TrailerCamDolly trailerCamDolly = new TrailerCamDolly(avatarCollisionInfo, new WalkTrailerCamCollider());
 					cameraPanel.setDolly(trailerCamDolly);
-				}
-				else
-				{
+				} else {
 					HeadCamDolly headCamDolly = new HeadCamDolly(avatarCollisionInfo);
 					cameraPanel.setDolly(headCamDolly);
 				}
@@ -413,28 +404,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface
 			hudCrossHair.addToCanvas(canvas3D2D);
 			loadInfo.addToCanvas(canvas3D2D);
 
-			float pixelSizeFPS = 0.00016F * (float) canvas3D2D.getGLWindow().getSurfaceHeight();
-			try
-			{
-				Label label = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, ">");
-				canvas3D2D.addUIShape(label);
-				label.setEnabled(true);
-				label.translate(-1F, 0F, 0f);
-				label.setColor(1f, 1f, 1f, 0.85f);
-				label = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "<");
-				canvas3D2D.addUIShape(label);
-				label.setEnabled(true);
-				label.translate(0.92F, 0F, 0f);
-				label.setColor(1f, 1f, 1f, 0.85f);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-
-
-			if (isLive)
-			{
+			if (isLive) {
 				setEnabled(true);
 			}
 		}

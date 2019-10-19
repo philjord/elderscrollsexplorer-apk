@@ -2,9 +2,7 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -13,9 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.utils.TouchImageView;
@@ -28,8 +24,7 @@ import java.util.Random;
 import androidx.fragment.app.Fragment;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 
-public class MapFragment extends Fragment
-{
+public class MapFragment extends Fragment {
 	private View rootView;
 	private MapImage map;
 
@@ -42,9 +37,7 @@ public class MapFragment extends Fragment
 	{
 		rootView = inflater.inflate(R.layout.map_panel, container, false);
 
-
-		// make the left and right swipers work
-		Button furnitureCatalogLeftSwiper = (Button) rootView.findViewById(R.id.furnitureCatalogLeftSwiper);
+		ImageButton furnitureCatalogLeftSwiper = (ImageButton) rootView.findViewById(R.id.closeMap);
 		furnitureCatalogLeftSwiper.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -53,21 +46,12 @@ public class MapFragment extends Fragment
 				((AndyESExplorerActivity) getActivity()).mViewPager.setCurrentItem(1, true);
 			}
 		});
-		Button furnitureCatalogRightSwiper = (Button) rootView.findViewById(R.id.furnitureCatalogRightSwiper);
-		furnitureCatalogRightSwiper.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				((AndyESExplorerActivity) getActivity()).mViewPager.setCurrentItem(3, true);
-			}
-		});
+
 
 		map = (MapImage) rootView.findViewById(R.id.map);
 		map.setMaxZoom(12f);
 
-		mDetector = new GestureDetector(getActivity().getApplicationContext(), new GestureDetector.OnGestureListener()
-		{
+		mDetector = new GestureDetector(getActivity().getApplicationContext(), new GestureDetector.OnGestureListener() {
 			@Override
 			public boolean onDown(MotionEvent e)
 			{
@@ -75,8 +59,7 @@ public class MapFragment extends Fragment
 			}
 
 			@Override
-			public void onShowPress(MotionEvent e)
-			{
+			public void onShowPress(MotionEvent e) {
 
 			}
 
@@ -87,18 +70,15 @@ public class MapFragment extends Fragment
 			}
 
 			@Override
-			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-			{
+			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 				return false;
 			}
 
 			@Override
-			public void onLongPress(MotionEvent e)
-			{
+			public void onLongPress(MotionEvent e) {
 				ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity) getContext()).scrollsExplorer;
 
-				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null)
-				{
+				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null) {
 					Vector3f warpTo = map.transformToMWCoords(new PointF(e.getX(), e.getY()));
 
 
@@ -118,17 +98,14 @@ public class MapFragment extends Fragment
 			}
 
 			@Override
-			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-			{
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				return false;
 			}
 		});
-		map.setOnTouchListener(new View.OnTouchListener()
-		{
+		map.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-
 				return mDetector.onTouchEvent(event);
 			}
 		});
@@ -138,24 +115,20 @@ public class MapFragment extends Fragment
 	}
 
 
-	public static class MapImage extends TouchImageView
-	{
+	public static class MapImage extends TouchImageView {
 		private ScrollsExplorer scrollsExplorer;
 
 		Paint defaultPaint = new Paint();
 
-		public MapImage(Context context)
-		{
+		public MapImage(Context context) {
 			super(context);
 		}
 
-		public MapImage(Context context, AttributeSet attrs)
-		{
+		public MapImage(Context context, AttributeSet attrs) {
 			super(context, attrs);
 		}
 
-		public MapImage(Context context, AttributeSet attrs, int defStyle)
-		{
+		public MapImage(Context context, AttributeSet attrs, int defStyle) {
 			super(context, attrs, defStyle);
 		}
 
@@ -163,19 +136,15 @@ public class MapFragment extends Fragment
 		private LocationUpdateListener locationUpdateListener;
 
 		@Override
-		protected void onDraw(Canvas canvas)
-		{
+		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 
-			if (scrollsExplorer == null)
-			{
+			if (scrollsExplorer == null) {
 				this.scrollsExplorer = ((AndyESExplorerActivity) getContext()).scrollsExplorer;
 			}
-			if (scrollsExplorer != null)
-			{
+			if (scrollsExplorer != null) {
 				// could be a delay in setting this up so retry to add a listener if not done yet
-				if (locationUpdateListener == null && scrollsExplorer.simpleWalkSetup != null)
-				{
+				if (locationUpdateListener == null && scrollsExplorer.simpleWalkSetup != null) {
 					locationUpdateListener = new LocationUpdateListener()
 					{
 						@Override
@@ -187,8 +156,7 @@ public class MapFragment extends Fragment
 					scrollsExplorer.simpleWalkSetup.getAvatarLocation().addAvatarLocationListener(locationUpdateListener);
 				}
 
-				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null)
-				{
+				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null) {
 					defaultPaint.setStrokeWidth(5);
 
 					Vector3f loc = new Vector3f();
@@ -245,8 +213,7 @@ public class MapFragment extends Fragment
 			}
 		}
 
-		private PointF transformToImageCoords(Vector3f loc)
-		{
+		private PointF transformToImageCoords(Vector3f loc) {
 			PointF p = new PointF(loc.x, loc.z);
 
 			// ok all work on the image needs to be done in normalize coords
@@ -284,8 +251,7 @@ public class MapFragment extends Fragment
 		}
 
 
-		private Vector3f transformToMWCoords(PointF mousePoint)
-		{
+		private Vector3f transformToMWCoords(PointF mousePoint) {
 			Vector3f loc = new Vector3f(mousePoint.x, 0, mousePoint.y);
 
 			int width = this.getWidth();

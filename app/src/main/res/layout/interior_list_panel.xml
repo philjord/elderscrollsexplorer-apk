@@ -32,14 +32,14 @@
             </ScrollView>
 
 
-    <Button
+    <ImageButton
         android:id="@+id/furnitureCatalogLeftSwiper2"
-        android:layout_width = "30dp"
-        android:layout_height = "100dp"
-        android:layout_gravity="center_vertical"
-        android:text="@string/gt"
-        android:layout_marginLeft="-5dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:padding="10dp"
+        android:src="@drawable/ic_close_black_24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         />
 </RelativeLayout>

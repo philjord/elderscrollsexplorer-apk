@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import com.ingenieur.andyelderscrolls.R;
@@ -26,19 +27,14 @@ public class CharacterFragment extends Fragment
 		rootView = inflater.inflate(R.layout.character_panel, container, false);
 
 
-
-		// make the right swiper work
-		Button furnitureTableRightSwiper = (Button)rootView.findViewById(R.id.furnitureTableRightSwiper);
-		furnitureTableRightSwiper.setOnClickListener(new View.OnClickListener()
-		{
+		// make the close work
+		ImageButton closeCS = (ImageButton)rootView.findViewById(R.id.closeCharacterSheet);
+		closeCS.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				((AndyESExplorerActivity)getActivity()).mViewPager.setCurrentItem(1, true);
 			}
 		});
-
-
 		final ToggleButton freeflybutton = (ToggleButton)rootView.findViewById(R.id.freeflybutton);
 		freeflybutton.setOnClickListener(new View.OnClickListener()
 		{
@@ -47,6 +43,43 @@ public class CharacterFragment extends Fragment
 			{
 				freeflybutton.setChecked(freeflybutton.isChecked());
 				((AndyESExplorerActivity)getActivity()).scrollsExplorer.simpleWalkSetup.setFreeFly(freeflybutton.isChecked());
+			}
+		});
+
+		final ToggleButton showphysicsbutton = (ToggleButton)rootView.findViewById(R.id.showphysicsbutton);
+		freeflybutton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				showphysicsbutton.setChecked(freeflybutton.isChecked());
+				((AndyESExplorerActivity)getActivity()).scrollsExplorer.simpleWalkSetup.toggleHavok();
+			}
+		});
+		final ToggleButton showvisualsbutton = (ToggleButton)rootView.findViewById(R.id.showvisualsbutton);
+		showvisualsbutton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				freeflybutton.setChecked(freeflybutton.isChecked());
+				((AndyESExplorerActivity)getActivity()).scrollsExplorer.simpleWalkSetup.toggleVisual();
+			}
+		});
+		final Button optionsbutton = (Button)rootView.findViewById(R.id.optionsbutton);
+		optionsbutton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity)getActivity()).scrollsExplorer;
+				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null)	{
+					OptionsDialog od = new OptionsDialog(((AndyESExplorerActivity)getActivity()), scrollsExplorer.simpleWalkSetup);
+					od.display();
+				} else {
+					OptionsDialog od = new OptionsDialog(((AndyESExplorerActivity)getActivity()), null);
+					od.display();
+				}
 			}
 		});
 

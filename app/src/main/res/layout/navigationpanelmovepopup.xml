@@ -29,12 +29,11 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:src="@drawable/go_up"/>
-            <ImageView
-                android:id="@+id/navPanelCloseButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="top|right"
-                android:src="@drawable/plan_pan"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
         </TableRow>
 
         <TableRow

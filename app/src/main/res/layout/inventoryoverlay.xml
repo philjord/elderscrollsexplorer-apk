@@ -4,18 +4,15 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_gravity="right|bottom"
+              android:layout_gravity="center_vertical"
               android:gravity="center"
               android:orientation="vertical"
               >
 
-
-
-            <ImageButton
-                android:id="@+id/looky"
+            <ImageView
+                android:id="@+id/charactersheetoverlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:src="@drawable/icons8_target"/>
-
+                android:src="@drawable/icons8_rucksack_96"/>
 </LinearLayout>

@@ -9,34 +9,82 @@
     android:background="#ABABAB"
     >
 
-    <LinearLayout
-        android:id="@+id/header1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4"
-        >
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:text="Free Fly"
-            />
-        <ToggleButton
-           android:id="@+id/freeflybutton"
-           android:layout_width="150dp"
-           android:layout_height="50dp"
-           android:text="Free Fly"
-            />
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/furnitureTableRightSwiper"
-        android:layout_width = "30dp"
-        android:layout_height = "100dp"
-        android:layout_gravity="center_vertical"
-        android:text="@string/lt"
-        android:layout_marginRight="-5dp"
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Free Fly"
+                />
+            <ToggleButton
+               android:id="@+id/freeflybutton"
+               android:layout_width="150dp"
+               android:layout_height="50dp"
+               android:text="Free Fly"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Show Physics"
+                />
+            <ToggleButton
+                android:id="@+id/showphysicsbutton"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Show Physics"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Show Visuals"
+                />
+            <ToggleButton
+                android:id="@+id/showvisualsbutton"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Show Visuals"
+                android:checked="true"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text=""
+                />
+            <Button
+                android:id="@+id/optionsbutton"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Options"
+                />
+        </TableRow>
+    </TableLayout>>
+
+    <ImageButton
+        android:id="@+id/closeCharacterSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:padding="10dp"
+        android:src="@drawable/ic_close_black_24dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         />
 </RelativeLayout>

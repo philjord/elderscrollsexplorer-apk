@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.ingenieur.andyelderscrolls.R;
 
@@ -29,13 +29,13 @@ public class InteriorListFragment extends Fragment
 
 
 		// make the left and right swipers work
-		Button furnitureCatalogLeftSwiper = (Button)rootView.findViewById(R.id.furnitureCatalogLeftSwiper2);
+		ImageButton furnitureCatalogLeftSwiper = (ImageButton)rootView.findViewById(R.id.furnitureCatalogLeftSwiper2);
 		furnitureCatalogLeftSwiper.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				((AndyESExplorerActivity)getActivity()).mViewPager.setCurrentItem(2, true);
+				((AndyESExplorerActivity)getActivity()).mViewPager.setCurrentItem(1, true);
 			}
 		});
 

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: org.jogamp.java3d:java3d-utils-and:1.7.0@jar">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jogamp/java3d/java3d-utils-and/1.7.0/java3d-utils-and-1.7.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
