@@ -16,13 +16,16 @@
 
 package com.google.android.vending.expansion.downloader;
 
-import com.android.vending.expansion.downloader.R;
-
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.SystemClock;
-import android.util.Log;
+
+import com.android.vending.expansion.downloader.R;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,8 @@ import java.util.regex.Pattern;
  * Some helper functions for the download manager
  */
 public class Helpers {
+
+    private static final Logger LOG = LoggerFactory.getLogger("Helpers");
 
     public static Random sRandom = new Random(SystemClock.uptimeMillis());
 
@@ -87,7 +92,7 @@ public class Helpers {
                 Environment.MEDIA_MOUNTED)) {
             // No SD card found.
             if ( Constants.LOGVV ) {
-                Log.d(Constants.TAG, "no external storage");
+                LOG.debug("no external storage");
             }
             return false;
         }
@@ -124,7 +129,7 @@ public class Helpers {
             File file = new File(path);
             file.delete();
         } catch (Exception e) {
-            Log.w(Constants.TAG, "file: '" + path + "' couldn't be deleted", e);
+            LOG.warn("file: '" + path + "' couldn't be deleted", e);
         }
     }
 
@@ -141,7 +146,7 @@ public class Helpers {
     static public String getDownloadProgressString(long overallProgress, long overallTotal) {
         if (overallTotal == 0) {
             if ( Constants.LOGVV ) {
-                Log.e(Constants.TAG, "Notification called when total is zero");
+                LOG.error("Notification called when total is zero");
             }
             return "";
         }
@@ -163,7 +168,7 @@ public class Helpers {
             long overallTotal) {
         if (overallTotal == 0) {
             if ( Constants.LOGVV ) {
-                Log.e(Constants.TAG, "Notification called when total is zero");
+                LOG.error("Notification called when total is zero");
             }
             return "";
         }
@@ -174,7 +179,7 @@ public class Helpers {
     public static String getDownloadProgressPercent(long overallProgress, long overallTotal) {
         if (overallTotal == 0) {
             if ( Constants.LOGVV ) {
-                Log.e(Constants.TAG, "Notification called when total is zero");
+                LOG.error("Notification called when total is zero");
             }
             return "";
         }
@@ -220,8 +225,8 @@ public class Helpers {
 
     static public String getSaveFilePath(Context c) {
         File root = Environment.getExternalStorageDirectory();
-        String path = root.toString() + Constants.EXP_PATH + c.getPackageName();
-        return path;
+        String path = Build.VERSION.SDK_INT >= 23 ? Constants.EXP_PATH_API23 : Constants.EXP_PATH;
+        return root.toString() + path + c.getPackageName();
     }
 
     /**

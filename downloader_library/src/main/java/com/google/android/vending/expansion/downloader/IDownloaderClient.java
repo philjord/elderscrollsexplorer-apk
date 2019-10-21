@@ -25,8 +25,7 @@ import android.os.Messenger;
 public interface IDownloaderClient {
     static final int STATE_IDLE = 1;
     static final int STATE_FETCHING_URL = 2;
-    static final int
-			STATE_CONNECTING = 3;
+    static final int STATE_CONNECTING = 3;
     static final int STATE_DOWNLOADING = 4;
     static final int STATE_COMPLETED = 5;
 
