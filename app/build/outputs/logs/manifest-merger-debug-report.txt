@@ -5,8 +5,6 @@ INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\s
 INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-129:12
 INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:2:1-129:12
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\fb9a548bca68c42ca7c6e49d2a569c28\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [:downloader_library] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\downloader_library\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:market_licensing] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\market_licensing\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:1-28:12
 MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\f0f00ace77ec1f6933ba390ef5299f71\appcompat-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [org.sufficientlysecure:donations:2.5] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\426434f8c3f389c4b970cf451aade34d\jetified-donations-2.5\AndroidManifest.xml:2:1-13:12
 MERGED from [com.google.vr:sdk-audio:1.10.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\5d3c6d69ad3f4576038160155e8bc4a8\sdk-audio-1.10.0\AndroidManifest.xml:2:1-4:12
@@ -123,8 +121,6 @@ MERGED from [com.google.firebase:firebase-iid:19.0.0] C:\Users\phil\.gradle\cach
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:19:22-64
 uses-permission#com.android.vending.CHECK_LICENSE
 ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:23:5-72
-MERGED from [:market_licensing] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\market_licensing\build\intermediates\library_manifest\debug\AndroidManifest.xml:26:5-73
-MERGED from [:market_licensing] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\market_licensing\build\intermediates\library_manifest\debug\AndroidManifest.xml:26:5-73
 	android:name
 		ADDED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml:23:22-70
 uses-permission#android.permission.WAKE_LOCK
@@ -339,10 +335,6 @@ INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\s
 INJECTED from C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\app\src\main\AndroidManifest.xml
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\fb9a548bca68c42ca7c6e49d2a569c28\multidex-2.0.0\AndroidManifest.xml:20:5-43
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\fb9a548bca68c42ca7c6e49d2a569c28\multidex-2.0.0\AndroidManifest.xml:20:5-43
-MERGED from [:downloader_library] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\downloader_library\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:downloader_library] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\downloader_library\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:market_licensing] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\market_licensing\build\intermediates\library_manifest\debug\AndroidManifest.xml:22:5-24:41
-MERGED from [:market_licensing] C:\Users\phil\AndroidStudioProjects\ElderScrollsExplorer-apk\market_licensing\build\intermediates\library_manifest\debug\AndroidManifest.xml:22:5-24:41
 MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\f0f00ace77ec1f6933ba390ef5299f71\appcompat-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\f0f00ace77ec1f6933ba390ef5299f71\appcompat-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [org.sufficientlysecure:donations:2.5] C:\Users\phil\.gradle\caches\transforms-2\files-2.1\426434f8c3f389c4b970cf451aade34d\jetified-donations-2.5\AndroidManifest.xml:7:5-9:41

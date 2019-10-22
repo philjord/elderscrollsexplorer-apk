@@ -166,7 +166,5 @@
     <orderEntry type="library" name="Gradle: com.google.vr:sdk-base:1.10.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.vr:sdk-common:1.10.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-base:18.2.0@aar" level="project" />
-    <orderEntry type="module" module-name="market_licensing" />
-    <orderEntry type="module" module-name="downloader_library" />
   </component>
 </module>

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
+import com.ingenieur.andyelderscrolls.utils.ExternalStorage;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -520,6 +521,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 							//eg obbRoot= /storage/emulated/0/Android/obb/com.example.phil.proguardtesty
 							//http://stackoverflow.com/questions/19453824/where-to-i-place-the-obb-file-to-test-android-expansion-pack-files-obb-on-my-n
 							String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
+							// push the ktx file from assets to the scrollsFolder
+							ExternalStorage.copyAsset(parentActivity, "", selectedGameConfig.scrollsFolder);
 							String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
 
 							bsaFileSet = new BSArchiveSet(BSARoots, true);
