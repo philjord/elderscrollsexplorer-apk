@@ -41,6 +41,7 @@ import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
+import bsaio.BSArchiveSetUri;
 import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
 import nif.NifToJ3d;
@@ -58,9 +59,6 @@ import tools3d.utils.scenegraph.SpinTransform;
 import utils.PerFrameUpdateBehavior;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
-import utils.source.file.FileMediaRoots;
-import utils.source.file.FileMeshSource;
-import utils.source.file.FileTextureSource;
 
 public class NifDisplayTester implements DragMouseAdapter.Listener
 {
@@ -112,19 +110,21 @@ public class NifDisplayTester implements DragMouseAdapter.Listener
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
+
+		//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+		//FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.ES_SHADERS = true;
 
-		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = true;
-		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
+		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
+		//FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
-		meshSource = new FileMeshSource();
+		//meshSource = new FileMeshSource();
 
-		String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
-		String[] BSARoots = new String[]{rootDir.getAbsolutePath(), obbRoot};
+		//String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
+		String[] BSARoots = new String[]{rootDir.getAbsolutePath()};
 
-		BSArchiveSet bsaFileSet = new BSArchiveSet(BSARoots, true);
+		BSArchiveSet bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);

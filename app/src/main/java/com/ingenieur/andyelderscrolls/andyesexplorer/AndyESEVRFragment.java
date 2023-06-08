@@ -197,6 +197,17 @@ public class AndyESEVRFragment extends NewtBaseFragment
 					Toast.makeText(act, message, Toast.LENGTH_LONG);
 					return true;
 				}
+				// return true to indicate success, false will throw the exception
+				public boolean handleRuntimeException(RuntimeException re)
+				{
+					AndyESExplorerActivity.logFireBase(FirebaseAnalytics.Event.POST_SCORE, "NativeWindowException", null);
+					String message = "insufficient3dResourcesMessage";
+					String title = "insufficient3dResourcesTitle";
+					//JOptionPane.showMessageDialog(getActivity(), message, title, JOptionPane.ERROR_MESSAGE);
+					AndyESExplorerActivity act = (AndyESExplorerActivity) AndyESEVRFragment.this.getActivity();
+					Toast.makeText(act, message, Toast.LENGTH_LONG);
+					return true;
+				}
 			});
 		}
 

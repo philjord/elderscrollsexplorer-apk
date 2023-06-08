@@ -20,8 +20,6 @@ import java.io.File;
 
 import nif.NifToJ3d;
 import nifbullet.BulletNifModelClassifier;
-import utils.source.file.FileMediaRoots;
-import utils.source.file.FileMeshSource;
 
 public class JBulletTester
 {
@@ -50,10 +48,6 @@ public class JBulletTester
 		chooserStartFolder = new File(rootDir, "Meshes");
 		this.parentActivity = parentActivity2;
 		NifToJ3d.SUPPRESS_EXCEPTIONS = false;
-
-
-		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
-
 
 		// collision configuration contains default setup for memory, collision setup
 		collisionConfiguration = new DefaultCollisionConfiguration();
@@ -87,9 +81,10 @@ public class JBulletTester
 					public void fileSelected(final File file)
 					{
 						chooserStartFolder = file;
-						BulletNifModelClassifier.testNif(file.getAbsolutePath(), new FileMeshSource());
-						BulletNifModelClassifier.createNifBullet(file.getAbsolutePath(), new FileMeshSource(), 0).addToDynamicsWorld(
-								dynamicsWorld);
+						//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+//						BulletNifModelClassifier.testNif(file.getAbsolutePath(), new FileMeshSource());
+//						BulletNifModelClassifier.createNifBullet(file.getAbsolutePath(), new FileMeshSource(), 0).addToDynamicsWorld(
+//								dynamicsWorld);
 					}
 
 					@Override

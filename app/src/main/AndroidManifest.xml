@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.ingenieur.andyelderscrolls"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="140"
-    android:versionName="1.40">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="141"
+    android:versionName="1.41">
 
     <supports-screens
         android:anyDensity="true"
@@ -15,47 +13,24 @@
     <!-- Tell the system this app requires OpenGL ES 3.0. -->
     <uses-feature android:glEsVersion="0x00030000" android:required="true" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
-    <!-- FOR APK EXPANSIONS -->
-    <!-- Required to access Google Play Licensing -->
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
-
-    <!-- Required to download files from Google Play -->
-    <!--  <uses-permission android:name="android.permission.INTERNET" />-->
-
-    <!-- Required to keep CPU alive while downloading files (NOT to keep screen awake) -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
-    <!-- Required to poll the state of the network connection and respond to changes -->
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <!-- Required to check whether Wi-Fi is enabled -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-
-    <!-- Required to read and write the expansion files on shared storage -->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-
-    <!--Required to accept donations_fragment.xmlgment.xml-->
-    <uses-permission android:name="com.android.vending.BILLING" />
-
-    <!-- for cardboard -->
+      <!-- for cardboard -->
     <uses-permission android:name="com.android.vending.VIBRATE" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:hardwareAccelerated="false">
-        <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
+        android:hardwareAccelerated="false"
+        android:launchMode="singleInstance">
+
         <activity
             android:name=".MorrowindActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Call of Red Mountain"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -63,26 +38,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MorrowindVRActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="Call of Red MountainVR"
-            android:icon="@drawable/vr_icon"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="com.google.intent.category.CARDBOARD"/>
-
-
-            </intent-filter>
-        </activity>
-
 
         <activity
             android:name=".ElderScrollsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Red Mountain Tools"
             android:icon="@drawable/ic_tools"
+            android:exported="false"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -121,9 +83,6 @@
         </activity>
         <activity android:label="@string/app_name"
                   android:name="simpleandroid.JoglStatusActivity"/>
-
-        <service android:name=".utils.obb.ObbDownloaderService" />
-        <receiver android:name=".utils.obb.ObbAlarmServiceReceiver" />
 
     </application>
 </manifest>

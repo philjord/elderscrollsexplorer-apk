@@ -38,7 +38,7 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class ElderScrollsActivity extends Activity
 {
-
+//TODO: this guy is not up with the hip kids on the new SAF URI FileChannel world but the below is still true
 	/**
 	 * Ok no more single root folder, all games must be added by selecting there esm file
 	 * bsa files MUST be sibling files or possibly an obb file with teh game name in it
@@ -275,7 +275,7 @@ public class ElderScrollsActivity extends Activity
 						gameSelected = gameConfig;
 
 						// debug shaders like this to externalize from jars
-						ShaderPrograms.fileSystemFolder = new File(gameConfig.scrollsFolder, "shaders");
+						//ShaderPrograms.fileSystemFolder = new File(gameConfig.scrollsFolder, "shaders");
 						break;
 					}
 				}
@@ -376,8 +376,9 @@ public class ElderScrollsActivity extends Activity
 				else
 				{
 					// Permission Denied
-					Toast.makeText(ElderScrollsActivity.this, "WRITE_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
-							.show();
+					//Toast.makeText(ElderScrollsActivity.this, "WRITE_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
+					//		.show();
+					permissionGranted();
 				}
 				break;
 			default:

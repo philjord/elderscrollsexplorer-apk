@@ -2,6 +2,7 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +22,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
+
+import java.net.URL;
 
 import jogamp.newt.WindowImpl;
 import jogamp.newt.driver.android.NewtBaseFragment;
@@ -72,6 +75,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 		if (delegateWindow instanceof WindowDriver)
 		{
 			WindowDriver wd = (WindowDriver) delegateWindow;
+
 			wd.setNativeWindowExceptionListener(new WindowImpl.NativeWindowExceptionListener()
 			{
 				// return true to indicate success, false will throw the exception
@@ -82,6 +86,19 @@ public class AndyESExplorerFragment extends NewtBaseFragment
 					String title = "insufficient3dResourcesTitle";
 					//JOptionPane.showMessageDialog(getActivity(), message, title, JOptionPane.ERROR_MESSAGE);
 					AndyESExplorerActivity act = (AndyESExplorerActivity) AndyESExplorerFragment.this.getActivity();
+					Looper.prepare();
+					Toast.makeText(act, message, Toast.LENGTH_LONG);
+					return true;
+				}
+				// return true to indicate success, false will throw the exception
+				public boolean handleRuntimeException(RuntimeException re)
+				{
+					AndyESExplorerActivity.logFireBase(FirebaseAnalytics.Event.POST_SCORE, "NativeWindowException", null);
+					String message = "insufficient3dResourcesMessage";
+					String title = "insufficient3dResourcesTitle";
+					//JOptionPane.showMessageDialog(getActivity(), message, title, JOptionPane.ERROR_MESSAGE);
+					AndyESExplorerActivity act = (AndyESExplorerActivity) AndyESExplorerFragment.this.getActivity();
+					Looper.prepare();
 					Toast.makeText(act, message, Toast.LENGTH_LONG);
 					return true;
 				}

@@ -101,20 +101,4 @@
     native <methods>;
 }
 
--keep class com.google.vr.cardboard.UsedByNative
--keep @com.google.vr.cardboard.UsedByNative class *
--keepclassmembers class * {
-    @com.google.vr.cardboard.UsedByNative *;
-}
 
--keep class com.google.vr.cardboard.annotations.UsedByNative
--keep @com.google.vr.cardboard.annotations.UsedByNative class *
--keepclassmembers class * {
-    @com.google.vr.cardboard.annotations.UsedByNative *;
-}
-
--keep class com.google.vr.cardboard.annotations.UsedByReflection
--keep @com.google.vr.cardboard.annotations.UsedByReflection class *
--keepclassmembers class * {
-    @com.google.vr.cardboard.annotations.UsedByReflection *;
-}

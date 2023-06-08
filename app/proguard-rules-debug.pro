@@ -102,13 +102,6 @@
 # Preserve some attributes that may be required for reflection.
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
--keep public class com.google.vending.licensing.ILicensingService
--keep public class com.android.vending.licensing.ILicensingService
--keep public class com.google.android.vending.licensing.ILicensingService
--dontnote com.android.vending.licensing.ILicensingService
--dontnote com.google.vending.licensing.ILicensingService
--dontnote com.google.android.vending.licensing.ILicensingService
-
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -150,19 +143,3 @@
 -dontnote android.support.**
 -dontwarn android.support.**
 
-# Understand the @Keep support annotation.
--keep class android.support.annotation.Keep
-
--keep @android.support.annotation.Keep class * {*;}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <methods>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <fields>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <init>(...);
-}

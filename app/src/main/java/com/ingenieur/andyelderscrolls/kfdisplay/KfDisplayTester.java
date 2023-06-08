@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.widget.Toast;
 
+import com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.ingenieur.andyelderscrolls.utils.FileChooser;
@@ -39,6 +40,7 @@ import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
+import bsaio.BSArchiveSetUri;
 import nif.BgsmSource;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
@@ -56,10 +58,6 @@ import tools3d.utils.scenegraph.SpinTransform;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
-import utils.source.file.FileMediaRoots;
-import utils.source.file.FileMeshSource;
-import utils.source.file.FileSoundSource;
-import utils.source.file.FileTextureSource;
 
 public class KfDisplayTester implements DragMouseAdapter.Listener
 {
@@ -117,19 +115,20 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
 		ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-		FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
+		//FileTextureSource.compressionType = FileTextureSource.CompressionType.KTX;
 		NiGeometryAppearanceFactoryShader.setAsDefault();
 		ShaderSourceIO.ES_SHADERS = true;
 
-		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = true;
-		FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
+		BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
+		//FileMediaRoots.setFixedRoot(rootDir.getAbsolutePath());
 
-		meshSource = new FileMeshSource();
+		//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+		//meshSource = new FileMeshSource();
 
-		String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
-		String[] BSARoots = new String[]{rootDir.getAbsolutePath(), obbRoot};
+		//String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
+		String[] BSARoots = new String[]{rootDir.getAbsolutePath()};
 
-		BSArchiveSet bsaFileSet = new BSArchiveSet(BSARoots, true);
+		BSArchiveSet bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);
@@ -372,7 +371,8 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
 		BgsmSource.setBgsmSource(meshSource);
-		MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
+		//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+		// MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
 
 		ArrayList<String> idleAnimations = new ArrayList<String>();
 
@@ -382,13 +382,14 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		}
 
 		// now add the root to the scene so the controller sequence is live
-		NifCharacter nifCharacter = new NifCharacter(skeletonNifFile, skinNifFiles2, mediaSources, idleAnimations);
-		nifCharacter.setCapability(Node.ALLOW_BOUNDS_READ);
-		bg.addChild(nifCharacter);
+		//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+		//NifCharacter nifCharacter = new NifCharacter(skeletonNifFile, skinNifFiles2, mediaSources, idleAnimations);
+		//nifCharacter.setCapability(Node.ALLOW_BOUNDS_READ);
+		//bg.addChild(nifCharacter);
 
 		modelGroup.addChild(bg);
 
-		simpleCameraHandler.viewBounds(nifCharacter.getBounds());
+		//simpleCameraHandler.viewBounds(nifCharacter.getBounds());
 
 	}
 
@@ -408,16 +409,16 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
 		BgsmSource.setBgsmSource(meshSource);
-		MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
+		//MediaSources mediaSources = new MediaSources(meshSource, textureSource, new FileSoundSource());
 
 		AttachedParts attachFileNames = new AttachedParts();
 		attachFileNames.addPart(AttachedParts.Part.Root, skinNifFiles2.get(0));
-
-		nifCharacterTes3 = new NifCharacterTes3(skeletonNifFile, attachFileNames, mediaSources);
-		bg.addChild(nifCharacterTes3);
+//TODO: no more files only URIS! so a new version of the file source but froma a uri tree root instead!
+		//nifCharacterTes3 = new NifCharacterTes3(skeletonNifFile, attachFileNames, mediaSources);
+		//bg.addChild(nifCharacterTes3);
 
 		modelGroup.addChild(bg);
-		simpleCameraHandler.viewBounds(nifCharacterTes3.getBounds());
+		//simpleCameraHandler.viewBounds(nifCharacterTes3.getBounds());
 	}
 
 	@Override
