@@ -2,16 +2,11 @@ package com.ingenieur.andyelderscrolls;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -25,11 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.utils.FileChooser;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
-import com.mindblowing.swingish.DFFile;
 
 import org.jogamp.java3d.JoglesPipeline;
 
@@ -38,23 +30,19 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Objects;
 
-import esmj3d.j3d.cell.J3dICellFactory;
 import nif.j3d.J3dNiTriBasedGeom;
-import nif.shaders.ShaderPrograms;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import simpleandroid.JoglStatusActivity;
-import tools3d.utils.YawPitch;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.LAST_SELECTED_FILE;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
 import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START_CONFIG;
 import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.configNames;
 
-import androidx.activity.result.ActivityResultLauncher;
+
 import androidx.documentfile.provider.DocumentFile;
 
 /**
@@ -361,9 +349,8 @@ public class MorrowindActivity extends Activity {
 					// does it in fact contain the esm file (perhaps the data has been deleted for example)
                     DocumentFile df = DocumentFile.fromTreeUri(this, basefolderUri);
                     DocumentFile checkEsmDF = df.findFile(gameConfig.mainESMFile);
-					File checkEsm = new DFFile(checkEsmDF);//new File(basefolderUri.getPath(), gameConfig.mainESMFile);
 
-					if (!checkEsm.exists()) {
+					if (!checkEsmDF.exists()) {
 						// if no esm clear this settings so we don't waste time with it
 						SharedPreferences.Editor editor = preferences.edit();
 						editor.remove(GAME_FOLDER + gameConfig.folderKey);

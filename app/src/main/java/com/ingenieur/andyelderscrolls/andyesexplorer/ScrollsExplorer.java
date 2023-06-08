@@ -14,7 +14,6 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.mindblowing.swingish.DFFile;
 
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
@@ -393,14 +392,14 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
     private boolean hasESMAndBSAFiles(GameConfig gameConfig) {
         // check to ensure the esm file and at least one bsa file are in the folder
-        File checkEsm = new DFFile(DocumentFile.fromTreeUri(this.parentActivity, Uri.parse(gameConfig.scrollsFolder)).findFile(gameConfig.mainESMFile));
+        DocumentFile checkEsm = DocumentFile.fromTreeUri(this.parentActivity, Uri.parse(gameConfig.scrollsFolder)).findFile(gameConfig.mainESMFile);
         if (!checkEsm.exists()) {
             return false;
         }
 
         int countOfBsa = 0;
-        File checkBsa = new DFFile(DocumentFile.fromTreeUri(this.parentActivity, Uri.parse(gameConfig.scrollsFolder)));
-        for (File f : checkBsa.listFiles()) {
+        DocumentFile checkBsa = DocumentFile.fromTreeUri(this.parentActivity, Uri.parse(gameConfig.scrollsFolder));
+        for (DocumentFile f : checkBsa.listFiles()) {
             countOfBsa += f.getName().toLowerCase().endsWith(".bsa") ? 1 : 0;
             countOfBsa += f.getName().toLowerCase().endsWith(".ba2") ? 1 : 0;
         }
