@@ -1,3 +1,21 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        maven { url "https://jogamp.org/deployment/maven" }
+        maven { url "https://jogamp.org/deployment/maven-java3d" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+}
 include ':app'
-include ':market_licensing'
-include ':downloader_library'
+
