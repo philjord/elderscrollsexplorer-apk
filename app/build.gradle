@@ -86,6 +86,17 @@ dependencies {
     releaseImplementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
 
+    //cos SAF is a bit brokeny
+    //DocumentFile.getUri() randomly returns the parent folder without this special include
+    //https://stackoverflow.com/questions/43071570/how-to-get-a-documentcontract-using-android-storage-access-framework
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+
+    //for BSA trees
+    implementation "androidx.recyclerview:recyclerview:"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+
+
     implementation ('org.jogamp.java3d:java3d-core-and:1.7.1' ) { changing = true }
     implementation ('org.jogamp.java3d:java3d-utils-and:1.7.1') { changing =  true }
 

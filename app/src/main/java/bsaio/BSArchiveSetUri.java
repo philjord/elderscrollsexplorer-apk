@@ -23,11 +23,12 @@ public class BSArchiveSetUri extends BSArchiveSet {
      * @param rootFilename
      * @param folderOfResources
      */
-    public BSArchiveSetUri(Context context, String rootFilename, boolean folderOfResources) {
-        this(context, new String[]{rootFilename}, folderOfResources);
+    public BSArchiveSetUri(Context context, String rootFilename, boolean folderOfResources, boolean isForDisplay) {
+        this(context, new String[]{rootFilename}, folderOfResources, isForDisplay);
     }
 
-    public BSArchiveSetUri(Context context, String[] rootFilenames, boolean folderOfResources) {
+    public BSArchiveSetUri(Context context, String[] rootFilenames, boolean folderOfResources, boolean isForDisplay) {
+        super(isForDisplay);
         long start = System.currentTimeMillis();
         for (String rootFilename : rootFilenames) {
             try {

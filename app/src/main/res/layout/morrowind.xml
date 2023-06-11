@@ -14,12 +14,13 @@
         android:layout_gravity="center_horizontal"
         android:choiceMode="singleChoice"
         android:listSelector="#666666" />
-    <LinearLayout
-        android:id="@+id/donations_activity_container"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:text="start ESE Activity"
+        android:id="@+id/startESEActivity"
+        android:onClick="startESEActivity"
+        android:enabled="true"/>
 
 </LinearLayout>
 

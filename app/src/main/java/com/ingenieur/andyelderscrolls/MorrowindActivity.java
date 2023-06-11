@@ -1,5 +1,10 @@
 package com.ingenieur.andyelderscrolls;
 
+import static android.widget.Toast.LENGTH_LONG;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
+import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START_CONFIG;
+import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.configNames;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.documentfile.provider.DocumentFile;
+
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
@@ -33,26 +40,22 @@ import java.util.Objects;
 import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
-import simpleandroid.JoglStatusActivity;
-
-import static android.widget.Toast.LENGTH_LONG;
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.GAME_FOLDER;
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.PREFS_NAME;
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_GAME;
-import static com.ingenieur.andyelderscrolls.ElderScrollsActivity.SELECTED_START_CONFIG;
-import static com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer.configNames;
-
-
-import androidx.documentfile.provider.DocumentFile;
+import simpleandroid.JoglHelloWorldActivity;
 
 /**
  * Created by phil on 7/15/2016.
  */
 public class MorrowindActivity extends Activity {
     private static final String WELCOME_SCREEN_UNWANTED = "WELCOME_SCREEN_UNWANTED";
-    private static final String OPTOMIZE = "OPTOMIZE";
+    private static final String OPTIMIZE = "OPTIMIZE";
     private static final String ANTIALIAS = "ANTIALIAS";
     private static final String GYROSCOPE = "GYROSCOPE";
+
+    // Note we are unlinked from the bigger ESE prefs as that wants multi game etc
+    public static final String MORROWIND_PREFS_NAME = "MorrowindActivityDefault";
+
+    public static final String MORROWIND_BASE_FOLDER = "MorrowindLastSelectedFile";
+    public static final String MORROWIND_GAME_FOLDER = "MORROWIND_GAME_FOLDER";
 
     //public static final String GOOGLE_PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqoEA2+dtSDgAZZhwOIhf67H2xR8rvrLENhrI5zNl8W7+GfGsRxfMmGiwisuOASY8fBh+t5IZumP7WGJ418oML6rUBpUCNihDuZcS/OrNQky7RyFkoY16n1G3v+jm4UwLoEsNQJnEpBWvPy0hptT6qRpRhNI7SVYilzPBc7FQPG2NWKh6kNoqSVoPI3K5hRzIYtqRtkHhFtMvpZhxcQuzKptLDu0ceCyEQLeWJmtiO1yCd57zkG0R+sIWd+69uuORIJGmg8vJWljyBTdhrKB8+sg3SZh4S/6lj0GZpy+M7cpzoJC4aBRVN/YMDxax1c56l7T8AY63pcCou8Ai20ER8QIDAQAB";
     //public static final String[] GOOGLE_CATALOG = new String[]{"corm.donation.1",
@@ -60,6 +63,7 @@ public class MorrowindActivity extends Activity {
 
     private GameConfig gameSelected;
 
+    private int ACTION_OPEN_DOCUMENT_TREE_CODE = 567;
 
     @Override
     public void onCreate(final Bundle state) {
@@ -82,56 +86,35 @@ public class MorrowindActivity extends Activity {
         }
         GameConfig.init();
 
-        //permissionGranted();
+        setContentView(R.layout.morrowind);
 
-
-	/*	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			int hasReadExternalStorage = checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES);
-			if (hasReadExternalStorage != PackageManager.PERMISSION_GRANTED) {
-				requestPermissions(new String[]{android.Manifest.permission.READ_MEDIA_*},
-						REQUEST_CODE_ASK_PERMISSIONS);
-			} else {
-				permissionGranted();
-			}
-		}
-		else {
-			int hasReadExternalStorage = checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-			if (hasReadExternalStorage != PackageManager.PERMISSION_GRANTED) {
-				requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-						REQUEST_CODE_ASK_PERMISSIONS);
-			} else {
-				permissionGranted();
-			}
-		}*/
-
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, 0);
-        String basefolder = preferences.getString("lastSelectedFile", null);
-        Uri basefolderUri = null;
-        if (basefolder != null) {
-            basefolderUri = Uri.parse(basefolder);
+        SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+        String baseFolder = preferences.getString(MORROWIND_BASE_FOLDER, null);
+        Uri baseFolderUri = null;
+        if (baseFolder != null) {
+            baseFolderUri = Uri.parse(baseFolder);
+            if (baseFolderUri != null) {
+                possiblyShowWelcomeScreen();
+            }
         }
 
-        if (basefolderUri != null) {
-            setContentView(R.layout.morrowind);
-            possiblyShowWelcomeScreen();
-        } else {
+        if(baseFolderUri == null) {
             // ok find a root folder for morrowind at least
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             this.startActivityForResult(intent, ACTION_OPEN_DOCUMENT_TREE_CODE);
         }
     }
 
-    private int ACTION_OPEN_DOCUMENT_TREE_CODE = 567;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        boolean optomize = settings.getBoolean(OPTOMIZE, false);
-        menu.findItem(R.id.menu_optomize).setChecked(optomize);
-        setOptomize(optomize);
+        SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+        boolean optimize = settings.getBoolean(OPTIMIZE, false);
+        menu.findItem(R.id.menu_optomize).setChecked(optimize);
+        setOptimize(optimize);
         boolean antialias = settings.getBoolean(ANTIALIAS, false);
         menu.findItem(R.id.menu_anti_alias).setChecked(antialias);
         AndyESExplorerActivity.antialias = antialias;
@@ -154,15 +137,14 @@ public class MorrowindActivity extends Activity {
             case R.id.menu_test_3d:
                 test3d();
                 return true;
-
             case R.id.menu_optomize:
                 item.setChecked(!item.isChecked());
-                setOptomize(item.isChecked());
+                setOptimize(item.isChecked());
                 return true;
             case R.id.menu_anti_alias:
                 item.setChecked(!item.isChecked());
                 AndyESExplorerActivity.antialias = item.isChecked();
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean(ANTIALIAS, item.isChecked());
                 editor.apply();
@@ -170,15 +152,13 @@ public class MorrowindActivity extends Activity {
             case R.id.menu_gyroscope:
                 item.setChecked(!item.isChecked());
                 AndyESExplorerActivity.gyroscope = item.isChecked();
-                SharedPreferences settings2 = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences settings2 = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
                 SharedPreferences.Editor editor2 = settings2.edit();
                 editor2.putBoolean(GYROSCOPE, item.isChecked());
                 editor2.apply();
                 return true;
             case R.id.menu_start_tools:
-                Intent intent = new Intent(this, ElderScrollsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startESEActivity(null);
                 return true;
             case R.id.menu_help_screen:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -207,6 +187,12 @@ public class MorrowindActivity extends Activity {
         }
     }
 
+    public void startESEActivity(View view) {
+        Intent intent = new Intent(this, ElderScrollsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -218,32 +204,31 @@ public class MorrowindActivity extends Activity {
 
                 // take persistable Uri Permission for future use
                 getContentResolver().takePersistableUriPermission(data.getData(), takeFlags);
-                SharedPreferences preferences = getSharedPreferences(PREFS_NAME, 0);
-                preferences.edit().putString("lastSelectedFile", data.getData().toString()).apply();
+                SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+                preferences.edit().putString(MORROWIND_BASE_FOLDER, data.getData().toString()).apply();
 
-                //TODO: note this line is not called on the case where we pull the esm file from prefs, so pehaps not call ti now?
+                // record the folder details in the config
                 setGameESMFileSelect(DocumentFile.fromTreeUri(this, baseDocumentTreeUri));
             } else {
                 Toast.makeText(this, "ACTION_OPEN_DOCUMENT_TREE_CODE error", LENGTH_LONG).show();
             }
         }
-        setContentView(R.layout.morrowind);
+
         possiblyShowWelcomeScreen();
     }
 
 
     private void test3d() {
-        Intent myIntent = new Intent(this, JoglStatusActivity.class);
+        Intent myIntent = new Intent(this, JoglHelloWorldActivity.class);//JoglStatusActivity.class);
         this.startActivity(myIntent);
     }
 
 
     private void possiblyShowWelcomeScreen() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
         boolean welcomeScreenUnwanted = settings.getBoolean(WELCOME_SCREEN_UNWANTED, false);
 
-        //TODO: I've disabled welcome!
-        if (welcomeScreenUnwanted || true) {
+        if (welcomeScreenUnwanted) {
             attemptLaunchMorrowind();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -257,7 +242,7 @@ public class MorrowindActivity extends Activity {
             builder.setNegativeButton(R.string.welcometextno, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // don't remind again
-                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(WELCOME_SCREEN_UNWANTED, true);
                     editor.apply();
@@ -292,9 +277,9 @@ public class MorrowindActivity extends Activity {
 
             for (GameConfig gameConfig : GameConfig.allGameConfigs) {
                 if (gameConfig.mainESMFile.equals(fileName)) {
-                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(GAME_FOLDER + gameConfig.folderKey, folder.getUri().toString());
+                    editor.putString(MORROWIND_GAME_FOLDER + gameConfig.folderKey, folder.getUri().toString());
                     editor.apply();
 
                     validESM = true;
@@ -311,64 +296,41 @@ public class MorrowindActivity extends Activity {
         attemptLaunchMorrowind();
     }
 
-    private void setGameESMFileSelect(File file) {
-        // let's see if this guy is one of our game configs
-        String fileName = file.getName();
-        boolean validESM = false;
-        for (GameConfig gameConfig : GameConfig.allGameConfigs) {
-            if (gameConfig.mainESMFile.equals(fileName)) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(GAME_FOLDER + gameConfig.folderKey, file.getParentFile().getAbsolutePath());
-                editor.apply();
-
-                validESM = true;
-                break;
-            }
-        }
-
-        if (!validESM) {
-            Toast.makeText(this, "Selected file not a valid game esm", LENGTH_LONG).show();
-        }
-
-        attemptLaunchMorrowind();
-    }
 
     private void attemptLaunchMorrowind() {
-		SharedPreferences preferences = getSharedPreferences(PREFS_NAME, 0);
-		String basefolder = preferences.getString("lastSelectedFile", null);
-		Uri basefolderUri = null;
-		if (basefolder != null) {
-			basefolderUri = Uri.parse(basefolder);
+        SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+        String baseFolder = preferences.getString(MORROWIND_BASE_FOLDER, null);
+        if (baseFolder != null) {
+            Uri basefolderUri = Uri.parse(baseFolder);
 
-			for (GameConfig gameConfig : GameConfig.allGameConfigs) {
-				//System.out.println("looking for game folder " + gameConfig.folderKey);
+            for (GameConfig gameConfig : GameConfig.allGameConfigs) {
+                //System.out.println("looking for game folder " + gameConfig.folderKey);
 
-				// id this key the morrowind one?
-				if ("MorrowindFolder".equals(gameConfig.folderKey)) {
-					// does it in fact contain the esm file (perhaps the data has been deleted for example)
+                // id this key the morrowind one?
+                if ("MorrowindFolder".equals(gameConfig.folderKey)) {
+                    // does it in fact contain the esm file (perhaps the data has been deleted for example)
                     DocumentFile df = DocumentFile.fromTreeUri(this, basefolderUri);
                     DocumentFile checkEsmDF = df.findFile(gameConfig.mainESMFile);
 
-					if (!checkEsmDF.exists()) {
-						// if no esm clear this settings so we don't waste time with it
-						SharedPreferences.Editor editor = preferences.edit();
-						editor.remove(GAME_FOLDER + gameConfig.folderKey);
-						editor.apply();
-					} else {
-						gameConfig.scrollsFolder = basefolderUri.toString();
-						gameSelected = gameConfig;
+                    if (!checkEsmDF.exists()) {
+                        // if no esm clear this settings so we don't waste time with it
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.remove(MORROWIND_GAME_FOLDER + gameConfig.folderKey);
+                        editor.apply();
+                    } else {
+                        gameConfig.scrollsFolder = basefolderUri.toString();
+                        gameSelected = gameConfig;
 
-						// debug shaders like this to externalize from jars
-						//ShaderPrograms.fileSystemFolder = new DFFile(df.findFile("shaders"));//new File(basefolderUri.getPath(), "shaders");
+                        // debug shaders like this to externalize from jars
+                        //ShaderPrograms.fileSystemFolder = new DFFile(df.findFile("shaders"));//new File(basefolderUri.getPath(), "shaders");
 
-						break;
-					}
-				}
-			}
+                        break;
+                    }
+                }
+            }
 
 
-		}
+        }
 
 
         if (gameSelected != null) {
@@ -399,6 +361,7 @@ public class MorrowindActivity extends Activity {
                 // send the which through and hope they match up
 
                 Intent intent = new Intent(MorrowindActivity.this, AndyESExplorerActivity.class);
+                // note we use strings from ElderScrollsActivity because that's how AndyESExplorerActivity unloads it
                 intent.putExtra(SELECTED_GAME, gameSelected.gameName);
                 intent.putExtra(SELECTED_START_CONFIG, which);
                 startActivity(intent);
@@ -417,19 +380,19 @@ public class MorrowindActivity extends Activity {
     }
 
 
-    public void setOptomize(boolean optomize) {
-        J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = optomize;
-        JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = optomize;
-        JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = optomize;
+    public void setOptimize(boolean optimize) {
+        J3dNiTriBasedGeom.JOGLES_OPTIMIZED_GEOMETRY = optimize;
+        JoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = optimize;
+        JoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = optimize;
 
         // these don't seem to cause trouble often, but the above three do constantly
-        //JoglesPipeline.LATE_RELEASE_CONTEXT = optomize;
-        //JoglesPipeline.MINIMISE_NATIVE_CALLS_TRANSPARENCY = optomize;
-        //JoglesPipeline.MINIMISE_NATIVE_CALLS_TEXTURE = optomize;
+        //JoglesPipeline.LATE_RELEASE_CONTEXT = optimize;
+        //JoglesPipeline.MINIMISE_NATIVE_CALLS_TRANSPARENCY = optimize;
+        //JoglesPipeline.MINIMISE_NATIVE_CALLS_TEXTURE = optimize;
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(OPTOMIZE, optomize);
+        editor.putBoolean(OPTIMIZE, optimize);
         editor.apply();
     }
 }

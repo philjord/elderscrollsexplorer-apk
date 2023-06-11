@@ -1,10 +1,14 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
+import static scrollsexplorer.GameConfig.allGameConfigs;
+
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
 import android.widget.Toast;
+
+import androidx.documentfile.provider.DocumentFile;
 
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
@@ -21,18 +25,19 @@ import org.jogamp.vecmath.Vector3f;
 
 import java.io.File;
 
-import bsaio.ArchiveFile;
-import bsaio.BSArchiveSet;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+import bsaio.ArchiveFile;
+import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
+import esmio.loader.ESMManager;
 import esmio.loader.ESMManagerUri;
+import esmio.loader.IESMManager;
+import esmio.utils.source.EsmSoundKeyToName;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import esmj3dtes3.ai.Tes3AICREA;
-import esmio.loader.ESMManager;
-import esmio.loader.IESMManager;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
@@ -54,15 +59,10 @@ import tools3d.utils.ShaderSourceIO;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import tools3d.utils.scenegraph.LocationUpdateListener;
-import esmio.utils.source.EsmSoundKeyToName;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
 import utils.source.TextureSource;
-
-import static scrollsexplorer.GameConfig.allGameConfigs;
-
-import androidx.documentfile.provider.DocumentFile;
 
 /**
  * Created by phil on 3/10/2016.
@@ -160,6 +160,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         BethWorldVisualBranch.FOG_END = 150;
 
         gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
+
         BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
 
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
@@ -337,7 +338,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             setSelectedGameConfig(gameConfigToLoad);
         } else {
             Looper.prepare();
-            Toast.makeText(parentActivity2, "But it's not setup correctly! where are the bsa and esm files?", Toast.LENGTH_LONG)
+            Toast.makeText(parentActivity2, "Failed to load " + gameConfigToLoad.gameName + " can't find the bsa and esm files!", Toast.LENGTH_LONG)
                     .show();
         }
 
@@ -393,7 +394,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
     private boolean hasESMAndBSAFiles(GameConfig gameConfig) {
         // check to ensure the esm file and at least one bsa file are in the folder
         DocumentFile checkEsm = DocumentFile.fromTreeUri(this.parentActivity, Uri.parse(gameConfig.scrollsFolder)).findFile(gameConfig.mainESMFile);
-        if (!checkEsm.exists()) {
+        if (checkEsm == null || !checkEsm.exists()) {
             return false;
         }
 
@@ -468,7 +469,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                             //ExternalStorage.copyAsset(parentActivity, "", selectedGameConfig.scrollsFolder);
                             //String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
 
-                            bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, true);
+                            bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, true, false);
 
 
                             // lets also set up the scrolls folder as a file base source as well

@@ -128,7 +128,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener
 		//String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
 		String[] BSARoots = new String[]{rootDir.getAbsolutePath()};
 
-		BSArchiveSet bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true);
+		BSArchiveSet bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true, true);
 		textureSource = new BsaTextureSource(bsaFileSet);
 
 		canvas3D2D = new Canvas3D2D(gl_window);

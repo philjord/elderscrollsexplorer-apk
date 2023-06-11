@@ -15,137 +15,118 @@ import com.jogamp.opengl.GLProfile;
 
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
 
-import java.io.File;
-
-import jogamp.newt.driver.android.NewtBaseActivity;
+import jogamp.newt.driver.android.NewtBaseFragmentActivity;
 import scrollsexplorer.GameConfig;
 
 
-public class NifDisplayActivity extends NewtBaseActivity
-{
-	private NifDisplayTester nifDisplay;
-	private GLWindow gl_window;
-	private GameConfig gameConfigToLoad;
+public class NifDisplayActivity extends NewtBaseFragmentActivity {
+    private NifDisplayTester nifDisplay;
+    private GLWindow gl_window;
+    private GameConfig gameConfigToLoad;
 
-	@Override
-	public void onCreate(final Bundle state)
-	{
+    @Override
+    public void onCreate(final Bundle state) {
 
-		System.setProperty("j3d.cacheAutoComputeBounds", "true");
-		System.setProperty("j3d.defaultReadCapability", "false");
-		System.setProperty("j3d.defaultNodePickable", "false");
-		System.setProperty("j3d.defaultNodeCollidable", "false");
+        System.setProperty("j3d.cacheAutoComputeBounds", "true");
+        System.setProperty("j3d.defaultReadCapability", "false");
+        System.setProperty("j3d.defaultNodePickable", "false");
+        System.setProperty("j3d.defaultNodeCollidable", "false");
 
-		SimpleShaderAppearance.setVersionES300();
+        SimpleShaderAppearance.setVersionES300();
 
-		super.onCreate(state);
+        super.onCreate(state);
 
-		Intent intent = getIntent();
-		String gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
-		gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
+        Intent intent = getIntent();
+        String gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
+        gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
 
-		final GLCapabilities caps =
-				new GLCapabilities(GLProfile.get(GLProfile.GLES2));
-		caps.setDoubleBuffered(true);
-		caps.setDepthBits(16);
-		caps.setStencilBits(8);
-		caps.setHardwareAccelerated(true);
-		//caps.setSampleBuffers(true);death no touch!
-		//caps.setNumSamples(2);
+        final GLCapabilities caps =
+                new GLCapabilities(GLProfile.get(GLProfile.GLES2));
+        caps.setDoubleBuffered(true);
+        caps.setDepthBits(16);
+        caps.setStencilBits(8);
+        caps.setHardwareAccelerated(true);
+        //caps.setSampleBuffers(true);death no touch!
+        //caps.setNumSamples(2);
 
-		gl_window = GLWindow.create(caps);
-		gl_window.setFullscreen(true);
+        gl_window = GLWindow.create(caps);
+        gl_window.setFullscreen(true);
 
-		this.setContentView(this.getWindow(), gl_window);
+        this.setContentView(this.getWindow(), gl_window);
 
 
-		gl_window.getScreen().addMonitorModeListener(new MonitorModeListener()
-													 {
-														 @Override
-														 public void monitorModeChangeNotify(MonitorEvent monitorEvent)
-														 {
-														 }
+        gl_window.getScreen().addMonitorModeListener(new MonitorModeListener() {
+                                                         @Override
+                                                         public void monitorModeChangeNotify(MonitorEvent monitorEvent) {
+                                                         }
 
-														 @Override
-														 public void monitorModeChanged(MonitorEvent monitorEvent, boolean b)
-														 {
-															 Log.e("System.err", "monitorModeChanged: " + monitorEvent);
-														 }
-													 }
+                                                         @Override
+                                                         public void monitorModeChanged(MonitorEvent monitorEvent, boolean b) {
+                                                             Log.e("System.err", "monitorModeChanged: " + monitorEvent);
+                                                         }
+                                                     }
 
-		);
+        );
 
 
-		gl_window.setVisible(true);
+        gl_window.setVisible(true);
 
-		gl_window.addGLEventListener(new GLEventListener()
-									 {
-										 @Override
-										 public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable)
-										 {
-											 try
-											 {
-												 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
-												 //KfDisplayTester from this init function
-												 nifDisplay = new NifDisplayTester(NifDisplayActivity.this, gl_window, new File(gameConfigToLoad.scrollsFolder));
+        gl_window.addGLEventListener(new GLEventListener() {
+                                         @Override
+                                         public void init(@SuppressWarnings("unused") final GLAutoDrawable drawable) {
+                                             try {
+                                                 //NOTE Canvas3D requires a fully initialized glWindow (in the android setup) so we must call
+                                                 //KfDisplayTester from this init function
+                                                 nifDisplay = new NifDisplayTester(NifDisplayActivity.this, gl_window, gameConfigToLoad.scrollsFolder);
 
-												 // addNotify will start up the renderer and kick things off
-												 nifDisplay.canvas3D2D.addNotify();
-											 }
-											 catch (Exception e)
-											 {
-												 e.printStackTrace();
-											 }
-										 }
+                                                 // addNotify will start up the renderer and kick things off
+                                                 nifDisplay.canvas3D2D.addNotify();
+                                             } catch (Exception e) {
+                                                 e.printStackTrace();
+                                             }
+                                         }
 
-										 @Override
-										 public void reshape(final GLAutoDrawable drawable, final int x, final int y,
-															 final int w, final int h)
-										 {
-										 }
+                                         @Override
+                                         public void reshape(final GLAutoDrawable drawable, final int x, final int y,
+                                                             final int w, final int h) {
+                                         }
 
-										 @Override
-										 public void display(final GLAutoDrawable drawable)
-										 {
-										 }
+                                         @Override
+                                         public void display(final GLAutoDrawable drawable) {
+                                         }
 
-										 @Override
-										 public void dispose(final GLAutoDrawable drawable)
-										 {
-										 }
-									 }
+                                         @Override
+                                         public void dispose(final GLAutoDrawable drawable) {
+                                         }
+                                     }
 
-		);
-	}
+        );
+    }
 
-	@Override
-	public void onPause()
-	{
-		if (nifDisplay != null)
-			nifDisplay.canvas3D2D.stopRenderer();
-		gl_window.setVisible(false);
-		super.onPause();
-	}
+    @Override
+    public void onPause() {
+        if (nifDisplay != null)
+            nifDisplay.canvas3D2D.stopRenderer();
+        gl_window.setVisible(false);
+        super.onPause();
+    }
 
-	@Override
-	public void onResume()
-	{
-		gl_window.setVisible(true);
-		if (nifDisplay != null)
-			nifDisplay.canvas3D2D.startRenderer();
-		super.onResume();
-	}
+    @Override
+    public void onResume() {
+        gl_window.setVisible(true);
+        if (nifDisplay != null)
+            nifDisplay.canvas3D2D.startRenderer();
+        super.onResume();
+    }
 
-	@Override
-	public void onDestroy()
-	{
-		if (nifDisplay != null)
-		{
-			nifDisplay.canvas3D2D.stopRenderer();
-			nifDisplay.canvas3D2D.removeNotify();
-		}
-		gl_window.destroy();
+    @Override
+    public void onDestroy() {
+        if (nifDisplay != null) {
+            nifDisplay.canvas3D2D.stopRenderer();
+            nifDisplay.canvas3D2D.removeNotify();
+        }
+        gl_window.destroy();
 
-		super.onDestroy();
-	}
+        super.onDestroy();
+    }
 }
