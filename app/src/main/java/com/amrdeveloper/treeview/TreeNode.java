@@ -56,6 +56,13 @@ public class TreeNode {
         updateNodeChildrenDepth(child);
     }
 
+    public void addChild(int index, TreeNode child) {
+        child.setParent(this);
+        child.setLevel(level + 1);
+        children.add(index, child);
+        updateNodeChildrenDepth(child);
+    }
+
     public void setValue(Object value) {
         this.value = value;
     }
@@ -104,7 +111,7 @@ public class TreeNode {
         return isSelected;
     }
 
-    private void updateNodeChildrenDepth(TreeNode node) {
+    private static void updateNodeChildrenDepth(TreeNode node) {
         if (node.getChildren().isEmpty()) return;
         for (TreeNode child : node.getChildren()) {
             child.setLevel(node.getLevel() + 1);

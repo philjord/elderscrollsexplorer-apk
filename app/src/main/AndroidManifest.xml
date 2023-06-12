@@ -71,6 +71,16 @@
                 android:value=".ElderScrollsActivity"/>
         </activity>
         <activity
+            android:name=".kfdisplay.KfDisplayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="KfDisplayActivity"
+            android:parentActivityName=".ElderScrollsActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ElderScrollsActivity"/>
+        </activity>
+        <activity
             android:name=".andyesexplorer.AndyESExplorerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="ESExplorer"

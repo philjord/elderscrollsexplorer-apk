@@ -99,6 +99,7 @@ public class MorrowindActivity extends Activity {
         }
 
         if(baseFolderUri == null) {
+            Toast.makeText(this, "Please select the folder containing the Morrowind game files", LENGTH_LONG).show();
             // ok find a root folder for morrowind at least
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             this.startActivityForResult(intent, ACTION_OPEN_DOCUMENT_TREE_CODE);
@@ -200,21 +201,24 @@ public class MorrowindActivity extends Activity {
         if (requestCode == ACTION_OPEN_DOCUMENT_TREE_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri baseDocumentTreeUri = Objects.requireNonNull(data).getData();
-                final int takeFlags = (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                // take persistable Uri Permission for future use
-                getContentResolver().takePersistableUriPermission(data.getData(), takeFlags);
-                SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
-                preferences.edit().putString(MORROWIND_BASE_FOLDER, data.getData().toString()).apply();
+                // record the folder details in the config, if the esm can be found
+                if(setGameESMFileSelect(DocumentFile.fromTreeUri(this, baseDocumentTreeUri))) {
+                    final int takeFlags = (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                // record the folder details in the config
-                setGameESMFileSelect(DocumentFile.fromTreeUri(this, baseDocumentTreeUri));
+                    // take persistable Uri Permission for future use
+                    getContentResolver().takePersistableUriPermission(data.getData(), takeFlags);
+                    SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+                    preferences.edit().putString(MORROWIND_BASE_FOLDER, data.getData().toString()).apply();
+                    possiblyShowWelcomeScreen();
+                } else {
+                    //try again?
+                    //possibly let's not infinite loop in case they really want ESE
+                }
             } else {
                 Toast.makeText(this, "ACTION_OPEN_DOCUMENT_TREE_CODE error", LENGTH_LONG).show();
             }
         }
-
-        possiblyShowWelcomeScreen();
     }
 
 
@@ -269,7 +273,7 @@ public class MorrowindActivity extends Activity {
      *
      * @param folder
      */
-    private void setGameESMFileSelect(DocumentFile folder) {
+    private boolean setGameESMFileSelect(DocumentFile folder) {
         boolean validESM = false;
         for (DocumentFile file : folder.listFiles()) {
             // let's see if this guy is one of our game configs
@@ -291,9 +295,10 @@ public class MorrowindActivity extends Activity {
         }
         if (!validESM) {
             Toast.makeText(this, "Selected file not a valid game esm", LENGTH_LONG).show();
+            return false;
         }
 
-        attemptLaunchMorrowind();
+        return validESM;
     }
 
 

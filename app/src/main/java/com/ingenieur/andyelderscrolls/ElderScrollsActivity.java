@@ -21,7 +21,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
-import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity2;
+import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
@@ -37,17 +37,6 @@ import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 
 public class ElderScrollsActivity extends Activity {
-//TODO: this guy is not up with the hip kids on the new SAF URI FileChannel world but the below is still true
-    /**
-     * Ok no more single root folder, all games must be added by selecting there esm file
-     * bsa files MUST be sibling files or possibly an obb file with teh game name in it
-     * esm files will be identified by filename these are fixed
-     * Tools will ahve an add button to add as many as you like, if a different location
-     * is selected for a current folder it is simply overwritten
-     * Morrowind will look for it's folder and ask for it if not found, ic_tools is how you change this if needed
-     * the esm names that are stored come from the gameconfig list key is folderKey esm name is mainESMFile
-     * So note Andy root must disappear totally? yes I think that's right
-     */
     public static final String PREFS_NAME = "ElderScrollsActivityDefault";
 
     public final static String SELECTED_GAME = "SELECTED_GAME";
@@ -112,6 +101,7 @@ public class ElderScrollsActivity extends Activity {
         }
 
         if (baseFolderUri == null) {
+            Toast.makeText(this, "Please select the root folder containing the various game folders", LENGTH_LONG).show();
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             this.startActivityForResult(intent, ACTION_OPEN_DOCUMENT_TREE_CODE);
         }
@@ -149,6 +139,7 @@ public class ElderScrollsActivity extends Activity {
      * @param view
      */
     public void resetRootFolder(View view) {
+        Toast.makeText(this, "Please select the root folder containing the various game folders", LENGTH_LONG).show();
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         this.startActivityForResult(intent, ACTION_OPEN_DOCUMENT_TREE_CODE);
     }
@@ -295,7 +286,7 @@ public class ElderScrollsActivity extends Activity {
     public void showKfDisplay(View view) {
         if (gameSelected != null) {
             setUpLogFile(gameSelected);
-            Intent intent = new Intent(this, KfDisplayActivity2.class);
+            Intent intent = new Intent(this, KfDisplayActivity.class);
             intent.putExtra(SELECTED_GAME, gameSelected.gameName);
             startActivity(intent);
         } else {

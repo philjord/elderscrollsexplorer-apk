@@ -24,9 +24,9 @@ public class BSAArchiveFileChooser {
 
     // filter on file extension
     private String extension = null;
+    private BSAArchiveFileChooserFilter bsaArchiveFileChooser;
 
     private BsaFileSelectedListener fileListener;
-
 
     // file selection event handling
     public interface BsaFileSelectedListener extends TreeViewAdapter.OnTreeNodeClickListener, TreeViewAdapter.OnTreeNodeLongClickListener {
@@ -49,6 +49,10 @@ public class BSAArchiveFileChooser {
         return this;
     }
 
+    public void setFilter(BSAArchiveFileChooserFilter bsaArchiveFileChooser) {
+        this.bsaArchiveFileChooser = bsaArchiveFileChooser;
+    }
+
     public BSAArchiveFileChooser setFileListener(BsaFileSelectedListener fileListener) {
         this.fileListener = fileListener;
         bsaTreeFragment.setTreeNodeClickListener(fileListener);
@@ -57,14 +61,17 @@ public class BSAArchiveFileChooser {
     }
 
     public void showDialog() {
-        refresh();
         bsaTreeFragment.show(activity.getSupportFragmentManager(), "dialog");
+    }
+
+    public void dismiss() {
+        bsaTreeFragment.dismiss();
     }
 
     /**
      * called when the data is altered or the extension is changed
      */
-    private void refresh() {
+    public BSAArchiveFileChooser load() {
         List<TreeNode> fileRoots = new ArrayList<TreeNode>();
         for (ArchiveFile archiveFile : bsArchiveSet) {
             if (archiveFile.hasNifOrKf()) {
@@ -82,6 +89,8 @@ public class BSAArchiveFileChooser {
 
                     //only process the ones we want
                     if (extension != null && !entry.getFileName().endsWith(extension))
+                        continue;
+                    if (bsaArchiveFileChooser != null && !bsaArchiveFileChooser.accept(entry))
                         continue;
 
                     String path = ((Displayable) entry).getFolderName();
@@ -130,7 +139,7 @@ public class BSAArchiveFileChooser {
 
                             if (insert) {
                                 FolderNode folderNode = new FolderNode(name, R.layout.list_item_file);
-                                parentNode.getChildren().add(index1, folderNode);
+                                parentNode.addChild(index1, folderNode);
                                 parentNode = folderNode;
                                 foldersByName.put(path, folderNode);
                             }
@@ -138,13 +147,24 @@ public class BSAArchiveFileChooser {
 
                     }
 
+					int count = parentNode.getChildren().size();
+                    String name = entry.getFileName();
+                    int index2;
+                    for (index2 = 0; index2 < count; index2++)
+                    {
+                        TreeNode compare = parentNode.getChildren().get(index2);
+                        if (compare instanceof FolderNode)
+                            continue;
+                        if (name.compareTo(((ArchiveEntry)compare.getValue()).getFileName()) < 0)
+                            break;
+                    }
                     TreeNode fileNode = new TreeNode(entry, R.layout.list_item_file);
-                    //parentNode.insert(fileNode, index2);
-                    parentNode.addChild(fileNode);
+                    parentNode.addChild(index2, fileNode);
                 }
             }
         }
         bsaTreeFragment.updateTreeNodes(fileRoots);
+        return this;
     }
 
 
@@ -173,4 +193,8 @@ public class BSAArchiveFileChooser {
 
     }
 
+
+    public interface BSAArchiveFileChooserFilter {
+        boolean accept(ArchiveEntry ae);
+    }
 }

@@ -36,9 +36,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TreeViewHolder extends RecyclerView.ViewHolder {
 
     /**
-     * The default padding value for the TreeNode item
+     * The default padding value for the TreeNode item (in px)
+     *  TreeViewHolder.nodePadding = (int) (BsaTreeFragment.this.getResources().getDisplayMetrics().density * 50);
      */
-    private int nodePadding = 50;
+    public static int levelIndentPadding = 50;
 
     public TreeViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -49,27 +50,11 @@ public class TreeViewHolder extends RecyclerView.ViewHolder {
      * @param node the current TreeNode
      */
     public void bindTreeNode(TreeNode node) {
-        int padding = node.getLevel() * nodePadding;
+        int leftPadding = node.getLevel() * levelIndentPadding;
         itemView.setPadding(
-                padding,
+                leftPadding,
                 itemView.getPaddingTop(),
                 itemView.getPaddingRight(),
                 itemView.getPaddingBottom());
-    }
-
-    /**
-     * Modify the current node padding value
-     * @param padding the new padding value
-     */
-    public void setNodePadding(int padding) {
-        this.nodePadding = padding;
-    }
-
-    /**
-     * Return the current TreeNode padding value
-     * @return The current padding value
-     */
-    public int getNodePadding() {
-        return nodePadding;
     }
 }

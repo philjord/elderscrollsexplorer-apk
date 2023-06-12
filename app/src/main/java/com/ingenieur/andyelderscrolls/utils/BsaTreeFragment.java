@@ -21,9 +21,9 @@ import com.amrdeveloper.treeview.TreeViewHolder;
 import com.amrdeveloper.treeview.TreeViewHolderFactory;
 import com.ingenieur.andyelderscrolls.R;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+
+import bsaio.ArchiveEntry;
 
 
 public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.OnTreeNodeClickListener, TreeViewAdapter.OnTreeNodeLongClickListener {
@@ -45,7 +45,6 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
     // if we are not set up hang on the the nodes the users wants loaded
     private List<TreeNode> nodesToLoad;
 
-
     public BsaTreeFragment() {
     }
 
@@ -53,6 +52,7 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        TreeViewHolder.levelIndentPadding = (int) (BsaTreeFragment.this.getResources().getDisplayMetrics().density * 10);
     }
 
 
@@ -70,57 +70,7 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
         treeViewAdapter = new TreeViewAdapter(factory);
         recyclerView.setAdapter(treeViewAdapter);
 
-      /*  TreeNode javaDirectory = new TreeNode("Java", R.layout.list_item_file);
-        javaDirectory.addChild(new TreeNode("FileJava1.java", R.layout.list_item_file));
-        javaDirectory.addChild(new TreeNode("FileJava2.java", R.layout.list_item_file));
-        javaDirectory.addChild(new TreeNode("FileJava3.java", R.layout.list_item_file));
-
-        TreeNode gradleDirectory = new TreeNode("Gradle", R.layout.list_item_file);
-        gradleDirectory.addChild(new TreeNode("FileGradle1.gradle", R.layout.list_item_file));
-        gradleDirectory.addChild(new TreeNode("FileGradle2.gradle", R.layout.list_item_file));
-        gradleDirectory.addChild(new TreeNode("FileGradle3.gradle", R.layout.list_item_file));
-
-        javaDirectory.addChild(gradleDirectory);
-
-        TreeNode lowLevelRoot = new TreeNode("LowLevel", R.layout.list_item_file);
-
-        TreeNode cDirectory = new TreeNode("C", R.layout.list_item_file);
-        cDirectory.addChild(new TreeNode("FileC1.c", R.layout.list_item_file));
-        cDirectory.addChild(new TreeNode("FileC2.c", R.layout.list_item_file));
-        cDirectory.addChild(new TreeNode("FileC3.c", R.layout.list_item_file));
-
-        TreeNode cppDirectory = new TreeNode("Cpp", R.layout.list_item_file);
-        cppDirectory.addChild(new TreeNode("FileCpp1.cpp", R.layout.list_item_file));
-        cppDirectory.addChild(new TreeNode("FileCpp2.cpp", R.layout.list_item_file));
-        cppDirectory.addChild(new TreeNode("FileCpp3.cpp", R.layout.list_item_file));
-
-        TreeNode goDirectory = new TreeNode("Go", R.layout.list_item_file);
-        goDirectory.addChild(new TreeNode("FileGo1.go", R.layout.list_item_file));
-        goDirectory.addChild(new TreeNode("FileGo2.go", R.layout.list_item_file));
-        goDirectory.addChild(new TreeNode("FileGo3.go", R.layout.list_item_file));
-
-        lowLevelRoot.addChild(cDirectory);
-        lowLevelRoot.addChild(cppDirectory);
-        lowLevelRoot.addChild(goDirectory);
-
-        TreeNode cSharpDirectory = new TreeNode("C#", R.layout.list_item_file);
-        cSharpDirectory.addChild(new TreeNode("FileCs1.cs", R.layout.list_item_file));
-        cSharpDirectory.addChild(new TreeNode("FileCs2.cs", R.layout.list_item_file));
-        cSharpDirectory.addChild(new TreeNode("FileCs3.cs", R.layout.list_item_file));
-
-        TreeNode gitFolder = new TreeNode(".git", R.layout.list_item_file);
-
-        List<TreeNode> fileRoots = new ArrayList<>();
-        fileRoots.add(javaDirectory);
-        fileRoots.add(lowLevelRoot);
-        fileRoots.add(cSharpDirectory);
-        fileRoots.add(gitFolder);
-
-        treeViewAdapter.updateTreeNodes(fileRoots);
-
-       */
-
-        if(nodesToLoad != null) {
+        if (nodesToLoad != null) {
             treeViewAdapter.updateTreeNodes(nodesToLoad);
             nodesToLoad = null;
         }
@@ -137,7 +87,6 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
 
     public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
         this.treeNodeLongClickListener.onTreeNodeLongClick(treeNode, view);
-        this.dismiss();
         return false;
     }
 
@@ -191,26 +140,28 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
                     return R.drawable.ic_cpp;
                 case ".cs":
                     return R.drawable.ic_cs;
-                case ".git":
+                case ".nif":
                     return R.drawable.ic_git;
-                case ".go":
+                case ".dds":
                     return R.drawable.ic_go;
-                case ".gradle":
+                case ".kf":
                     return R.drawable.ic_gradle;
-                case ".java":
+                case ".ktx":
                     return R.drawable.ic_java;
                 default:
                     return R.drawable.ic_file;
             }
         }
     }
+
     /**
      * Update the list of tree nodes
+     *
      * @param fileRoots The new tree nodes
      */
     public void updateTreeNodes(List<TreeNode> fileRoots) {
-        if(treeViewAdapter != null)
-        treeViewAdapter.updateTreeNodes(fileRoots);
+        if (treeViewAdapter != null)
+            treeViewAdapter.updateTreeNodes(fileRoots);
         else
             nodesToLoad = fileRoots;
     }
@@ -237,9 +188,12 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
             super.bindTreeNode(node);
 
             String fileNameStr = node.getValue().toString();
+            if (node.getValue() instanceof ArchiveEntry)
+                fileNameStr = ((ArchiveEntry) node.getValue()).getFileName();
+
             fileName.setText(fileNameStr);
 
-            int dotIndex = fileNameStr.indexOf('.');
+            int dotIndex = fileNameStr.lastIndexOf('.');
             if (dotIndex == -1) {
                 fileTypeIcon.setImageResource(R.drawable.ic_folder);
             } else {
