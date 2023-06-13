@@ -454,9 +454,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         // show file chooser
         parentActivity.runOnUiThread(new Runnable() {
             public void run() {
-                //tODO: can't reshow teh same bsaArchiveFileChooser it shows nothing
-                if (bsaArchiveFileChooser == null || true) {
-                    //TODO: reuse teh file chooser so the selection is still the same?
+                if (bsaArchiveFileChooser == null) {
                     bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
                         @Override
                         public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {

@@ -1,6 +1,5 @@
 package com.ingenieur.andyelderscrolls.utils;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,10 +41,17 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
 
     private static final String TAG = "BsaTreeFragment";
 
-    // if we are not set up hang on the the nodes the users wants loaded
-    private List<TreeNode> nodesToLoad;
-
     public BsaTreeFragment() {
+        TreeViewHolderFactory factory = (v, layout) -> new BsaNodeViewHolder(v);
+        treeViewAdapter = new TreeViewAdapter(factory);
+    }
+
+    /**
+     * To allow reshowing the dialog fragment we must same the data adapter
+     * @param prevTree
+     */
+    public BsaTreeFragment(BsaTreeFragment prevTree) {
+        treeViewAdapter = prevTree.treeViewAdapter;
     }
 
     @Override
@@ -65,15 +71,7 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setNestedScrollingEnabled(false);
 
-        TreeViewHolderFactory factory = (v, layout) -> new BsaNodeViewHolder(v);
-
-        treeViewAdapter = new TreeViewAdapter(factory);
         recyclerView.setAdapter(treeViewAdapter);
-
-        if (nodesToLoad != null) {
-            treeViewAdapter.updateTreeNodes(nodesToLoad);
-            nodesToLoad = null;
-        }
 
         treeViewAdapter.setTreeNodeClickListener(this);
         treeViewAdapter.setTreeNodeLongClickListener(this);
@@ -82,12 +80,15 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
     }
 
     public void onTreeNodeClick(TreeNode treeNode, View view) {
-        this.treeNodeClickListener.onTreeNodeClick(treeNode, view);
+        if(treeNodeClickListener != null)
+            this.treeNodeClickListener.onTreeNodeClick(treeNode, view);
     }
 
     public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
-        this.treeNodeLongClickListener.onTreeNodeLongClick(treeNode, view);
-        return false;
+        if(treeNodeLongClickListener != null)
+            return this.treeNodeLongClickListener.onTreeNodeLongClick(treeNode, view);
+        else
+            return false;
     }
 
     /**
@@ -160,10 +161,7 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
      * @param fileRoots The new tree nodes
      */
     public void updateTreeNodes(List<TreeNode> fileRoots) {
-        if (treeViewAdapter != null)
-            treeViewAdapter.updateTreeNodes(fileRoots);
-        else
-            nodesToLoad = fileRoots;
+        treeViewAdapter.updateTreeNodes(fileRoots);
     }
 
     public class BsaNodeViewHolder extends TreeViewHolder {

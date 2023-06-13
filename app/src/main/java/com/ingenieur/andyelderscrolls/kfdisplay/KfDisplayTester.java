@@ -214,12 +214,16 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
         canvas3D2D.getView().setBackClipDistance(5000);
         canvas3D2D.getView().setFrontClipDistance(0.1f);
 
-
         canvas3D2D.getGLWindow().addKeyListener(new KeyHandler());
 
-
         dragMouseAdapter.setListener(this);
+
         canvas3D2D.getGLWindow().addMouseListener(dragMouseAdapter);
+
+        //FOR forcing a center distance
+        simpleCameraHandler.setView(new Point3d(0, 1, 3), new Point3d(0, 1, 0));
+
+
 
 
         // show file chooser
@@ -228,32 +232,29 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                 Toast.makeText(parentActivity, "Please select a skeleton nif file", Toast.LENGTH_SHORT)
                         .show();
 
-                //TODO: can't reshow teh same bsaArchiveFileChooser it shows nothing
-                if (bsaArchiveFileChooser == null || true) {
-                    //TODO: reuse the file chooser so the selection is still the same?
-                    bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif");
-                    bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
-                        @Override
-                        public boolean accept(ArchiveEntry ae) {
-                            return ae.getFileName().indexOf("skel") != -1;
-                        }
-                    });
-                    bsaArchiveFileChooser.setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
-                        @Override
-                        public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
-                            return false;
-                        }
 
-                        @Override
-                        public void onTreeNodeClick(TreeNode treeNode, View view) {
-                            if (treeNode.getValue() instanceof ArchiveEntry) {
-                                skeletonNifModelFile = (ArchiveEntry) treeNode.getValue();
-                                bsaArchiveFileChooser.dismiss();
-                                selectSkins();
-                            }
+                bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif");
+                bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
+                    @Override
+                    public boolean accept(ArchiveEntry ae) {
+                        return ae.getFileName().indexOf("skel") != -1;
+                    }
+                });
+                bsaArchiveFileChooser.setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
+                    @Override
+                    public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onTreeNodeClick(TreeNode treeNode, View view) {
+                        if (treeNode.getValue() instanceof ArchiveEntry) {
+                            skeletonNifModelFile = (ArchiveEntry) treeNode.getValue();
+                            bsaArchiveFileChooser.dismiss();
+                            selectSkins();
                         }
-                    }).load();
-                }
+                    }
+                }).load();
 
                 bsaArchiveFileChooser.showDialog();
             }
@@ -266,30 +267,33 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                 Toast.makeText(parentActivity, "Please select skin(s) nif file(s)", Toast.LENGTH_SHORT)
                         .show();
 
-                //TODO: can't reshow teh same bsaArchiveFileChooser it shows nothing
-                if (bsaArchiveFileChooser == null || true) {
-                    //TODO: reuse teh file chooser so the selection is still the same?
-                    bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
-                        @Override
-                        public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
+                //TODO: multi selection needs to be more obvious somehow
+                bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
+                    @Override
+                    public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
+                        // use long select to select multiple for now
+                        if (treeNode.getValue() instanceof ArchiveEntry) {
+                            skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
+                            return true;
+                        } else {
                             return false;
                         }
+                    }
 
-                        @Override
-                        public void onTreeNodeClick(TreeNode treeNode, View view) {
-                            if (treeNode.getValue() instanceof ArchiveEntry) {
-                                skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
-                                bsaArchiveFileChooser.dismiss();
+                    @Override
+                    public void onTreeNodeClick(TreeNode treeNode, View view) {
+                        if (treeNode.getValue() instanceof ArchiveEntry) {
+                            skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
+                            bsaArchiveFileChooser.dismiss();
 
-                                //TODO: multi selection in file chooser, and directory selection maybe?
-                                //TODO: somehow allow null skin selection too
+                            //TODO: somehow allow null skin selection too
 
-                                Toast.makeText(parentActivity, "Please select anim to display", Toast.LENGTH_SHORT).show();
-                                selectKfFile();
-                            }
+                            Toast.makeText(parentActivity, "Please select anim to display", Toast.LENGTH_SHORT).show();
+                            selectKfFile();
                         }
-                    }).load();
-                }
+                    }
+                }).load();
+
 
                 bsaArchiveFileChooser.showDialog();
             }
@@ -304,9 +308,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                     Toast.makeText(parentActivity, "Please select kf file(s)", Toast.LENGTH_SHORT)
                             .show();
 
-                    //TODO: can't reshow teh same bsaArchiveFileChooser it shows nothing
                     if (bsaArchiveFileChooser == null || true) {
-                        //TODO: reuse teh file chooser so the selection is still the same?
                         bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("kf").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
                             @Override
                             public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
@@ -382,6 +384,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
         modelGroup.addChild(bg);
 
+        //this is Waay too far back, I wonder why
         //simpleCameraHandler.viewBounds(nifCharacter.getBounds());
 
     }
