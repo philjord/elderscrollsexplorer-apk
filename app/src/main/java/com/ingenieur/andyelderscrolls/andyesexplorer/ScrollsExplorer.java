@@ -2,16 +2,20 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import static scrollsexplorer.GameConfig.allGameConfigs;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
+import androidx.fragment.app.FragmentActivity;
 
+import com.amrdeveloper.treeview.TreeNode;
+import com.frostwire.util.SparseArray;
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
+import com.ingenieur.andyelderscrolls.utils.ESMCellChooser;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.MouseEvent;
@@ -19,11 +23,13 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
+import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
@@ -31,12 +37,19 @@ import bsa.source.BsaTextureSource;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
+import esmio.common.data.plugin.PluginGroup;
+import esmio.common.data.record.Record;
 import esmio.loader.ESMManager;
 import esmio.loader.ESMManagerUri;
 import esmio.loader.IESMManager;
 import esmio.utils.source.EsmSoundKeyToName;
+import esmj3d.data.shared.records.CommonREFR;
+import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.BethRenderSettings;
+import esmj3d.j3d.cell.J3dICELLPersistent;
+import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3d.j3d.j3drecords.inst.J3dRECOInst;
 import esmj3dtes3.ai.Tes3AICREA;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
@@ -49,6 +62,7 @@ import scrollsexplorer.IDashboard;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
+import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.MouseOverHandler;
 import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
@@ -74,6 +88,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
     private SimpleBethCellManager simpleBethCellManager;
 
+    private ESMCellChooser esmCellChooser;
+
     public AndySimpleWalkSetup simpleWalkSetup;
 
     private MediaSources mediaSources;
@@ -86,7 +102,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
     private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
-    private Activity parentActivity;
+    private FragmentActivity parentActivity;
 
     private GameConfig gameConfigToLoad;
 
@@ -118,7 +134,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             };
 
 
-    public ScrollsExplorer(Activity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId) {
+    public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId) {
 
         this.parentActivity = parentActivity2;
 
@@ -424,60 +440,27 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         Thread t = new Thread() {
             public void run() {
                 synchronized (selectedGameConfig) {
+
+                    // load up the esm file
                     IDashboard.dashboard.setEsmLoading(1);
-
-                    //TODO TODO:
-                    //KTX file are not in my bsa at all, I need ot convert on the fly and chace out
-
                     DocumentFile rootFolder = DocumentFile.fromTreeUri(ScrollsExplorer.this.parentActivity, Uri.parse(selectedGameConfig.scrollsFolder));
                     DocumentFile esmDF = rootFolder.findFile(selectedGameConfig.mainESMFile);
                     esmManager = ESMManagerUri.getESMManager(ScrollsExplorer.this.parentActivity, esmDF.getUri());
-                    bsaFileSet = null;
+                    IDashboard.dashboard.setEsmLoading(-1);
+
                     if (esmManager != null) {
-
-                        YawPitch yp = selectedGameConfig.startYP;
-                        Vector3f trans = selectedGameConfig.startLocation;
-                        int prevCellformid = selectedGameConfig.startCellId;
-                        //Freeform so load the recorded values
-                        if (saveLoadConfig) {
-                            yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
-                            trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
-                                    selectedGameConfig.startLocation.toString()));
-
-                            prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
-                        }
-
-                        AndyESExplorerActivity.logFireBaseContent("selectedGameConfig", "startCellId " + prevCellformid + " trans " + trans);
-
-                        simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-
                         new EsmSoundKeyToName(esmManager);
                         MeshSource meshSource;
                         TextureSource textureSource;
                         SoundSource soundSource;
 
-                        if (bsaFileSet == null) {
-                            // TODO: dump the obb stuff and simply convert compressed texture on the fly and record them somewhere(in the game folder?)
-                            //The specific location for your expansion files is:
-                            //<shared-storage>/Android/obb/<package-name>/
-                            //<shared-storage> is the path to the shared storage space, available from getExternalStorageDirectory().
-                            //	<package-name> is your application's Java-style package name, available from getPackageName().
-                            //eg obbRoot= /storage/emulated/0/Android/obb/com.example.phil.proguardtesty
-                            //http://stackoverflow.com/questions/19453824/where-to-i-place-the-obb-file-to-test-android-expansion-pack-files-obb-on-my-n
-                            //String obbRoot = Environment.getExternalStorageDirectory() + "/Android/obb/" + parentActivity.getPackageName();
-                            // push the ktx file from assets to the scrollsFolder
-                            //ExternalStorage.copyAsset(parentActivity, "", selectedGameConfig.scrollsFolder);
-                            //String[] BSARoots = new String[]{selectedGameConfig.scrollsFolder, obbRoot};
-
-                            bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, true, false);
+                        //TODO TODO:  KTX file are not in my bsa at all, I need ot convert on the fly and cache out
+                        // TODO: dump the obb stuff and simply convert compressed texture on the fly and record them somewhere(in the game folder?)
+                        bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, false);
 
 
-                            // lets also set up the scrolls folder as a file base source as well
-                        }
-
-                        if (bsaFileSet.size() == 0) {
-                            System.err.println("bsa files size is 0 :(");
-                            IDashboard.dashboard.setEsmLoading(-1);
+                        if (bsaFileSet == null || bsaFileSet.size() == 0) {
+                            System.err.println("bsa is null or size is 0 :(" + selectedGameConfig.scrollsFolder);
                             return;
                         }
 
@@ -514,7 +497,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                                     simpleBethCellManager);
                         }
 
-                        display(prevCellformid);
 
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
                             // this is how you play a mp3  file. the setDataSource
@@ -566,16 +548,116 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                         }
 
 
+                        //TODO: let the users pick this
+                        boolean useLastSave = false;
+                        if (useLastSave) {
+                            YawPitch yp = selectedGameConfig.startYP;
+                            Vector3f trans = selectedGameConfig.startLocation;
+                            int prevCellformid = selectedGameConfig.startCellId;
+                            //Freeform so load the recorded values
+                            if (saveLoadConfig) {
+                                yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
+                                trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+                                        selectedGameConfig.startLocation.toString()));
+
+                                prevCellformid = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
+                            }
+
+                            AndyESExplorerActivity.logFireBaseContent("selectedGameConfig", "startCellId " + prevCellformid + " trans " + trans);
+
+                            simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
+                            display(prevCellformid);
+                        } else {
+                            // display the cell picker and create a start location form the selected cell
+                            parentActivity.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    esmCellChooser = new ESMCellChooser(parentActivity, esmManager).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
+                                        @Override
+                                        public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
+                                            return true;
+                                        }
+
+                                        @Override
+                                        public void onTreeNodeClick(TreeNode treeNode, View view) {
+                                            if (treeNode.getValue() instanceof Record) {
+                                                esmCellChooser.dismiss();
+
+                                                int formToLoad = ((Record) treeNode.getValue()).getFormID();
+                                                YawPitch yp = selectedGameConfig.startYP;
+                                                Vector3f trans = selectedGameConfig.startLocation;
+
+                                                // need to set Trans to a door somewhere?
+                                                findADoor(formToLoad, yp, trans);
+
+                                                AndyESExplorerActivity.logFireBaseContent("selectedGameConfig", "startCellId " + formToLoad + " trans " + trans);
+
+                                                simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
+                                                display(((Record) treeNode.getValue()).getFormID());
+                                            }
+                                        }
+                                    }).load();
+
+                                    esmCellChooser.showDialog();
+                                }
+                            });
+
+                        }
+
                     } else {
-                        System.out.println("esm manger is null, I just don't know why...");
+                        System.out.println("esm manger is null, I just don't know why..." + esmDF.getUri());
                     }
 
-                    IDashboard.dashboard.setEsmLoading(-1);
+
                 }
 
             }
         };
         t.start();
+    }
+
+    private void findADoor(int formToLoad, YawPitch yp, Vector3f trans) {
+        J3dICellFactory j3dCellFactory = selectedGameConfig.j3dCellFactory;
+        if (j3dCellFactory != null) {
+            // if SimpleBethCellManager.setSources has been called the persistent children will have been loaded
+
+            PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
+            ArrayList<CommonREFR> doors = new ArrayList<>();
+
+            for (Record record : cellChildGroups.getRecordList()) {
+                // is this a door way?
+                if (record.getRecordType().equals("REFR")) {
+                    // don't go game specific just the common data needed (which include XTEL!)
+                    CommonREFR commonREFR = new CommonREFR(record, true);
+                    XTEL xtel = commonREFR.XTEL;
+                    //if we are a door outward we are a door inward
+                    // but position and translation are actually on the other record so just land on this door will do for now
+
+                    if (xtel != null) {
+
+                        //TODO: find the other door record and find out what it thinks of this doors exis position
+                        //int otherDoorFormId = xtel.doorFormId;
+                        //int otherCellFormID = j3dCellFactory.getCellIdOfPersistentTarget(otherDoorFormId);
+                        Record otherDoor = j3dCellFactory.getRecord(xtel.doorFormId);
+
+                        if (otherDoor != null) {
+                            CommonREFR otherDoorCommonREFR = new CommonREFR(otherDoor, true);
+                            doors.add(otherDoorCommonREFR);
+                        }
+                    }
+                }
+
+            }
+            if (doors.size() > 0) {
+                int idx = (int) (Math.random() * (doors.size() - 1));
+                XTEL xtel = doors.get(idx).XTEL; // note this is the otehr door so teh exit is right but it's cell is not our cell
+                Vector3f t = ActionableMouseOverHandler.getTrans(xtel.x, xtel.y, xtel.z);
+                t.y += 1; // cos it's the floor I reckon, nay something off in all direction a bit here
+                Quat4f r = ActionableMouseOverHandler.getRot(xtel.rx, xtel.ry, xtel.rz);
+                trans.set(t);
+                yp.set(r);
+            }
+        }
+
     }
 
 

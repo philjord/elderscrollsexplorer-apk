@@ -6,6 +6,6 @@
     android:tint="?attr/colorControlNormal"
     android:autoMirrored="true">
   <path
-      android:fillColor="@android:color/white"
+      android:fillColor="@android:color/holo_blue_dark"
       android:pathData="M10,17l5,-5 -5,-5v10z"/>
 </vector>

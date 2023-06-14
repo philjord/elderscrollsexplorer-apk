@@ -54,7 +54,7 @@ public class ESMManagerUri extends ESMManager {
 				if (count == 16) {
 					String recordType = new String(prefix, 0, 4);
 					if (recordType.equals("TES3")) {
-						return new ESMManagerTes3Uri(fileChannel, fileUri.getPath());
+						return new ESMManagerTes3Uri(fileChannel, fileUri.getLastPathSegment());
 					}
 				}
 			}
@@ -63,7 +63,7 @@ public class ESMManagerUri extends ESMManager {
 			}
 
 			//assume tes4
-			return new ESMManagerUri(fileChannel, fileUri.getPath());
+			return new ESMManagerUri(fileChannel, fileUri.getLastPathSegment());
 
 		}
 		catch (IOException e) {

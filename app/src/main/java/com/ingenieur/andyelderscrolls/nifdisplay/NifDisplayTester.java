@@ -122,7 +122,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
 
         String[] BSARoots = new String[]{rootDir};
 
-        bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true, true);
+        bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true);
         meshSource = new BsaMeshSource(bsaFileSet);
         textureSource = new BsaTextureSource(bsaFileSet);
 

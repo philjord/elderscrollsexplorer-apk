@@ -57,10 +57,6 @@ public class MorrowindActivity extends Activity {
     public static final String MORROWIND_BASE_FOLDER = "MorrowindLastSelectedFile";
     public static final String MORROWIND_GAME_FOLDER = "MORROWIND_GAME_FOLDER";
 
-    //public static final String GOOGLE_PUBKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqoEA2+dtSDgAZZhwOIhf67H2xR8rvrLENhrI5zNl8W7+GfGsRxfMmGiwisuOASY8fBh+t5IZumP7WGJ418oML6rUBpUCNihDuZcS/OrNQky7RyFkoY16n1G3v+jm4UwLoEsNQJnEpBWvPy0hptT6qRpRhNI7SVYilzPBc7FQPG2NWKh6kNoqSVoPI3K5hRzIYtqRtkHhFtMvpZhxcQuzKptLDu0ceCyEQLeWJmtiO1yCd57zkG0R+sIWd+69uuORIJGmg8vJWljyBTdhrKB8+sg3SZh4S/6lj0GZpy+M7cpzoJC4aBRVN/YMDxax1c56l7T8AY63pcCou8Ai20ER8QIDAQAB";
-    //public static final String[] GOOGLE_CATALOG = new String[]{"corm.donation.1",
-    //		"corm.donation.2", "corm.donation.5", "corm.donation.10", "corm.donation.20"};
-
     private GameConfig gameSelected;
 
     private int ACTION_OPEN_DOCUMENT_TREE_CODE = 567;
