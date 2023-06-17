@@ -131,7 +131,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 
 		Intent intent = getIntent();
 		gameName = intent.getStringExtra(ElderScrollsActivity.SELECTED_GAME);
-		gameConfigId = intent.getIntExtra(ElderScrollsActivity.SELECTED_START_CONFIG, 1);
+		gameConfigId = intent.getIntExtra(ElderScrollsActivity.SELECTED_START_CONFIG, -1);
 
 		logFireBaseContent("SELECTED_GAME", gameName);
 

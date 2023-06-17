@@ -10,46 +10,76 @@ import com.ingenieur.andyelderscrolls.R;
 import nifbullet.NavigationProcessorBullet;
 
 public class LookNavigationView extends GLWindowOverLay {
-	public LookNavigationView(Context context, View parent, NavigationProcessorBullet npb) {
-		super(context, parent, R.layout.navigationpanellookpopup, Gravity.RIGHT | Gravity.BOTTOM);
-		new LookNavigationButton(npb, getButton(R.id.looky));
-	}
+    private static final float FREE_LOOK_GROSS_ROTATE_FACTOR = -0.005f;
 
-	private static class LookNavigationButton  {
-		private static final float FREE_LOOK_GROSS_ROTATE_FACTOR = -0.005f;
-		private float mouseDownLocationx;
-		private float mouseDownLocationy;
-		public LookNavigationButton(	final NavigationProcessorBullet npb,
-																	android.view.View button) {
-			button.setOnTouchListener(new android.view.View.OnTouchListener() {
-				@Override
-				public boolean onTouch(android.view.View v, MotionEvent event) {
-					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						mouseDownLocationx = event.getX();
-						mouseDownLocationy = event.getY();
-					} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-						float ex = event.getX();
-						float ey = event.getY();
+    private View.OnClickListener onClickListener;
+    private final float SCROLL_THRESHOLD = 2;
+    private View button;
 
-						float dx = ex - mouseDownLocationx;
-						float dy = ey - mouseDownLocationy;
+    public LookNavigationView(Context context, View parent, NavigationProcessorBullet npb) {
+        super(context, parent, R.layout.navigationpanellookpopup, Gravity.RIGHT | Gravity.BOTTOM);
+        button = getButton(R.id.looky);
+        button.setOnTouchListener(new DragOrTouchListener(npb));
+    }
 
-						if (dx != 0 || dy != 0) {
-							double scaledDeltaX = (double) dx * FREE_LOOK_GROSS_ROTATE_FACTOR;
-							double scaledDeltaY = (double) dy * FREE_LOOK_GROSS_ROTATE_FACTOR;
+    @Override
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
-							if (npb != null) {
-								npb.changeRotation(scaledDeltaY, scaledDeltaX);
-							}
+    private class DragOrTouchListener implements View.OnTouchListener {
+        private final NavigationProcessorBullet npb;
+        private boolean isClick = false;
+        private float mDownX;
+        private float mDownY;
 
-							mouseDownLocationx = ex;
-							mouseDownLocationy = ey;
-						}
-					}
-					return true;
-				}
+        public DragOrTouchListener(NavigationProcessorBullet npb) {
+            this.npb = npb;
+        }
 
-			});
-		}
-	}
+        @Override
+        public boolean onTouch(View v, MotionEvent ev) {
+            switch (ev.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                    isClick = true;
+                    mDownX = ev.getX();
+                    mDownY = ev.getY();
+                    break;
+                case MotionEvent.ACTION_CANCEL://fall through
+                case MotionEvent.ACTION_UP:
+                    // is this a click not a drag?
+                    if (isClick && onClickListener != null) {
+                        onClickListener.onClick(v);
+                        isClick = false;
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float ex = ev.getX();
+                    float ey = ev.getY();
+                    float dx = ex - mDownX;
+                    float dy = ey - mDownY;
+                    if (Math.abs(mDownX - ex) > SCROLL_THRESHOLD || Math.abs(mDownY - ey) > SCROLL_THRESHOLD) {
+                        isClick = false;
+
+                        if (dx != 0 || dy != 0) {
+                            double scaledDeltaX = (double) dx * FREE_LOOK_GROSS_ROTATE_FACTOR;
+                            double scaledDeltaY = (double) dy * FREE_LOOK_GROSS_ROTATE_FACTOR;
+
+                            if (npb != null) {
+                                npb.changeRotation(scaledDeltaY, scaledDeltaX);
+                            }
+
+                            mDownX = ex;
+                            mDownY = ey;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+
+
+    }
 }

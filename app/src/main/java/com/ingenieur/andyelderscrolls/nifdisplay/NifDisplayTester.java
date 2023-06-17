@@ -483,6 +483,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
 
     @Override
     public void dragComplete(final MouseEvent e, DragMouseAdapter.DRAG_TYPE dragType) {
+        //TODO: DragMouseAdapter is my own code so check there first
         // this drag adapter is VERY flakey on drag left? am I dropping touch events again?? doesn't look like it
         // but jogamp.newt.WindowImpl.doPointerEvent needs examination!
         if (dragType == DragMouseAdapter.DRAG_TYPE.UP) {

@@ -176,6 +176,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         BethWorldVisualBranch.FOG_END = 150;
 
         gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
+        //record the cell request
+        if (gameConfigId == -1)
+            gameConfigToLoad.startCellId = -1;
+
 
         BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
 
@@ -198,33 +202,31 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         }
 
 
-        int startConfig = gameConfigId;
-
         // default to none
         Tes3Extensions.HANDS = Tes3Extensions.hands.NONE;
         musicToPlay = 0;
 
         GameConfig morrowindConfig = GameConfig.allGameConfigs.get(0);
 
-        if (startConfig == 0) {
+        if (gameConfigId == 0) {
             //scene  Imperial prison ship id 22668
             morrowindConfig.startCellId = 22668;
             morrowindConfig.startLocation = new Vector3f(1, -0.3f, 2);
             morrowindConfig.startYP = new YawPitch(Math.PI / 4, 0);
             musicToPlay = 1;//explore
-        } else if (startConfig == 1) {
+        } else if (gameConfigId == 1) {
             // deck of start ship
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(-108, 3, 936);
             morrowindConfig.startYP = new YawPitch(0, 0);
             musicToPlay = 1;//explore
-        } else if (startConfig == 2) {
+        } else if (gameConfigId == 2) {
             //Freeform
             saveLoadConfig = true;
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(-108, 3, 936);
             morrowindConfig.startYP = new YawPitch(0, 0);
-        } else if (startConfig == 3) {
+        } else if (gameConfigId == 3) {
             //dwarwen ruin for combat but odd sound issue
             morrowindConfig.startCellId = 23903;//23042;
             morrowindConfig.startLocation = new Vector3f(2, -1, 18);//(57, 0, -17);
@@ -232,21 +234,21 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             musicToPlay = 2;//battle
             Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
             Tes3AICREA.combatDemo = true;
-        } else if (startConfig == 4) {
+        } else if (gameConfigId == 4) {
             //vivec for third person view
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(423, 8, 1079);
             morrowindConfig.startYP = new YawPitch(0, 0);
             musicToPlay = 1;//explore
             AndySimpleWalkSetup.TRAILER_CAM = true;
-        } else if (startConfig == 5) {
+        } else if (gameConfigId == 5) {
             // ald rhun
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(-152, 31, -682);
             morrowindConfig.startYP = new YawPitch(0, 0);
             musicToPlay = 1;//explore
             Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
-        } else if (startConfig == 6) {
+        } else if (gameConfigId == 6) {
             //tel mora  , cast spell in third
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(1387, 18, -1438);
@@ -254,53 +256,53 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             musicToPlay = 1;//explore
             Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
             AndySimpleWalkSetup.TRAILER_CAM = true;
-        } else if (startConfig == 7) {
+        } else if (gameConfigId == 7) {
             //inside cavern with azura
             morrowindConfig.startCellId = 22087;
             morrowindConfig.startLocation = new Vector3f(0, 0, 16);
             morrowindConfig.startYP = new YawPitch(0, 0);
             musicToPlay = 1;//explore
-        } else if (startConfig == 8) {
+        } else if (gameConfigId == 8) {
             //  ghost gate, look the walk down gully
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(256, 11, -460);
             morrowindConfig.startYP = new YawPitch(0, 0);
             Tes3Extensions.HANDS = Tes3Extensions.hands.SPELL;
             musicToPlay = 1;//explore
-        } else if (startConfig == 9) {
+        } else if (gameConfigId == 9) {
             //nice green land walk along a road, transition to next
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(896, 12, -1472);
             morrowindConfig.startYP = new YawPitch(0, 0);
             musicToPlay = 1;//explore
-        } else if (startConfig == 10) {
+        } else if (gameConfigId == 10) {
             //   dwarf ruins outside along a bridge walk up behind crea
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(-183, 49, -1059);
             morrowindConfig.startYP = new YawPitch(0, 0);
             Tes3Extensions.HANDS = Tes3Extensions.hands.AXE;
             musicToPlay = 2;//battle
-        } else if (startConfig == 11) {
+        } else if (gameConfigId == 11) {
             //Ebonheart, Imperial Commission
             morrowindConfig.startCellId = 22302;
             morrowindConfig.startLocation = new Vector3f(0, 2, -6);
             morrowindConfig.startYP = new YawPitch(Math.PI, 0);
-        } else if (startConfig == 12) {
+        } else if (gameConfigId == 12) {
             //Vivec, Palace of Vivec
             morrowindConfig.startCellId = 24230;
             morrowindConfig.startLocation = new Vector3f(0, -4, 5);
             morrowindConfig.startYP = new YawPitch(Math.PI, 0);
-        } else if (startConfig == 13) {
+        } else if (gameConfigId == 13) {
             //Telasero, Propylon Chamber
             morrowindConfig.startCellId = 23850;
             morrowindConfig.startLocation = new Vector3f(5, -6, -9);
             morrowindConfig.startYP = new YawPitch(Math.PI / 4, 0);
-        } else if (startConfig == 14) {
+        } else if (gameConfigId == 14) {
             //Molag Mar
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(1405, 23, 758);
             morrowindConfig.startYP = new YawPitch(0, 0);
-        } else if (startConfig == 15) {
+        } else if (gameConfigId == 15) {
             //Vos
             morrowindConfig.startCellId = 0;
             morrowindConfig.startLocation = new Vector3f(1225, 19, -1465);
@@ -309,24 +311,24 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 
         //Android TESIV: Oblivion = 143176?, (425,43,-912)
-        allGameConfigs.get(1).startCellId = 180488;
-        allGameConfigs.get(1).startLocation = new Vector3f(425, 43, -912);
+        //allGameConfigs.get(1).startCellId = 180488;
+        //allGameConfigs.get(1).startLocation = new Vector3f(425, 43, -912);
 
         //Android FO3: Fallout 3 = 2676, (-37, 165, 281)
-        allGameConfigs.get(2).startCellId = 2676;
-        allGameConfigs.get(2).startLocation = new Vector3f(-37, 165, 281);
+        //allGameConfigs.get(2).startCellId = 2676;
+        //allGameConfigs.get(2).startLocation = new Vector3f(-37, 165, 281);
 
         //Android FONV: Fallout New Vegas = 1064441, (23, 94, -24)
-        allGameConfigs.get(3).startCellId = 1064441;
-        allGameConfigs.get(3).startLocation = new Vector3f(23, 94, -24);
+        //allGameConfigs.get(3).startCellId = 1064441;
+        ///allGameConfigs.get(3).startLocation = new Vector3f(23, 94, -24);
 
         //Android TESV: Skyrim = 107119, (251, -44, 94)
-        allGameConfigs.get(4).startCellId = 107119;
-        allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
+        //allGameConfigs.get(4).startCellId = 107119;
+        //allGameConfigs.get(4).startLocation = new Vector3f(251, -44, 94);
 
         //Android FO4: Fallout 4 = 7768, (19, 1, 5)
-        allGameConfigs.get(5).startCellId = 7768;// inside house at stadium home base
-        allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
+        //allGameConfigs.get(5).startCellId = 7768;// inside house at stadium home base
+        //allGameConfigs.get(5).startLocation = new Vector3f(19, 1, 5);
 
         //allGameConfigs.get(5).startCellId = 3988;// inside stadium
         //allGameConfigs.get(5).startLocation = new Vector3f(31, -17, -77);
@@ -443,6 +445,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                     // load up the esm file
                     IDashboard.dashboard.setEsmLoading(1);
+
                     DocumentFile rootFolder = DocumentFile.fromTreeUri(ScrollsExplorer.this.parentActivity, Uri.parse(selectedGameConfig.scrollsFolder));
                     DocumentFile esmDF = rootFolder.findFile(selectedGameConfig.mainESMFile);
                     esmManager = ESMManagerUri.getESMManager(ScrollsExplorer.this.parentActivity, esmDF.getUri());
@@ -547,10 +550,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                             }
                         }
 
-
-                        //TODO: let the users pick this
-                        boolean useLastSave = false;
-                        if (useLastSave) {
+                        // -1 means show the cell picker
+                        if (gameConfigToLoad.startCellId != -1) {
                             YawPitch yp = selectedGameConfig.startYP;
                             Vector3f trans = selectedGameConfig.startLocation;
                             int prevCellformid = selectedGameConfig.startCellId;
@@ -606,10 +607,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                     } else {
                         System.out.println("esm manger is null, I just don't know why..." + esmDF.getUri());
                     }
-
-
                 }
-
             }
         };
         t.start();
@@ -618,43 +616,67 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
     private void findADoor(int formToLoad, YawPitch yp, Vector3f trans) {
         J3dICellFactory j3dCellFactory = selectedGameConfig.j3dCellFactory;
         if (j3dCellFactory != null) {
-            // if SimpleBethCellManager.setSources has been called the persistent children will have been loaded
 
-            PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
             ArrayList<CommonREFR> doors = new ArrayList<>();
+            if (selectedGameConfig.gameName != "TESIII: Morrowind") {
+                // if SimpleBethCellManager.setSources has been called the persistent children will have been loaded
+                PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
+                for (Record record : cellChildGroups.getRecordList()) {
+                    // is this a door way?
+                    if (record.getRecordType().equals("REFR")) {
+                        // don't go game specific just the common data needed (which include XTEL!)
+                        CommonREFR commonREFR = new CommonREFR(record, true);
+                        XTEL xtel = commonREFR.XTEL;
+                        //if we are a door outward we have a door inward
+                        if (xtel != null) {
+                            Record otherDoor;
+                            if (xtel.doorFormId != 0) {
+                                otherDoor = j3dCellFactory.getRecord(xtel.doorFormId);
+                                if (otherDoor != null) {
+                                    CommonREFR otherDoorCommonREFR = new CommonREFR(otherDoor, true);
+                                    doors.add(otherDoorCommonREFR);
+                                }
+                            }
+                        }
 
-            for (Record record : cellChildGroups.getRecordList()) {
-                // is this a door way?
-                if (record.getRecordType().equals("REFR")) {
-                    // don't go game specific just the common data needed (which include XTEL!)
-                    CommonREFR commonREFR = new CommonREFR(record, true);
-                    XTEL xtel = commonREFR.XTEL;
-                    //if we are a door outward we are a door inward
-                    // but position and translation are actually on the other record so just land on this door will do for now
-
-                    if (xtel != null) {
-
-                        //TODO: find the other door record and find out what it thinks of this doors exis position
-                        //int otherDoorFormId = xtel.doorFormId;
-                        //int otherCellFormID = j3dCellFactory.getCellIdOfPersistentTarget(otherDoorFormId);
-                        Record otherDoor = j3dCellFactory.getRecord(xtel.doorFormId);
-
-                        if (otherDoor != null) {
-                            CommonREFR otherDoorCommonREFR = new CommonREFR(otherDoor, true);
-                            doors.add(otherDoorCommonREFR);
+                    }
+                }
+            } else {
+                // no persistent system, just load them all!
+                PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
+                for (Record record : cellChildGroups.getRecordList()) {
+                    // is this a door way?
+                    if (record.getRecordType().equals("REFR")) {
+                        // morrowind has a half pie system using DNAM
+                        // morrowind has no match inwards door so we'll have to make up t and yp
+                        if (selectedGameConfig.gameName == "TESIII: Morrowind") {
+                            esmj3dtes3.data.records.REFR commonREFR = new esmj3dtes3.data.records.REFR(record);
+                            doors.add(commonREFR);
                         }
                     }
                 }
-
             }
+
             if (doors.size() > 0) {
                 int idx = (int) (Math.random() * (doors.size() - 1));
-                XTEL xtel = doors.get(idx).XTEL; // note this is the otehr door so teh exit is right but it's cell is not our cell
-                Vector3f t = ActionableMouseOverHandler.getTrans(xtel.x, xtel.y, xtel.z);
-                t.y += 1; // cos it's the floor I reckon, nay something off in all direction a bit here
-                Quat4f r = ActionableMouseOverHandler.getRot(xtel.rx, xtel.ry, xtel.rz);
-                trans.set(t);
-                yp.set(r);
+                if (selectedGameConfig.gameName != "TESIII: Morrowind") {
+                    XTEL xtel = doors.get(idx).XTEL; // note this is the other door so the exit is right but it's cell is not our cell
+                    Vector3f t = ActionableMouseOverHandler.getTrans(xtel.x, xtel.y, xtel.z);
+                    t.y += 1; // TODO: cos it's the floor I reckon, nay something off in all direction a bit here
+                    Quat4f r = ActionableMouseOverHandler.getRot(xtel.rx, xtel.ry, xtel.rz);
+                    trans.set(t);
+                    yp.set(r);
+                } else {
+                    esmj3dtes3.data.records.REFR refr = (esmj3dtes3.data.records.REFR) doors.get(idx);
+                    Vector3f loc = refr.getTrans();
+                    Vector3f rot = refr.getEulerRot();
+                    //TODO:  location needs to be pushed forward in facing as this is just the door itself
+                    Vector3f t = ActionableMouseOverHandler.getTrans(loc.x, loc.y, loc.z);
+                    t.y += 1; // TODO: cos it's the floor I reckon, nay something off in all direction a bit here
+                    Quat4f r = ActionableMouseOverHandler.getRot(rot.x, rot.y, rot.z);
+                    trans.set(t);
+                    yp.set(r);
+                }
             }
         }
 
