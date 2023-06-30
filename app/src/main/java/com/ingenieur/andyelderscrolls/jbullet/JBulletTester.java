@@ -1,7 +1,5 @@
 package com.ingenieur.andyelderscrolls.jbullet;
 
-
-import android.app.Activity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,8 +18,6 @@ import com.ingenieur.andyelderscrolls.utils.BSAArchiveFileChooser;
 
 import org.jogamp.vecmath.Vector3f;
 
-import java.io.File;
-
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import bsaio.ArchiveEntry;
@@ -30,10 +26,10 @@ import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
-import nif.shaders.NiGeometryAppearanceShader;
+import nif.shader.NiGeometryAppearanceShader;
+import nif.shader.ShaderSourceIO;
 import nifbullet.BulletNifModelClassifier;
 import scrollsexplorer.GameConfig;
-import tools3d.utils.ShaderSourceIO;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 
