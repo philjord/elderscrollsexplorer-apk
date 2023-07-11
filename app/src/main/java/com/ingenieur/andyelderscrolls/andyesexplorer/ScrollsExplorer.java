@@ -49,6 +49,9 @@ import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import javaawt.VMEventQueue;
+import javaawt.image.VMBufferedImage;
+import javaawt.imageio.VMImageIO;
 import nif.BgsmSource;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
@@ -129,7 +132,13 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
         ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-        BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
+        BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
+
+        //these 3 test the "no dds support" issue and solution on phones
+        BsaTextureSource.DECOMPRESS_DDS = true;
+        javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
+        javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
+        javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
 
         BethRenderSettings.setFarLoadGridCount(4);
         BethRenderSettings.setNearLoadGridCount(2);

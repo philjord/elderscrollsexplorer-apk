@@ -32,6 +32,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import bsa.source.BsaTextureSource;
+import javaawt.VMEventQueue;
+import javaawt.image.VMBufferedImage;
+import javaawt.imageio.VMImageIO;
 import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
@@ -77,6 +81,9 @@ public class ElderScrollsActivity extends Activity {
                 "\t\tJoglesPipeline.ATTEMPT_OPTIMIZED_VERTICES = false;\n" +
                 "\t\tJoglesPipeline.COMPRESS_OPTIMIZED_VERTICES = false;\n" +
                 "\t\tJoglesPipeline.LATE_RELEASE_CONTEXT = false;");
+
+
+
 
 
         // android has a different system from windows
