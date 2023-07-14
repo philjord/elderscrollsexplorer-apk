@@ -135,7 +135,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
 
         //these 3 test the "no dds support" issue and solution on phones
-        BsaTextureSource.DECOMPRESS_DDS = true;
+        CompressedTextureLoader.RETURN_DECOMPRESSED_DDS = true;
         javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
         javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
         javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);

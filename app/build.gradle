@@ -99,7 +99,5 @@ dependencies {
 
     implementation ('org.jogamp.java3d:java3d-core-and:1.7.1' ) { changing = true }
     implementation ('org.jogamp.java3d:java3d-utils-and:1.7.1') { changing =  true }
-
-
 }
 
