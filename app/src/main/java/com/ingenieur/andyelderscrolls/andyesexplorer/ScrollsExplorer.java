@@ -132,20 +132,16 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
         ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
-        BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.DDS;
+        // this will favour KTX then decompressed DDS
+        BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.ALL;
 
-        //these 3 test the "no dds support" issue and solution on phones
+        //these allow the "no dds support" issue and solution on phones
         CompressedTextureLoader.RETURN_DECOMPRESSED_DDS = true;
         javaawt.image.BufferedImage.installBufferedImageDelegate(VMBufferedImage.class);
         javaawt.imageio.ImageIO.installBufferedImageImpl(VMImageIO.class);
         javaawt.EventQueue.installEventQueueImpl(VMEventQueue.class);
 
-        BethRenderSettings.setFarLoadGridCount(4);
-        BethRenderSettings.setNearLoadGridCount(2);
-        BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-        BethRenderSettings.setObjectFade(100);
-        BethRenderSettings.setItemFade(60);
-        BethRenderSettings.setActorFade(35);
+
         BethRenderSettings.setOutlineFocused(true);
         BethRenderSettings.setEnablePlacedLights(true);
         BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
@@ -165,7 +161,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         if (gameConfigId == -1)
             gameConfigToLoad.startCellId = -1;
 
-
         BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
 
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
@@ -176,29 +171,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
             J3dLAND.setTes3();
             BethRenderSettings.setTes3(true);
-
-            // for syda neen performance
-            //J3dCELL.DO_DUMP = true;
-            BethRenderSettings.setFarLoadGridCount(4);
-            BethWorldVisualBranch.FOG_START = 75;
-            BethWorldVisualBranch.FOG_END = 150;
-
-            //long distance view
-            //BethRenderSettings.setFarLoadGridCount(16);
-            //BethRenderSettings.setFogEnabled(false);
-        } else {
-            AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
-
-            //TODO: must make a per game setting recorder for this gear!
-
-            //oblivion goes hard, others are cautious for now
-            if (!gameConfigToLoad.folderKey.equals("OblivionFolder")) {
-                BethRenderSettings.setFarLoadGridCount(0);
-                BethRenderSettings.setNearLoadGridCount(2);
-                BethRenderSettings.setLOD_LOAD_DIST_MAX(0);
-                BethWorldVisualBranch.FOG_START = 75;
-                BethWorldVisualBranch.FOG_END = 150;
-            }
         }
 
         // default to none
@@ -215,7 +187,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
         dragMouseAdapter.setListener(this);
 
-        // start teh actual game up!
+        // start the actual game up!
         if (hasESMAndBSAFiles(gameConfigToLoad)) {
             setSelectedGameConfig(gameConfigToLoad);
         } else {
@@ -341,6 +313,57 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                         BgsmSource.setBgsmSource(meshSource);
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
+
+
+                        // do we have some ktx images or are we stuck with slow big dds decompress
+                        boolean ddsDecompressing = !((BsaTextureSource) textureSource).hasKTX() && !((BsaTextureSource) textureSource).hasASTC();
+
+                        if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
+
+                            BethRenderSettings.setFarLoadGridCount(4);
+                            BethRenderSettings.setNearLoadGridCount(2);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+                            BethRenderSettings.setObjectFade(100);
+                            BethRenderSettings.setItemFade(80);
+                            BethRenderSettings.setActorFade(35);
+                            BethWorldVisualBranch.FOG_START = 100;
+                            BethWorldVisualBranch.FOG_END = 250;
+
+                            //long distance view
+                            //BethRenderSettings.setFarLoadGridCount(16);
+                            //BethRenderSettings.setFogEnabled(false);
+                        } else {
+                            AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
+
+                            //TODO: must make a per game setting recorder for this gear!
+
+                            // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
+                            if(ddsDecompressing)
+                                CompressedTextureLoader.DROP_0_MIP = true;
+
+                            //oblivion goes hard, others are cautious for now
+                            if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
+                                BethRenderSettings.setFarLoadGridCount(4);
+                                BethRenderSettings.setNearLoadGridCount(1);
+                                BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+                                BethRenderSettings.setObjectFade(100);
+                                BethRenderSettings.setItemFade(80);
+                                BethRenderSettings.setActorFade(35);
+                                BethWorldVisualBranch.FOG_START = 150;
+                                BethWorldVisualBranch.FOG_END = 350;
+                            }  else  {
+                                BethRenderSettings.setFarLoadGridCount(3);
+                                BethRenderSettings.setNearLoadGridCount(1);
+                                BethRenderSettings.setLOD_LOAD_DIST_MAX(16);
+                                BethRenderSettings.setObjectFade(50);
+                                BethRenderSettings.setItemFade(60);
+                                BethRenderSettings.setActorFade(35);
+                                BethWorldVisualBranch.FOG_START = 75;
+                                BethWorldVisualBranch.FOG_END = 150;
+                            }
+                        }
+
+
 
                         simpleWalkSetup.configure(meshSource, simpleBethCellManager);
                         simpleWalkSetup.setEnabled(false);
