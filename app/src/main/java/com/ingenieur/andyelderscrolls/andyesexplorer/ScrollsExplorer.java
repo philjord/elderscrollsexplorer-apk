@@ -317,29 +317,29 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                         // do we have some ktx images or are we stuck with slow big dds decompress
                         boolean ddsDecompressing = !((BsaTextureSource) textureSource).hasKTX() && !((BsaTextureSource) textureSource).hasASTC();
+                        // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
+                        if (ddsDecompressing)
+                            CompressedTextureLoader.DROP_0_MIP = true;
 
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
 
-                            BethRenderSettings.setFarLoadGridCount(4);
+                            BethRenderSettings.setFarLoadGridCount(8);
                             BethRenderSettings.setNearLoadGridCount(2);
                             BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-                            BethRenderSettings.setObjectFade(100);
-                            BethRenderSettings.setItemFade(80);
-                            BethRenderSettings.setActorFade(35);
-                            BethWorldVisualBranch.FOG_START = 100;
-                            BethWorldVisualBranch.FOG_END = 250;
+                            BethRenderSettings.setObjectFade(150);
+                            BethRenderSettings.setItemFade(120);
+                            BethRenderSettings.setActorFade(50);
+                            BethRenderSettings.setFogEnabled(false);
+                            //BethWorldVisualBranch.FOG_START = 100;
+                            //BethWorldVisualBranch.FOG_END = 250;
 
                             //long distance view
                             //BethRenderSettings.setFarLoadGridCount(16);
-                            //BethRenderSettings.setFogEnabled(false);
+                            //
                         } else {
                             AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
 
                             //TODO: must make a per game setting recorder for this gear!
-
-                            // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
-                            if(ddsDecompressing)
-                                CompressedTextureLoader.DROP_0_MIP = true;
 
                             //oblivion goes hard, others are cautious for now
                             if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
