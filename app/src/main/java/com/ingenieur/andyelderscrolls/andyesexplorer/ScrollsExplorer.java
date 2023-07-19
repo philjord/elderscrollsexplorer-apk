@@ -292,16 +292,15 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                     if (esmManager != null) {
                         new EsmSoundKeyToName(esmManager);
                         MeshSource meshSource;
-                        TextureSource textureSource;
+                        BsaTextureSource textureSource;
                         SoundSource soundSource;
 
-                        //TODO TODO:  KTX file are not in my bsa at all, I need ot convert on the fly and cache out
-                        // TODO: dump the obb stuff and simply convert compressed texture on the fly and record them somewhere(in the game folder?)
+                        //TODO:  KTX files I need to convert on the fly and cache out from the raw dds files of the games
                         bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, false);
 
 
-                        if (bsaFileSet == null || bsaFileSet.size() == 0) {
-                            System.err.println("bsa is null or size is 0 :(" + selectedGameConfig.scrollsFolder);
+                        if (bsaFileSet.size() == 0) {
+                            System.err.println("bsa size is 0 :( " + selectedGameConfig.scrollsFolder);
                             return;
                         }
 
@@ -316,13 +315,17 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 
                         // do we have some ktx images or are we stuck with slow big dds decompress
-                        boolean ddsDecompressing = !((BsaTextureSource) textureSource).hasKTX() && !((BsaTextureSource) textureSource).hasASTC();
+                        boolean ddsDecompressing = !textureSource.hasKTX() && !textureSource.hasASTC();
+                        System.out.println("ddsDecompressing = " + ddsDecompressing);
+
                         // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
                         if (ddsDecompressing)
                             CompressedTextureLoader.DROP_0_MIP = true;
 
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
 
+                            //Morrowind is tiny, never drop mips uncompressed and be damned!
+                            CompressedTextureLoader.DROP_0_MIP = false;
                             BethRenderSettings.setFarLoadGridCount(8);
                             BethRenderSettings.setNearLoadGridCount(2);
                             BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
@@ -344,22 +347,29 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                             //oblivion goes hard, others are cautious for now
                             if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
                                 BethRenderSettings.setFarLoadGridCount(4);
-                                BethRenderSettings.setNearLoadGridCount(1);
-                                BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+                                BethRenderSettings.setNearLoadGridCount(2);
+                                BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
                                 BethRenderSettings.setObjectFade(100);
                                 BethRenderSettings.setItemFade(80);
-                                BethRenderSettings.setActorFade(35);
-                                BethWorldVisualBranch.FOG_START = 150;
-                                BethWorldVisualBranch.FOG_END = 350;
-                            }  else  {
+                                BethRenderSettings.setActorFade(40);
+                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
+                            }  else if (gameConfigToLoad.folderKey.startsWith("Fallout")) {
                                 BethRenderSettings.setFarLoadGridCount(3);
                                 BethRenderSettings.setNearLoadGridCount(1);
-                                BethRenderSettings.setLOD_LOAD_DIST_MAX(16);
-                                BethRenderSettings.setObjectFade(50);
-                                BethRenderSettings.setItemFade(60);
+                                BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+                                BethRenderSettings.setObjectFade(80);
+                                BethRenderSettings.setItemFade(70);
                                 BethRenderSettings.setActorFade(35);
-                                BethWorldVisualBranch.FOG_START = 75;
-                                BethWorldVisualBranch.FOG_END = 150;
+                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
+                            }  else  {
+                                //skyrim or fallout 4
+                                BethRenderSettings.setFarLoadGridCount(2);
+                                BethRenderSettings.setNearLoadGridCount(1);
+                                BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+                                BethRenderSettings.setObjectFade(50);
+                                BethRenderSettings.setItemFade(50);
+                                BethRenderSettings.setActorFade(35);
+                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
                             }
                         }
 
