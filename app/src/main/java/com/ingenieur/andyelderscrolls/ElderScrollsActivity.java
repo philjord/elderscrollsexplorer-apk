@@ -178,21 +178,23 @@ public class ElderScrollsActivity extends Activity {
         if (folder.isDirectory()) {
             // if so check for an esm in us record it, and leave (do not dig deeper)
             for (DocumentFile file : folder.listFiles()) {
-                // let's see if this guy is one of our game configs
-                String fileName = file.getName();
-                for (GameConfig gameConfig : GameConfig.allGameConfigs) {
-                   // System.out.println("checking " + folder.getName() + " against " + gameConfig.gameName);
-                    if (gameConfig.mainESMFile.equals(fileName)) {
-                        System.out.println("Matched esm file name! " + gameConfig.gameName);
+                if (!file.isDirectory()) {
+                    // let's see if this guy is one of our game configs
+                    String fileName = file.getName();
+                    for (GameConfig gameConfig : GameConfig.allGameConfigs) {
+                        // System.out.println("checking " + folder.getName() + " against " + gameConfig.gameName);
+                        if (gameConfig.mainESMFile.equals(fileName)) {
+                            System.out.println("Matched esm file name! " + gameConfig.gameName);
 
-                        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                        SharedPreferences.Editor editor = settings.edit();
-                        // note we record the folder not the esm file itself
-                        editor.putString(GAME_FOLDER + gameConfig.folderKey, folder.getUri().toString());
-                        editor.apply();
-                        System.out.println("Saved to Prefs " + GAME_FOLDER + gameConfig.folderKey + " : " + folder.getUri().toString());
-                        // leave the method, do not check siblings, do not check sub folders
-                        return 1;
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            // note we record the folder not the esm file itself
+                            editor.putString(GAME_FOLDER + gameConfig.folderKey, folder.getUri().toString());
+                            editor.apply();
+                            System.out.println("Saved to Prefs " + GAME_FOLDER + gameConfig.folderKey + " : " + folder.getUri().toString());
+                            // leave the method, do not check siblings, do not check sub folders
+                            return 1;
+                        }
                     }
                 }
             }

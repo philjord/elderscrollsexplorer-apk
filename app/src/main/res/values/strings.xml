@@ -17,12 +17,11 @@ Call of Red Mountain uses the assets from Morrowind by Bethesda Game Studios (20
 In order to play this game you must have acquired those files in some manner, they are not distributed with this game engine.<br>
 Please copy the Morrowind installation folder onto your device now, this can be up to 1.2Gb (or more) so you will need plenty of sdcard space.<br>
 You can copy it to any location that is accessible from your computer\'s file explorer.<br>
-There is an video of how to do this here:<br>
+There is a very out of data video of how to do this here, it uses old version of the Android operating system:<br>
 <a href="https://www.youtube.com/watch?v=q_MmQSTznh4">Call or Red Mountain setup demonstration</a><br>
 </p>
 <p>
-When you first start up Call of Red Mountain you will be asked to select the Morrowind.esm file that is located in that game installation folder
-on your device. From there the game engine will locate the other asset files relative to that esm file. <br>
+When you first start up Call of Red Mountain you will be asked to select the folder that contains the Morrowind.esm file on your device. From there the game engine will locate the other asset files relative to that esm file. <br>
 </p>
 <p>
 There are several pre-set start locations and configurations, or you can use the in game options menu to warp around.<br>
@@ -31,33 +30,22 @@ There are several pre-set start locations and configurations, or you can use the
 Options and Free fly can be clicked in the character screen.
 Some Icons by Icons8 https://icons8.com
 </p>
-<p>If you have some time and own the game Oblivion you could attempt to build a converted texture file and play it<br>
-To do that please follow these instructions:<br>
-<a href="https://www.dropbox.com/s/s6mc0tzt1u6pv3d/CoRM%20texture%20conversion.zip?dl=0">CoRM texture conversion</a>
+<p>If you have some time and own the other Bethesda games: Oblivion, Fallout 3, Skyrim, Fallout4.
+You can copy the games files onto your phone and run ElderScrollsExplorer from the button at the bottom.<br>
 ]]></string>
     <string name="welcometextyes">Remind me later</string>
     <string name="welcometextno">Don\'t remind me</string>
-    <string name="wait_file_download">file downloading</string>
     <string name="capturelogs">Write log</string>
     <string name="dontcapturelogs">Don\'t write log</string>
     <string name="menu_test_3d">Test 3D</string>
     <string name="menu_help">Help</string>
     <string name="menu_about">About</string>
-    <string name="menu_donate">Donate</string>
     <string name="menu_optomize">Optomize</string>
     <string name="menu_anti_alias">x2 AA</string>
-    <string name="donations__description">Do you love Morrowind?\nAny support would be gratefully appreciated and may assist in speeding up development!</string>
     <string name="menu_options">Options</string>
     <string name="menu_start_tools">Start Tools</string>
     <string name="lt"><![CDATA[<]]></string>
     <string name="gt"><![CDATA[>]]></string>
     <string name="menu_gyroscope">gyroscope</string>
     <string name="menu_privacy">Privacy Policy</string>
-    <string-array name="donation_google_catalog_values">
-        <item>Donation 1</item>
-        <item>Donation 2</item>
-        <item>Donation 5</item>
-        <item>Donation 10</item>
-        <item>Donation 20</item>
-    </string-array>
 </resources>

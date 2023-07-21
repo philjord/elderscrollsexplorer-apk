@@ -88,13 +88,59 @@ public class MorrowindActivity extends Activity {
 
         setContentView(R.layout.morrowind);
 
+
+        // Possibly show welcome screen
+        SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+        boolean welcomeScreenUnwanted = settings.getBoolean(WELCOME_SCREEN_UNWANTED, false);
+
+        if (welcomeScreenUnwanted) {
+            getFilePermissions();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Add the buttons
+            builder.setPositiveButton(R.string.welcometextyes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // do remind again so no prefs
+                    getFilePermissions();
+                }
+            });
+            builder.setNegativeButton(R.string.welcometextno, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // don't remind again
+                    SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(WELCOME_SCREEN_UNWANTED, true);
+                    editor.apply();
+                    getFilePermissions();
+                }
+            });
+
+            String welcomeMessage = this.getString(R.string.welcometext);
+            TextView textView = new TextView(this);
+            textView.setPadding(10, 10, 10, 10);
+            textView.setText(Html.fromHtml(welcomeMessage));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+            builder.setView(textView);
+
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+
+    private void getFilePermissions() {
+
+        //CAREFEUL!! shared prefs can be not wiped on uninstall, see AndroidManifest.xml
+        //https://stackoverflow.com/questions/35517239/sharedpreferences-are-not-being-cleared-when-i-uninstall
         SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
         String baseFolder = preferences.getString(MORROWIND_BASE_FOLDER, null);
         Uri baseFolderUri = null;
         if (baseFolder != null) {
             baseFolderUri = Uri.parse(baseFolder);
             if (baseFolderUri != null) {
-                possiblyShowWelcomeScreen();
+                attemptLaunchMorrowind();
             }
         }
 
@@ -172,9 +218,6 @@ public class MorrowindActivity extends Activity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
-            case R.id.menu_donate:
-                // no more donations from this guy, google play one day perhaps
-                return true;
             case R.id.menu_privacy:
                 String urlStr = "https://sites.google.com/view/corm-privacy/home";
                 Uri webpage = Uri.parse(urlStr);
@@ -210,7 +253,7 @@ public class MorrowindActivity extends Activity {
                     getContentResolver().takePersistableUriPermission(data.getData(), takeFlags);
                     SharedPreferences preferences = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
                     preferences.edit().putString(MORROWIND_BASE_FOLDER, data.getData().toString()).apply();
-                    possiblyShowWelcomeScreen();
+                    attemptLaunchMorrowind();
                 } else {
                     //try again?
                     //possibly let's not infinite loop in case they really want ESE
@@ -228,45 +271,6 @@ public class MorrowindActivity extends Activity {
     }
 
 
-    private void possiblyShowWelcomeScreen() {
-        SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
-        boolean welcomeScreenUnwanted = settings.getBoolean(WELCOME_SCREEN_UNWANTED, false);
-
-        if (welcomeScreenUnwanted) {
-            attemptLaunchMorrowind();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            // Add the buttons
-            builder.setPositiveButton(R.string.welcometextyes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // do remind again so no prefs
-                    attemptLaunchMorrowind();
-                }
-            });
-            builder.setNegativeButton(R.string.welcometextno, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // don't remind again
-                    SharedPreferences settings = getSharedPreferences(MORROWIND_PREFS_NAME, 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(WELCOME_SCREEN_UNWANTED, true);
-                    editor.apply();
-                    attemptLaunchMorrowind();
-                }
-            });
-
-            String welcomeMessage = this.getString(R.string.welcometext);
-            TextView textView = new TextView(this);
-            textView.setPadding(10, 10, 10, 10);
-            textView.setText(Html.fromHtml(welcomeMessage));
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-
-            builder.setView(textView);
-
-            // Create the AlertDialog
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-    }
 
     /**
      * new version for getting a whole directory

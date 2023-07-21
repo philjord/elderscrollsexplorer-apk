@@ -7,6 +7,6 @@ public final class BuildConfig {
   public static final boolean DEBUG = Boolean.parseBoolean("true");
   public static final String APPLICATION_ID = "com.ingenieur.ese.eseandroid";
   public static final String BUILD_TYPE = "debug";
-  public static final int VERSION_CODE = 141;
-  public static final String VERSION_NAME = "1.41";
+  public static final int VERSION_CODE = 142;
+  public static final String VERSION_NAME = "1.42";
 }
