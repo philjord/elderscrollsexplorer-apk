@@ -58,47 +58,9 @@
 -dontwarn net.java.games.**
 -dontwarn org.lwjgl.**
 
-#jogl
--dontwarn jogamp.opengl.**
--dontwarn com.jogamp.opengl.**
--dontwarn com.jogamp.common.util.awt.**
--dontwarn com.jogamp.nativewindow.**
-
-
-
-#if any class not found issues occured replace all "-keep" lines below with these 2 lines
-# -keep class com.jogamp.** { *; }
-# -keep class jogamp.** { *; }
-
-#gluegen-rt-android.jar
--keep class jogamp.common.os.android.AndroidUtilsImpl { *; }
-
-#joal-android.jar
--keep class com.jogamp.openal.** { *; }
--keep class jogamp.openal.** { *; }
-
-#jogl-all-android.jar
--keep class com.jogamp.nativewindow.egl.EGLGraphicsDevice { *; }
--keep class com.jogamp.opengl.egl.** { *; }
-
--keep class jogamp.graph.font.typecast.TypecastFontConstructor { *; }
--keep class jogamp.graph.curve.opengl.shader.** { *; }
-
--keep class jogamp.newt.driver.** { *; }
--keep class jogamp.opengl.** { *; }
 
 #my code
 -keep class nif.** { *; }
 
-
-# Don't obfuscate any NDK/SDK code. This makes the debugging of stack traces in
-# in release builds easier.
--keepnames class com.google.vr.ndk.** { *; }
--keepnames class com.google.vr.sdk.** { *; }
-
-# These are part of the Java <-> native interfaces for GVR.
--keepclasseswithmembernames,includedescriptorclasses class com.google.vr.** {
-    native <methods>;
-}
 
 
