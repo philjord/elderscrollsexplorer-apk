@@ -22,7 +22,7 @@ public class MasterFC extends Master {
 	}
 
 	@Override
-	public void load() throws PluginException, DataFormatException, IOException {
+	public boolean load() throws PluginException, DataFormatException, IOException {
 
 		FileChannelRAF in;
 		if (masterFile.size() > Integer.MAX_VALUE || !ESMManager.USE_FILE_MAPS)
@@ -30,7 +30,7 @@ public class MasterFC extends Master {
 		else
 			in = new FileChannelRAF(masterFile, "r");
 
-		super.load(in);
+		return super.load(in);
 
 	}
 }
