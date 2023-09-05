@@ -17,6 +17,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.andyesexplorer.ui.GLWindowOverLay;
 import com.jogamp.graph.font.FontFactory;
+import com.jogamp.graph.ui.shapes.Label;
 import com.jogamp.nativewindow.NativeWindowException;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.opengl.GLWindow;
@@ -24,7 +25,6 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
 
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.vecmath.AxisAngle4f;
@@ -41,7 +41,6 @@ import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.navigation.twocircles.NavigationInputNewtMove;
 import tools3d.utils.YawPitch;
 
-
 public class AndyESEVRFragment extends NewtBaseFragment
 {
 	private GLWindow gl_window;
@@ -56,10 +55,7 @@ public class AndyESEVRFragment extends NewtBaseFragment
 	{
 		super.onCreate(state);
 
-
 		createGLWindow();
-
-
 
 		//PHIL DO THIS http://mesai0.blogspot.co.nz/2013/03/outdoorgeo-augmented-reality-camera.html
 		// Configure sensors and touch in the Activity constructor.
@@ -71,9 +67,7 @@ public class AndyESEVRFragment extends NewtBaseFragment
 			//TODO: why doesn't			Sensor.TYPE_GAME_ROTATION_VECTOR work at all
 			phoneOrientationListener = new PhoneOrientationListener();
 
-
-
-			//when uncommenting tlook below to onPause and onResume
+			//when uncommenting look below to onPause and onResume
 		}
 	}
 
@@ -128,15 +122,15 @@ public class AndyESEVRFragment extends NewtBaseFragment
 					float pixelSizeFPS = 0.00006F * (float) canvas3D2D.getGLWindow().getSurfaceHeight();
 					try
 					{
-						debuglabel = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+						debuglabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 						canvas3D2D.addUIShape(debuglabel);
 						debuglabel.setEnabled(true);
-						debuglabel.translate(-0.9F, 0F, 0f);
+						debuglabel.moveTo(-0.9F, 0F, 0f);
 						debuglabel.setColor(1f, 1f, 1f, 0.85f);
-						debuglabel2 = new Label(canvas3D2D.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+						debuglabel2 = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 						canvas3D2D.addUIShape(debuglabel2);
 						debuglabel2.setEnabled(true);
-						debuglabel2.translate(-0.9F, 0.2F, 0f);
+						debuglabel2.moveTo(-0.9F, 0.2F, 0f);
 						debuglabel2.setColor(1f, 1f, 1f, 0.85f);
 
 					}

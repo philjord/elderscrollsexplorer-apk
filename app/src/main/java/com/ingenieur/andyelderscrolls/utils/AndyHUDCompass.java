@@ -1,7 +1,7 @@
 package com.ingenieur.andyelderscrolls.utils;
 
 import com.jogamp.graph.font.FontFactory;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
+import com.jogamp.graph.ui.shapes.Label;
 
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
@@ -31,16 +31,16 @@ public class AndyHUDCompass implements LocationUpdateListener
 		float pixelSizeFPS = 0.00008F * (float) canvas.getGLWindow().getSurfaceHeight();
 		try
 		{
-			textElementBear = new Label(canvas.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+			textElementBear = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementBear);
 			textElementBear.setEnabled(true);
-			textElementBear.translate(-0.88F, 0.59F, 0f);
+			textElementBear.moveTo(-0.88F, 0.59F, 0f);
 			textElementBear.setColor(0f, 0f, 0f, 1f);
 
-			textElementAzi = new Label(canvas.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+			textElementAzi = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementAzi);
 			textElementAzi.setEnabled(true);
-			textElementAzi.translate(-0.88f, 0.52f, 0f);
+			textElementAzi.moveTo(-0.88f, 0.52f, 0f);
 			textElementAzi.setColor(0f, 0f, 0f, 1f);
 
 		}

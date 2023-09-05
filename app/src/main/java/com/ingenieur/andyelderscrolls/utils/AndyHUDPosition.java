@@ -1,7 +1,7 @@
 package com.ingenieur.andyelderscrolls.utils;
 
 import com.jogamp.graph.font.FontFactory;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
+import com.jogamp.graph.ui.shapes.Label;
 
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
@@ -18,7 +18,6 @@ public class AndyHUDPosition implements LocationUpdateListener
 {
 	private Label posLabel;
 
-
 	public AndyHUDPosition()
 	{
 	}
@@ -28,10 +27,10 @@ public class AndyHUDPosition implements LocationUpdateListener
 		float pixelSizeFPS = 0.00008F * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
 		try
 		{
-			posLabel = new Label(canvas3d2d.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+			posLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(posLabel);
 			posLabel.setEnabled(true);
-			posLabel.translate(-0.88F, 0.67F, 0f);
+			posLabel.moveTo(-0.88F, 0.67F, 0f);
 			posLabel.setColor(0.0f, 0.1f, 0.1f, 0.85f);
 		}
 		catch (IOException e)

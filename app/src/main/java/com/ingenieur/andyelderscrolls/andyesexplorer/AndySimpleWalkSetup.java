@@ -4,12 +4,10 @@ import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
-import com.jogamp.graph.font.FontFactory;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.BoundingSphere;
@@ -26,9 +24,6 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
-
-
-import java.io.IOException;
 
 import esmj3d.j3d.BethRenderSettings;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
@@ -56,10 +51,7 @@ import utils.source.MeshSource;
 
 /**
  * Created by phil on 3/11/2016.
- */
 
-
-/**
  * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays,
  * physics display together,
  * <p/>

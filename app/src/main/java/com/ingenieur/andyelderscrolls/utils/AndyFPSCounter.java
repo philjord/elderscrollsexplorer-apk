@@ -1,7 +1,7 @@
 package com.ingenieur.andyelderscrolls.utils;
 
 import com.jogamp.graph.font.FontFactory;
-import com.jogamp.opengl.hudbasics.graph.demos.ui.Label;
+import com.jogamp.graph.ui.shapes.Label;
 
 import org.jogamp.java3d.Behavior;
 import org.jogamp.java3d.BranchGroup;
@@ -51,10 +51,10 @@ public class AndyFPSCounter
 		float pixelSizeFPS = 0.00015F * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
 		try
 		{
-			this.fpsLabel = new Label(canvas3d2d.getVertexFactory(), 0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
+			this.fpsLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(fpsLabel);
 			this.fpsLabel.setEnabled(true);
-			this.fpsLabel.translate(-0.88F, 0.75F, 0.0F);
+			this.fpsLabel.moveTo(-0.88F, 0.75F, 0.0F);
 			this.fpsLabel.setColor(1.0F, 1.0F, 0.0F, 1.0F);
 		}
 		catch (IOException e)
