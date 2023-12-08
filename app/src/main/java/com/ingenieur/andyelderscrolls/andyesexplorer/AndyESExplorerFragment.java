@@ -123,7 +123,8 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                     lookNavigationPanel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            scrollsExplorer.simpleWalkSetup.getCameraMouseOver().doClick();
+                            if(scrollsExplorer.simpleWalkSetup != null && scrollsExplorer.simpleWalkSetup.getCameraMouseOver() != null)
+                                scrollsExplorer.simpleWalkSetup.getCameraMouseOver().doClick();
                         }
                     });
 
