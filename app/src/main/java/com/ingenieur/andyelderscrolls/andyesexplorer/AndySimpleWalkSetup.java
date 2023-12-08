@@ -211,8 +211,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
         setupGraphicsSetting(gl_window);
 
-        this.cameraPanel.getCanvas3D2D().addNotify();
-        this.cameraPanel.startRendering();
+     //   this.cameraPanel.getCanvas3D2D().addNotify();
+     //   this.cameraPanel.startRendering();
     }
 
     public void startRenderer(GLWindow gl_window) {
@@ -540,6 +540,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         //Nothing!
     }
 
+    /**
+     * in fps but 0 = unlimited
+     */
+    public void setMaxFrameRate(int fps) {
+        long minFrame = 0;
+        if(fps>0) {
+            minFrame = 1000 / fps;
+        }
+        cameraPanel.getCanvas3D2D().getView().setMinimumFrameCycleTime(minFrame);
+    }
     /* (non-Javadoc)
      * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#setMouseLock(boolean)
      */
