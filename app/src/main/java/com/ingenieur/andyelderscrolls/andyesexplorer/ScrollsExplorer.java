@@ -2,10 +2,14 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import static scrollsexplorer.GameConfig.allGameConfigs;
 
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -29,14 +33,22 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
+import bsa.source.DDSToKTXBsaConverter;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
+import bsaio.DBException;
 import esmio.common.data.plugin.PluginGroup;
 import esmio.common.data.record.Record;
 import esmio.loader.ESMManager;
@@ -280,13 +292,14 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         Thread t = new Thread() {
             public void run() {
                 synchronized (selectedGameConfig) {
-
+                    simpleWalkSetup.setMaxFrameRate(5);
+//                    simpleWalkSetup.setEnabled(false);
                     // load up the esm file
                     IDashboard.dashboard.setEsmLoading(1);
 
-                    DocumentFile rootFolder = DocumentFile.fromTreeUri(ScrollsExplorer.this.parentActivity, Uri.parse(selectedGameConfig.scrollsFolder));
+                    DocumentFile rootFolder = DocumentFile.fromTreeUri(parentActivity, Uri.parse(selectedGameConfig.scrollsFolder));
                     DocumentFile esmDF = rootFolder.findFile(selectedGameConfig.mainESMFile);
-                    esmManager = ESMManagerUri.getESMManager(ScrollsExplorer.this.parentActivity, esmDF.getUri());
+                    esmManager = ESMManagerUri.getESMManager(parentActivity, esmDF.getUri());
                     IDashboard.dashboard.setEsmLoading(-1);
 
                     if (esmManager != null) {
@@ -295,8 +308,125 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                         BsaTextureSource textureSource;
                         SoundSource soundSource;
 
-                        //TODO:  KTX files I need to convert on the fly and cache out from the raw dds files of the games
-                        bsaFileSet = new BSArchiveSetUri(ScrollsExplorer.this.parentActivity, selectedGameConfig.scrollsFolder, false);
+                        if (bsaFileSet == null)
+                        {
+                            bsaFileSet = new BSArchiveSetUri(parentActivity, selectedGameConfig.scrollsFolder, false);
+
+                            //OK time to check that each bsa file that holds dds has a ktx equivalent and drop the dds version
+                            // or if not to convert the dds to ktx then drop the dds version
+
+                            //a list of new name/old dds archive pair so old can be taken out after new is found or created
+                            HashMap<String, ArchiveFile> neededBsas = new HashMap<String, ArchiveFile>();
+
+                            for (ArchiveFile archiveFile : bsaFileSet) {
+                                if (archiveFile != null && archiveFile.hasDDS()) {
+                                    // we want a archive with the same name but _ktx before the extension holding KTX files
+                                    String ddsArchiveName = archiveFile.getName();
+                                    String ext = ddsArchiveName.substring(ddsArchiveName.lastIndexOf("."));
+                                    String ktxArchiveName = ddsArchiveName.substring(0,ddsArchiveName.lastIndexOf("."));
+                                    ktxArchiveName = ktxArchiveName + "_ktx" + ext;
+                                    neededBsas.put(ktxArchiveName, archiveFile);
+                                }
+                            }
+
+                            //TODO: need to ask a question of the user, in case they want to try ddsDecompress (bad idea!)
+
+                            for(String ktxArchiveName : neededBsas.keySet()) {
+                                ArchiveFile ddsArchive = neededBsas.get(ktxArchiveName);
+                                String ddsArchiveName = ddsArchive.getName();
+                                //remove the dds version archive either way
+                                try {
+                                    ddsArchive.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                bsaFileSet.remove(ddsArchive);
+                                ddsArchive = null;
+
+                                boolean found = false;
+                                for (ArchiveFile archiveFile : bsaFileSet) {
+                                    //TODO: should see  if it's got ktx in it, but for now let's just prey
+                                    if (archiveFile != null && archiveFile.getName().equals(ktxArchiveName)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!found) {
+                                    System.out.println("Not found: " + ktxArchiveName + " creating now");
+
+                                    // I need the displayable version to convert so let's load a new copy of ddsArchive
+                                    FileInputStream fis;
+                                    try {
+                                        long tstart = System.currentTimeMillis();
+                                        DocumentFile ddsDF = rootFolder.findFile(ddsArchiveName);
+
+                                        Uri ddsUri = ddsDF.getUri();
+                                        System.out.println("Reloading as in displayable format " + ddsDF.getUri());
+
+                                        ParcelFileDescriptor ddsPFD = parentActivity.getContentResolver().openFileDescriptor(ddsUri, "r");
+                                        fis = new ParcelFileDescriptor.AutoCloseInputStream(ddsPFD);
+                                        ArchiveFile archiveFile = ArchiveFile.createArchiveFile(fis.getChannel(), ddsArchiveName);
+                                        archiveFile.load(true);//blocking call
+                                        System.out.println("loaded as displayable " + ddsUri  + " in " + (System.currentTimeMillis() - tstart));
+                                        //converting
+                                        tstart = System.currentTimeMillis();
+                                        // find it
+                                        DocumentFile ktxDF = rootFolder.findFile(ktxArchiveName);
+                                        // or create it (if not found)
+                                        if(ktxDF == null) {
+                                            ktxDF = rootFolder.createFile("application/octet-stream", ktxArchiveName);
+                                        }
+
+                                        ParcelFileDescriptor ktxPFD = parentActivity.getContentResolver().openFileDescriptor(ktxDF.getUri(), "rw");
+                                        FileOutputStream fos = new ParcelFileDescriptor.AutoCloseOutputStream(ktxPFD);
+                                        fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
+                                        DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), archiveFile);
+                                        System.out.println("Converting " + ddsArchiveName + " to " + ktxArchiveName + " this may take 10+ minutes ");
+                                        parentActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //screen stil sleeps just after a long time, CPU processing appears to continue anyway
+                                                parentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                                                Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to " +ktxArchiveName + " this may take 10+ minutes ", Toast.LENGTH_LONG)
+                                                        .show();
+                                            }
+                                        });
+
+                                        convert.start();
+                                        try {
+                                            convert.join();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        parentActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                                                Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to " +ktxArchiveName + " finished ", Toast.LENGTH_LONG)
+                                                        .show();
+                                            }
+                                        });
+                                        System.out.println(""	+ (System.currentTimeMillis() - tstart) + "ms to compress " + ktxArchiveName);
+                                        // have to re locate it for some reason to load it
+                                        ktxDF = rootFolder.findFile(ktxArchiveName);
+                                        ktxPFD = parentActivity.getContentResolver().openFileDescriptor(ktxDF.getUri(), "r");
+                                        // now load that newly created file into the system
+                                        fis = new ParcelFileDescriptor.AutoCloseInputStream(ktxPFD);
+                                        bsaFileSet.loadFileAndWait(fis.getChannel(), ktxArchiveName);
+
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    } catch (DBException e1) {
+                                        e1.printStackTrace();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
+                        //TODO: Morrowind appears to have sound and music as a separate gosh darned file system system! not in a bsa
 
 
                         if (bsaFileSet.size() == 0) {
@@ -313,14 +443,13 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
-
                         // do we have some ktx images or are we stuck with slow big dds decompress
                         boolean ddsDecompressing = !textureSource.hasKTX() && !textureSource.hasASTC();
-                        System.out.println("ddsDecompressing = " + ddsDecompressing);
-
-                        // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
-                        if (ddsDecompressing)
+                        if (ddsDecompressing) {
+                            System.out.println("ddsDecompressing = " + ddsDecompressing);
+                            // this is terrible 1/4 images, but helps if no KTX files are available and we are decompressing dds
                             CompressedTextureLoader.DROP_0_MIP = true;
+                        }
 
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
 
@@ -428,26 +557,26 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                             //https://stackoverflow.com/questions/1972027/android-playing-mp3-from-byte
                             if (SimpleSounds.mp3SystemMediaPlayer == null) {
                                 SimpleSounds.mp3SystemMediaPlayer = new
-                                        SimpleSounds.Mp3SystemMediaPlayer() {
-                                            MediaPlayer musicMediaPlayer2;
+                                    SimpleSounds.Mp3SystemMediaPlayer() {
+                                        MediaPlayer musicMediaPlayer2;
 
-                                            @Override
-                                            public void playAnMp3(String s, float v) {
-                                                s = s.replace("\\", "/");
-                                                if (!s.startsWith("/"))
-                                                    s = "/" + s;
+                                        @Override
+                                        public void playAnMp3(String s, float v) {
+                                            s = s.replace("\\", "/");
+                                            if (!s.startsWith("/"))
+                                                s = "/" + s;
 
-                                                File mp3File = new File(gameConfigToLoad.scrollsFolder + s);
-                                                if (mp3File.exists()) {
-                                                    musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(mp3File));
-                                                    if (musicMediaPlayer != null) {
-                                                        musicMediaPlayer2.setVolume(v, v);
-                                                        musicMediaPlayer2.setLooping(false);
-                                                        musicMediaPlayer2.start();
-                                                    }
+                                            File mp3File = new File(gameConfigToLoad.scrollsFolder + s);
+                                            if (mp3File.exists()) {
+                                                musicMediaPlayer2 = MediaPlayer.create(parentActivity, Uri.fromFile(mp3File));
+                                                if (musicMediaPlayer != null) {
+                                                    musicMediaPlayer2.setVolume(v, v);
+                                                    musicMediaPlayer2.setLooping(false);
+                                                    musicMediaPlayer2.start();
                                                 }
                                             }
-                                        };
+                                        }
+                                    };
                             }
                         }
 
@@ -469,8 +598,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                             simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
                             display(prevCellformid);
+                            simpleWalkSetup.setMaxFrameRate(0);
                         } else {
-                            // display the cell picker and create a start location form the selected cell
+                            // display the cell picker and create a start location from the selected cell
                             parentActivity.runOnUiThread(new Runnable() {
                                 public void run() {
                                     esmCellChooser = new ESMCellChooser(parentActivity, esmManager).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
@@ -495,6 +625,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                                                 simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
                                                 display(((Record) treeNode.getValue()).getFormID());
+                                                simpleWalkSetup.setMaxFrameRate(0);
                                             }
                                         }
                                     }).load();
@@ -645,6 +776,10 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
         Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
         simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
+
+
+        //simpleWalkSetup.setMaxFrameRate(0);
+        //simpleWalkSetup.setEnabled(true);
     }
 
     public SimpleBethCellManager getSimpleBethCellManager() {
