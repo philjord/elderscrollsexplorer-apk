@@ -211,8 +211,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
         setupGraphicsSetting(gl_window);
 
-     //   this.cameraPanel.getCanvas3D2D().addNotify();
-     //   this.cameraPanel.startRendering();
+        this.cameraPanel.getCanvas3D2D().addNotify();
+        this.cameraPanel.startRendering();
     }
 
     public void startRenderer(GLWindow gl_window) {
@@ -272,6 +272,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
     @Override
     public void changeLocation(Quat4f rot, Vector3f trans) {
         System.out.println("Moving to " + trans);
+
         //TODO: should I call warp now? not needed if only change cell uses the above
         warp(trans);
         getAvatarLocation().setTranslation(trans);
@@ -397,6 +398,12 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      */
     @Override
     public void setEnabled(boolean enable) {
+        // make the load screen a slow un
+        if(enable)
+            setMaxFrameRate(0);
+        else
+            setMaxFrameRate(5);
+
         if (enable != enabled) {
             System.out.println("Setting Enabled " + enable);
             // start the processor up ************************
@@ -544,8 +551,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      * in fps but 0 = unlimited
      */
     public void setMaxFrameRate(int fps) {
-        long minFrame = 0;
-        if(fps>0) {
+        long minFrame = 20;// 50 fps is plenty thanks, on a phone
+        if(fps>0&&fps <= 50) {
             minFrame = 1000 / fps;
         }
         cameraPanel.getCanvas3D2D().getView().setMinimumFrameCycleTime(minFrame);

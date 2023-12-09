@@ -292,8 +292,8 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         Thread t = new Thread() {
             public void run() {
                 synchronized (selectedGameConfig) {
-                    simpleWalkSetup.setMaxFrameRate(5);
-//                    simpleWalkSetup.setEnabled(false);
+                    simpleWalkSetup.setEnabled(false);
+
                     // load up the esm file
                     IDashboard.dashboard.setEsmLoading(1);
 
@@ -505,7 +505,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
 
                         simpleWalkSetup.configure(meshSource, simpleBethCellManager);
-                        simpleWalkSetup.setEnabled(false);
+
 
                         simpleWalkSetup.getWindow().addKeyListener(new KeyHandler());
                         simpleWalkSetup.getWindow().addMouseListener(dragMouseAdapter);
@@ -598,7 +598,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                             simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
                             display(prevCellformid);
-                            simpleWalkSetup.setMaxFrameRate(0);
                         } else {
                             // display the cell picker and create a start location from the selected cell
                             parentActivity.runOnUiThread(new Runnable() {
@@ -625,7 +624,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
                                                 simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
                                                 display(((Record) treeNode.getValue()).getFormID());
-                                                simpleWalkSetup.setMaxFrameRate(0);
                                             }
                                         }
                                     }).load();
@@ -776,10 +774,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
         Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
         simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
-
-
-        //simpleWalkSetup.setMaxFrameRate(0);
-        //simpleWalkSetup.setEnabled(true);
     }
 
     public SimpleBethCellManager getSimpleBethCellManager() {
