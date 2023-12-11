@@ -797,19 +797,20 @@ public class ScrollsExplorer
                                                         @Override
                                                         public void run() {
                                                             Toast.makeText(parentActivity, "Progress " + currentProgress + "%", Toast.LENGTH_LONG).show();
+                                                            System.out.println("Conversion progress " + currentProgress + "%");
                                                         }
                                                     });
                                                 }
                                             };
 
                                             DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), archiveFile, sul);
-                                            System.out.println("Converting " + ddsArchiveName + " to " + ktxArchiveName + " this may take 10+ minutes ");
+                                            System.out.println("Converting " + ddsArchiveName + " to ktx version this may take 10+ minutes ");
                                             parentActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     //screen stil sleeps just after a long time, CPU processing appears to continue anyway
                                                     parentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to " + ktxArchiveName + " this may take 10+ minutes ", Toast.LENGTH_LONG)
+                                                    Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to ktx, this may take ages.", Toast.LENGTH_LONG)
                                                             .show();
                                                 }
                                             });
@@ -824,7 +825,7 @@ public class ScrollsExplorer
                                                 @Override
                                                 public void run() {
                                                     parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to " + ktxArchiveName + " finished ", Toast.LENGTH_LONG)
+                                                    Toast.makeText(parentActivity, "Converting " + ktxArchiveName + " finished", Toast.LENGTH_LONG)
                                                             .show();
                                                 }
                                             });
