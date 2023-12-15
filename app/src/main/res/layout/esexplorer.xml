@@ -13,4 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </androidx.viewpager.widget.ViewPager>
+
+    <ProgressBar android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

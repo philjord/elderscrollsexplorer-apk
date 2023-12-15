@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.amrdeveloper.treeview.TreeNode;
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.MorrowindActivity;
+import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.ingenieur.andyelderscrolls.utils.ESMCellChooser;
 import com.jogamp.newt.event.KeyAdapter;
@@ -127,11 +129,14 @@ public class ScrollsExplorer
     private MediaPlayer musicMediaPlayer;
 
     private boolean saveLoadConfig = false;
-
+    private ProgressBar progressBar;
 
     public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId) {
 
         this.parentActivity = parentActivity2;
+
+        progressBar = (ProgressBar) parentActivity.findViewById(R.id.progressBar);
+        //(ProgressBar)parentActivity.viewIinflated.findViewById(R.id.progressBar);
 
         Camera.FRONT_CLIP = 0.2f;
         Camera.BACK_CLIP = 300f;
@@ -789,29 +794,33 @@ public class ScrollsExplorer
 
                                             ParcelFileDescriptor ktxPFD = parentActivity.getContentResolver().openFileDescriptor(ktxDF.getUri(), "rw");
                                             FileOutputStream fos = new ParcelFileDescriptor.AutoCloseOutputStream(ktxPFD);
-                                            fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
+                                            FileInputStream fisKtx = new ParcelFileDescriptor.AutoCloseInputStream(ktxPFD);
+
+                                            //DO NOT delte file as it is hopefully a restartable fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
 
                                             DDSToKTXBsaConverter.StatusUpdateListener sul = new DDSToKTXBsaConverter.StatusUpdateListener() {
                                                 public void updateProgress(int currentProgress) {
                                                     parentActivity.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(parentActivity, "Progress " + currentProgress + "%", Toast.LENGTH_LONG).show();
-                                                            System.out.println("Conversion progress " + currentProgress + "%");
+                                                            progressBar.setProgress(currentProgress);
                                                         }
                                                     });
                                                 }
                                             };
 
-                                            DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), archiveFile, sul);
+
+                                            DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), fisKtx.getChannel(), archiveFile, sul);
                                             System.out.println("Converting " + ddsArchiveName + " to ktx version this may take 10+ minutes ");
                                             parentActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    //screen stil sleeps just after a long time, CPU processing appears to continue anyway
+                                                    //screen still sleeps just after a long time, CPU processing appears to continue anyway
                                                     parentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    Toast.makeText(parentActivity, "Converting " + ddsArchiveName + " to ktx, this may take ages.", Toast.LENGTH_LONG)
-                                                            .show();
+                                                    progressBar.setIndeterminate(false);
+                                                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                                                    progressBar.setProgress(0);
+                                                    progressBar.setMax(100);
                                                 }
                                             });
 
@@ -821,12 +830,12 @@ public class ScrollsExplorer
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
+
                                             parentActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    Toast.makeText(parentActivity, "Converting " + ktxArchiveName + " finished", Toast.LENGTH_LONG)
-                                                            .show();
+                                                    progressBar.setVisibility(ProgressBar.GONE);
                                                 }
                                             });
                                             System.out.println("" + (System.currentTimeMillis() - tstart) + "ms to compress " + ktxArchiveName);
@@ -860,7 +869,7 @@ public class ScrollsExplorer
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    builder.setMessage("Would you like to convert " + neededBsas.size() + " bsa files from dds to ktx, this may take ages...").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("Convert " + neededBsas.size() + " bsa files from dds to ktx, this may take ages...").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }
             });
