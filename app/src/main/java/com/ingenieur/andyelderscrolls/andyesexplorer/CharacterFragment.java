@@ -46,7 +46,7 @@ public class CharacterFragment extends Fragment {
         showphysicsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showphysicsbutton.setChecked(freeflybutton.isChecked());
+                showphysicsbutton.setChecked(showphysicsbutton.isChecked());
                 ((AndyESExplorerActivity) getActivity()).scrollsExplorer.simpleWalkSetup.toggleHavok();
             }
         });
@@ -54,7 +54,7 @@ public class CharacterFragment extends Fragment {
         showvisualsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                freeflybutton.setChecked(freeflybutton.isChecked());
+                showvisualsbutton.setChecked(showvisualsbutton.isChecked());
                 ((AndyESExplorerActivity) getActivity()).scrollsExplorer.simpleWalkSetup.toggleVisual();
             }
         });
