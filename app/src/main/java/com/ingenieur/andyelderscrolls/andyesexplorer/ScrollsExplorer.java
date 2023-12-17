@@ -772,7 +772,7 @@ public class ScrollsExplorer
                                         // I need the displayable version to convert so let's load a new copy of ddsArchive
                                         FileInputStream fis;
                                         try {
-                                            long tstart = System.currentTimeMillis();
+                                            long tstart2 = System.currentTimeMillis();
                                             DocumentFile ddsDF = rootFolder.findFile(ddsArchiveName);
 
                                             Uri ddsUri = ddsDF.getUri();
@@ -782,9 +782,9 @@ public class ScrollsExplorer
                                             fis = new ParcelFileDescriptor.AutoCloseInputStream(ddsPFD);
                                             ArchiveFile archiveFile = ArchiveFile.createArchiveFile(fis.getChannel(), ddsArchiveName);
                                             archiveFile.load(true);//blocking call
-                                            System.out.println("loaded as displayable " + ddsUri + " in " + (System.currentTimeMillis() - tstart));
+                                            System.out.println("loaded as displayable " + ddsUri + " in " + (System.currentTimeMillis() - tstart2));
                                             //converting
-                                            tstart = System.currentTimeMillis();
+                                            final long tstart = System.currentTimeMillis();
                                             // find it
                                             DocumentFile ktxDF = rootFolder.findFile(ktxArchiveName);
                                             // or create it (if not found)
@@ -804,6 +804,7 @@ public class ScrollsExplorer
                                                         @Override
                                                         public void run() {
                                                             progressBar.setProgress(currentProgress);
+                                                            System.out.println("CurrentProgress " + currentProgress + "%  in " + (System.currentTimeMillis() - tstart) + "ms for " + ktxArchiveName);
                                                         }
                                                     });
                                                 }
@@ -811,7 +812,7 @@ public class ScrollsExplorer
 
 
                                             DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), fisKtx.getChannel(), archiveFile, sul);
-                                            System.out.println("Converting " + ddsArchiveName + " to ktx version this may take 10+ minutes ");
+                                            System.out.println("Converting " + ddsArchiveName + " to ktx version, this may take ages!");
                                             parentActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -853,9 +854,10 @@ public class ScrollsExplorer
                                         } catch (IOException e1) {
                                             e1.printStackTrace();
                                         }
-                                        waitForAnswer.countDown();
+
                                     }
                                 }
+                                waitForAnswer.countDown();
                             }
                         };
                         t.start();
