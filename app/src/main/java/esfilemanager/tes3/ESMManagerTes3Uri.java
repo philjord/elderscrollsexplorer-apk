@@ -1,9 +1,10 @@
-package esmio.tes3;
+package esfilemanager.tes3;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import esmio.common.PluginException;
+import esmio.tes3.ESMManagerTes3;
 
 public class ESMManagerTes3Uri extends ESMManagerTes3 {
 	public ESMManagerTes3Uri(FileChannel fileChannel, String fileName) {

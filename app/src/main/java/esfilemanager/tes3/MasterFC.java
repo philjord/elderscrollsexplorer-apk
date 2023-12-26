@@ -1,8 +1,9 @@
-package esmio.tes3;
+package esfilemanager.tes3;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import esmio.tes3.Master;
 import tools.io.FileChannelRAF;
 
 /**

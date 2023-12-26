@@ -54,7 +54,7 @@ import bsaio.DBException;
 import esmio.common.data.plugin.PluginGroup;
 import esmio.common.data.record.Record;
 import esmio.loader.ESMManager;
-import esmio.loader.ESMManagerUri;
+import esfilemanager.loader.ESMManagerUri;
 import esmio.loader.IESMManager;
 import esmio.utils.ESMUtils;
 import esmio.utils.source.EsmSoundKeyToName;
