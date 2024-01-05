@@ -3,7 +3,7 @@ package esfilemanager.tes3;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import esmio.tes3.Master;
+import esfilemanager.tes3.Master;
 import tools.io.FileChannelRAF;
 
 /**

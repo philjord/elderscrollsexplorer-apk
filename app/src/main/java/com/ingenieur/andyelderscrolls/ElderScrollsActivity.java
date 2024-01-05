@@ -23,6 +23,7 @@ import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
 import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
 import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
 import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
+import com.ingenieur.andyelderscrolls.texdisplay.TexDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import org.jogamp.java3d.JoglesPipeline;
@@ -260,6 +261,8 @@ public class ElderScrollsActivity extends Activity {
                         kfButton.setEnabled(true);
                         Button jBulletButton = (Button) findViewById(R.id.jBulletButton);
                         jBulletButton.setEnabled(true);
+                        Button texButton = (Button) findViewById(R.id.texButton);
+                        texButton.setEnabled(true);
                         // now await user deciding to select explore or nif display etc on selection
                         break;
                     }
@@ -284,6 +287,17 @@ public class ElderScrollsActivity extends Activity {
         if (gameSelected != null) {
             setUpLogFile(gameSelected);
             Intent intent = new Intent(this, NifDisplayActivity.class);
+            intent.putExtra(SELECTED_GAME, gameSelected.gameName);
+            startActivity(intent);
+        } else {
+            Toast.makeText(ElderScrollsActivity.this, "Please select a game root folder", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+    public void showTexDisplay(View view) {
+        if (gameSelected != null) {
+            setUpLogFile(gameSelected);
+            Intent intent = new Intent(this, TexDisplayActivity.class);
             intent.putExtra(SELECTED_GAME, gameSelected.gameName);
             startActivity(intent);
         } else {

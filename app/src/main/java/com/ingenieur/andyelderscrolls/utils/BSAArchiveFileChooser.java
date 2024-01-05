@@ -83,7 +83,10 @@ public class BSAArchiveFileChooser {
     public BSAArchiveFileChooser load() {
         fileRoots.clear();
         for (ArchiveFile archiveFile : bsArchiveSet) {
-            if (archiveFile.hasNifOrKf()) {
+            //FIXME need to filter for sound file extensions
+            if (   (extension.equals("nif") || extension.equals("kf") && archiveFile.hasNifOrKf())
+                || (extension.equals("dds") && archiveFile.hasDDS())
+                || (extension.equals("ktx") && archiveFile.hasKTX()) ) {
                 //R.layout.list_item_room maybe?
                 TreeNode archiveFileRoot = new TreeNode(archiveFile, R.layout.list_item_file);
                 fileRoots.add(archiveFileRoot);

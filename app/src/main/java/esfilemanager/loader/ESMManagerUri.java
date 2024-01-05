@@ -11,10 +11,10 @@ import java.nio.channels.FileChannel;
 import java.util.zip.DataFormatException;
 
 import esfilemanager.common.data.plugin.MasterFC;
-import esmio.common.PluginException;
-import esmio.common.data.plugin.Master;
-import esmio.loader.ESMManager;
-import esmio.loader.IESMManager;
+import esfilemanager.common.PluginException;
+import esfilemanager.common.data.plugin.Master;
+import esfilemanager.loader.ESMManager;
+import esfilemanager.loader.IESMManager;
 import esfilemanager.tes3.ESMManagerTes3Uri;
 
 /** For desktop to swap File path strings into ByteBuffer or randomaccessfile or io streams

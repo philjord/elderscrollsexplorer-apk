@@ -135,19 +135,19 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
 
         public static int getExtensionIcon(String extension) {
             switch (extension) {
-                case ".c":
+                case "c":
                     return R.drawable.ic_c;
-                case ".cpp":
+                case "cpp":
                     return R.drawable.ic_cpp;
-                case ".cs":
+                case "cs":
                     return R.drawable.ic_cs;
-                case ".nif":
+                case "nif":
                     return R.drawable.ic_git;
-                case ".dds":
+                case "dds":
                     return R.drawable.ic_go;
-                case ".kf":
+                case "kf":
                     return R.drawable.ic_gradle;
-                case ".ktx":
+                case "ktx":
                     return R.drawable.ic_java;
                 default:
                     return R.drawable.ic_file;

@@ -9,9 +9,9 @@ import com.ingenieur.andyelderscrolls.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import esmio.common.data.plugin.PluginRecord;
-import esmio.loader.FormToFilePointer;
-import esmio.loader.IESMManager;
+import esfilemanager.common.data.plugin.PluginRecord;
+import esfilemanager.loader.FormToFilePointer;
+import esfilemanager.loader.IESMManager;
 
 
 public class ESMCellChooser {
