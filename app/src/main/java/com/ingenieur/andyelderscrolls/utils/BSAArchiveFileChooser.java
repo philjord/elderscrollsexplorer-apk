@@ -15,7 +15,6 @@ import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.displayables.Displayable;
 
-
 public class BSAArchiveFileChooser {
     private BSArchiveSet bsArchiveSet;
 
@@ -27,8 +26,11 @@ public class BSAArchiveFileChooser {
     private BSAArchiveFileChooserFilter bsaArchiveFileChooserFilter;
 
     private List<TreeNode> fileRoots = new ArrayList<TreeNode>();
+    HashMap<String, FolderNode> foldersByPath = new HashMap<String, FolderNode>();
 
     private BsaFileSelectedListener fileListener;
+    private boolean multiple;
+
 
     // file selection event handling
     public interface BsaFileSelectedListener extends TreeViewAdapter.OnTreeNodeClickListener, TreeViewAdapter.OnTreeNodeLongClickListener {
@@ -44,8 +46,7 @@ public class BSAArchiveFileChooser {
     }
 
     public BSAArchiveFileChooser setExtension(String extension) {
-        this.extension = (extension == null) ? null :
-                extension.toLowerCase();
+        this.extension = (extension == null) ? null : extension.toLowerCase();
         return this;
     }
 
@@ -57,14 +58,17 @@ public class BSAArchiveFileChooser {
         this.fileListener = fileListener;
         return this;
     }
-
+    public BSAArchiveFileChooser setMultiple(boolean multiple) {
+        this.multiple = multiple;
+        return this;
+    }
     public void showDialog() {
         // must recreate each time as it doesn't reshow!
         if (bsaTreeFragment != null) {
             bsaTreeFragment.dismiss();
-            bsaTreeFragment = new BsaTreeFragment(bsaTreeFragment);// create it from the same dataset
+            bsaTreeFragment = new BsaTreeFragment(bsaTreeFragment, multiple);// create it from the same dataset
         } else {
-            bsaTreeFragment = new BsaTreeFragment();
+            bsaTreeFragment = new BsaTreeFragment(multiple);
         }
         bsaTreeFragment.updateTreeNodes(fileRoots);
         bsaTreeFragment.setTreeNodeClickListener(fileListener);
@@ -77,21 +81,51 @@ public class BSAArchiveFileChooser {
             bsaTreeFragment.dismiss();
     }
 
+    public void updateNodesState() {
+        if (bsaTreeFragment != null)
+            bsaTreeFragment.getTreeViewAdapter().notifyDataSetChanged();
+    }
+    /**
+     * MUST be called after showDialog()
+     * @param folderNode
+     */
+    public void expandToTreeNode(TreeNode folderNode) {
+
+        String folderPath = "";
+
+        TreeNode curr = folderNode;
+        while (curr != null) {
+            if(curr instanceof FolderNode) {
+                folderPath = curr.getValue().toString() + (folderPath.length() > 0 ? "\\" : "") + folderPath;
+            }
+            curr = curr.getParent();
+        }
+
+        if (foldersByPath.get(folderPath) != null) {
+            TreeNode nodeToExpand = foldersByPath.get(folderPath);
+            if(bsaTreeFragment != null) {
+                bsaTreeFragment.getTreeViewAdapter().expandToNode(nodeToExpand);
+            }
+        }
+    }
     /**
      * called when the data is altered or the extension is changed
      */
     public BSAArchiveFileChooser load() {
         fileRoots.clear();
+        foldersByPath.clear();
         for (ArchiveFile archiveFile : bsArchiveSet) {
             //FIXME need to filter for sound file extensions
             if (   (extension.equals("nif") || extension.equals("kf") && archiveFile.hasNifOrKf())
                 || (extension.equals("dds") && archiveFile.hasDDS())
                 || (extension.equals("ktx") && archiveFile.hasKTX()) ) {
                 //R.layout.list_item_room maybe?
-                TreeNode archiveFileRoot = new TreeNode(archiveFile, R.layout.list_item_file);
-                fileRoots.add(archiveFileRoot);
+                FolderNode archiveFileRoot = new FolderNode(archiveFile.getName(), R.layout.list_item_file);
 
-                HashMap<String, FolderNode> foldersByName = new HashMap<String, FolderNode>();
+                int acceptedItems = 0;
+                // both removed if nothing accepted
+                fileRoots.add(archiveFileRoot);
+                foldersByPath.put(archiveFile.getName(), archiveFileRoot);
 
                 List<ArchiveEntry> entries = archiveFile.getEntries();
                 TreeNode parentNode;
@@ -105,55 +139,57 @@ public class BSAArchiveFileChooser {
                     if (bsaArchiveFileChooserFilter != null && !bsaArchiveFileChooserFilter.accept(entry))
                         continue;
 
-                    String path = ((Displayable) entry).getFolderName();
-                    if (foldersByName.get(path) != null) {
-                        parentNode = foldersByName.get(path);
-                    } else {
+                    acceptedItems++;
 
-                        int length = path.length();
+                    String folderPath = archiveFile.getName() +"\\" + ((Displayable) entry).getFolderName();
+                    if (foldersByPath.get(folderPath) != null) {
+                        parentNode = foldersByPath.get(folderPath);
+                    } else {
+                        // need to build the folderPath
+
+                        int length = folderPath.length();
 
                         int pos = 0;
                         int index1;
                         while (pos < length) {
                             String name;
-                            int sep = path.indexOf('\\', pos);
+                            String parentPath;
+                            int sep = folderPath.indexOf('\\', pos);
                             if (sep < 0) {
-                                name = path.substring(pos);
+                                name = folderPath.substring(pos);
+                                parentPath = folderPath;
                                 pos = length;
                             } else {
-                                name = path.substring(pos, sep);
+                                name = folderPath.substring(pos, sep);
+                                parentPath = folderPath.substring(0, sep);
                                 pos = sep + 1;
                             }
 
-                            if (foldersByName.get(name) != null) {
-                                parentNode = foldersByName.get(name);
-                                break;
-                            }
 
-                            int count = parentNode.getChildren().size();
-                            boolean insert = true;
-                            index1 = 0;
-                            while (index1 < count) {
-                                TreeNode compare = parentNode.getChildren().get(index1);
-                                if (!(compare instanceof FolderNode))
-                                    break;
-                                FolderNode folderNode = (FolderNode) compare;
-                                int diff = name.compareTo(folderNode.getName());
-                                if (diff <= 0) {
-                                    if (diff == 0) {
-                                        insert = false;
-                                        parentNode = folderNode;
+                            if(foldersByPath.get(parentPath) == null) {
+                                // create this one inside the already discovered parent
+
+                                // find the spot within the parent children list by comparison
+                                int count = parentNode.getChildren().size();
+                                index1 = 0;
+                                while (index1 < count) {
+                                    TreeNode compare = parentNode.getChildren().get(index1);
+                                    if (!(compare instanceof FolderNode))
+                                        break;
+                                    FolderNode folderNode2 = (FolderNode) compare;
+                                    int diff = name.compareTo(folderNode2.getName());
+                                    if (diff <= 0) {
+                                        break;
                                     }
-                                    break;
+                                    index1++;
                                 }
-                                index1++;
-                            }
 
-                            if (insert) {
                                 FolderNode folderNode = new FolderNode(name, R.layout.list_item_file);
                                 parentNode.addChild(index1, folderNode);
                                 parentNode = folderNode;
-                                foldersByName.put(path, folderNode);
+                                foldersByPath.put(parentPath, folderNode);
+                            } else {
+                                parentNode = foldersByPath.get(parentPath);
                             }
                         }
 
@@ -171,6 +207,13 @@ public class BSAArchiveFileChooser {
                     }
                     TreeNode fileNode = new TreeNode(entry, R.layout.list_item_file);
                     parentNode.addChild(index2, fileNode);
+                }
+
+
+                // nothing in the bsa file we want
+                if(acceptedItems == 0) {
+                    fileRoots.remove(archiveFileRoot);
+                    foldersByPath.remove(archiveFile.getName());
                 }
             }
         }

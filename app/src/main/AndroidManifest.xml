@@ -31,7 +31,7 @@
         ><!--https://stackoverflow.com/questions/35517239/sharedpreferences-are-not-being-cleared-when-i-uninstall-->
 
         <activity
-            android:name=".MorrowindActivity"
+            android:name=".ElderScrollsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Call of Red Mountain"
             android:exported="true"
@@ -44,7 +44,7 @@
         </activity>
 
         <activity
-            android:name=".ElderScrollsActivity"
+            android:name=".MorrowindActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             >

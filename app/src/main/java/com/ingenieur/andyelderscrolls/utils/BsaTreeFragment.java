@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import bsaio.ArchiveEntry;
 
 public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.OnTreeNodeClickListener, TreeViewAdapter.OnTreeNodeLongClickListener {
 
+    private boolean multiple = false;
     private TreeViewAdapter treeViewAdapter;
 
     /**
@@ -40,8 +42,8 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
     private TreeViewAdapter.OnTreeNodeLongClickListener treeNodeLongClickListener;
 
     private static final String TAG = "BsaTreeFragment";
-
-    public BsaTreeFragment() {
+    public BsaTreeFragment(boolean multiple) {
+        this.multiple = multiple;
         TreeViewHolderFactory factory = (v, layout) -> new BsaNodeViewHolder(v);
         treeViewAdapter = new TreeViewAdapter(factory);
     }
@@ -50,8 +52,20 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
      * To allow reshowing the dialog fragment we must same the data adapter
      * @param prevTree
      */
-    public BsaTreeFragment(BsaTreeFragment prevTree) {
+    public BsaTreeFragment(BsaTreeFragment prevTree, boolean multiple) {
+        this.multiple = multiple;
         treeViewAdapter = prevTree.treeViewAdapter;
+    }
+    public BsaTreeFragment() {
+        this(false);
+    }
+
+    /**
+     * To allow reshowing the dialog fragment we must same the data adapter
+     * @param prevTree
+     */
+    public BsaTreeFragment(BsaTreeFragment prevTree) {
+        this(prevTree,false);
     }
 
     @Override
@@ -72,6 +86,18 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
         recyclerView.setNestedScrollingEnabled(false);
 
         recyclerView.setAdapter(treeViewAdapter);
+
+        if(multiple) {
+            Button doneButton = view.findViewById(R.id.fileTreeDoneButton);
+            doneButton.setVisibility(View.VISIBLE);
+            doneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(treeNodeClickListener != null)
+                        treeNodeClickListener.onTreeNodeClick(null, view);
+                }
+            });
+        }
 
         treeViewAdapter.setTreeNodeClickListener(this);
         treeViewAdapter.setTreeNodeLongClickListener(this);
@@ -109,6 +135,9 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
         this.treeNodeLongClickListener = listener;
     }
 
+    public TreeViewAdapter getTreeViewAdapter() {
+        return treeViewAdapter;
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -201,12 +230,19 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
             }
 
             if (node.getChildren().isEmpty()) {
-                fileStateIcon.setVisibility(View.INVISIBLE);
+                if(node.isSelected()) {
+                    fileStateIcon.setVisibility(View.VISIBLE);
+                    fileStateIcon.setImageResource(R.drawable.ic_check);
+                } else {
+                    fileStateIcon.setVisibility(View.INVISIBLE);
+                }
             } else {
                 fileStateIcon.setVisibility(View.VISIBLE);
                 int stateIcon = node.isExpanded() ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right;
                 fileStateIcon.setImageResource(stateIcon);
             }
+
+
         }
     }
 

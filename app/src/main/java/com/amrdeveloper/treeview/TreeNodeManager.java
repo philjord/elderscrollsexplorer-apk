@@ -208,6 +208,39 @@ public class TreeNodeManager {
     }
 
     /**
+     * Expanding branches to show the node
+     * @param  node The node to expand all parents thereof
+     * @return the index of this node if it exists in the list
+     */
+    public int expandToNode(TreeNode node) {
+        // go to the first root that's in rootsNodes then go down teh the node given
+        int position = -1;
+        while(!node.isExpanded()) {
+            TreeNode top = node;
+            while (top.getParent() != null && !top.getParent().isExpanded()) {
+                top = top.getParent();
+            }
+            position = expandNode(top);
+        }
+
+        /*
+        int position = rootsNodes.indexOf(node);
+        if (position != -1 && !node.isExpanded()) {
+            node.setExpanded(true);
+            int index = position + 1;
+            for (TreeNode child : node.getChildren()) {
+                int before = rootsNodes.size();
+                rootsNodes.add(index, child);
+                expandNodeBranch(child);
+                int after = rootsNodes.size();
+                int diff = after - before;
+                index += diff;
+            }
+        }*/
+        return position;
+    }
+
+    /**
      * Expanding one node branch to until specific level
      * @param node to expand branch of it until level
      * @param level to expand node branches to it

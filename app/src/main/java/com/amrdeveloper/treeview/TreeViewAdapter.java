@@ -166,6 +166,17 @@ public class TreeViewAdapter extends RecyclerView.Adapter<TreeViewHolder> {
     }
 
     /**
+     * Expanding to a node
+     * @param node The node to expand it
+     */
+    public void expandToNode(TreeNode node) {
+        int position = treeNodeManager.expandToNode(node);
+        if (position != -1) {
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
      * Collapsing node and all of his children
      * @param node The node to collapse it
      */

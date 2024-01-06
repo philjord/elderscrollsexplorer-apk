@@ -91,7 +91,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
     private FragmentActivity parentActivity;
 
-    private ArchiveEntry chooserStartFolder;
+    private TreeNode chooserStartFolder;
 
     private static ArchiveEntry skeletonNifModelFile;
 
@@ -250,6 +250,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                     public void onTreeNodeClick(TreeNode treeNode, View view) {
                         if (treeNode.getValue() instanceof ArchiveEntry) {
                             skeletonNifModelFile = (ArchiveEntry) treeNode.getValue();
+                            chooserStartFolder = treeNode;
                             bsaArchiveFileChooser.dismiss();
                             selectSkins();
                         }
@@ -264,15 +265,17 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
     private void selectSkins() {
         parentActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(parentActivity, "Please select skin(s) nif file(s)", Toast.LENGTH_SHORT)
+                Toast.makeText(parentActivity, "Skins, long hold for multi", Toast.LENGTH_LONG)
                         .show();
 
-                //TODO: multi selection needs to be more obvious somehow
-                bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
+                bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setMultiple(true).setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
                     @Override
                     public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
                         // use long select to select multiple for now
                         if (treeNode.getValue() instanceof ArchiveEntry) {
+                            treeNode.setSelected(true);
+                            bsaArchiveFileChooser.updateNodesState();
+                            chooserStartFolder = treeNode;
                             skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
                             return true;
                         } else {
@@ -282,20 +285,22 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
                     @Override
                     public void onTreeNodeClick(TreeNode treeNode, View view) {
-                        if (treeNode.getValue() instanceof ArchiveEntry) {
-                            skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
+                        // null indicates done button pressed, not a node clicked
+                        if(treeNode == null ){
                             bsaArchiveFileChooser.dismiss();
-
-                            //TODO: somehow allow null skin selection too
-
-                            Toast.makeText(parentActivity, "Please select anim to display", Toast.LENGTH_SHORT).show();
                             selectKfFile();
+                        } else if (treeNode.getValue() instanceof ArchiveEntry) {
+                            treeNode.setSelected(true);
+                            bsaArchiveFileChooser.updateNodesState();
+                            chooserStartFolder = treeNode;
+                            skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
                         }
                     }
                 }).load();
 
 
                 bsaArchiveFileChooser.showDialog();
+                bsaArchiveFileChooser.expandToTreeNode(chooserStartFolder);
             }
         });
 
@@ -318,7 +323,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                             @Override
                             public void onTreeNodeClick(TreeNode treeNode, View view) {
                                 if (treeNode.getValue() instanceof ArchiveEntry) {
-                                    chooserStartFolder = (ArchiveEntry) treeNode.getValue();
+                                    chooserStartFolder = treeNode;
                                     display(skeletonNifModelFile, skinNifFiles, (ArchiveEntry) treeNode.getValue());
                                     bsaArchiveFileChooser.dismiss();
                                 }
@@ -327,6 +332,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                     }
 
                     bsaArchiveFileChooser.showDialog();
+                    bsaArchiveFileChooser.expandToTreeNode(chooserStartFolder);
                 }
             });
 
