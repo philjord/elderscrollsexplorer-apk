@@ -176,7 +176,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         fpsCounter.addToCanvas(canvas3D2D);
 
         bg.addChild(ambLight);
-        //bg.addChild(dirLight);
+        bg.addChild(dirLight);
 
         TransformGroup tg = new TransformGroup();
         // light is above like nifskope
@@ -289,7 +289,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
                     int currentIdx = siblings.indexOf(currentTreeNodeDisplayed);
                     if (currentIdx >= 0) {
                         // display model in step direction (if there is a one)
-                        if (currentIdx + step > 0 && currentIdx + step < siblings.size()) {
+                        if (currentIdx + step >= 0 && currentIdx + step < siblings.size()) {
                             // if value is a folder not nif then this call will do nothing
                             treeNodeToDisplay(siblings.get(currentIdx + step));
                         }
@@ -477,6 +477,8 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
                 }
 
                 bsaArchiveFileChooser.showDialog();
+                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
+
             }
         });
     }

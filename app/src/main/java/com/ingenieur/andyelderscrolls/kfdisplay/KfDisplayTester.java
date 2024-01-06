@@ -18,6 +18,7 @@ import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.Background;
 import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.DirectionalLight;
 import org.jogamp.java3d.Group;
 import org.jogamp.java3d.Light;
 import org.jogamp.java3d.Node;
@@ -34,6 +35,7 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
@@ -71,16 +73,6 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
     private SpinTransform spinTransform;
 
-	/*private boolean cycle = true;
-
-	private boolean showHavok = true;
-
-	private boolean showVisual = true;
-
-	private boolean animateModel = true;
-
-	private boolean spin = false;*/
-
     private SimpleUniverse simpleUniverse;
 
     private Background background = new Background();
@@ -91,7 +83,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
     private FragmentActivity parentActivity;
 
-    private TreeNode chooserStartFolder;
+    private TreeNode currentTreeNodeDisplayed;
 
     private static ArchiveEntry skeletonNifModelFile;
 
@@ -137,7 +129,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
         spinTransformGroup.addChild(rotateTransformGroup);
         rotateTransformGroup.addChild(modelGroup);
         simpleCameraHandler = new SimpleCameraHandler(simpleUniverse.getViewingPlatform(), simpleUniverse.getCanvas(), modelGroup,
-                rotateTransformGroup, false);
+                rotateTransformGroup, false, true);
 
         spinTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
         spinTransformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -152,10 +144,10 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
         ambLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
         ambLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
 
-        //Color3f dlColor = new Color3f(0.1f, 0.1f, 0.6f);
-        //DirectionalLight dirLight = new DirectionalLight(true, dlColor, new Vector3f(0f, -1f, 0f));
-        //dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
-        //dirLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
+        Color3f dlColor = new Color3f(0.1f, 0.1f, 0.6f);
+        DirectionalLight dirLight = new DirectionalLight(true, dlColor, new Vector3f(0f, -1f, 0f));
+        dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
+        dirLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
 
         Color3f plColor = new Color3f(1.0f, 0.95f, 0.95f);
         //Color3f plColor = new Color3f(0.4f, 0.4f, 0.7f);
@@ -169,7 +161,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
         fpsCounter.addToCanvas(canvas3D2D);
 
         bg.addChild(ambLight);
-        //bg.addChild(dirLight);
+        bg.addChild(dirLight);
 
         TransformGroup tg = new TransformGroup();
         // light is above like nifskope
@@ -223,15 +215,11 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
         //FOR forcing a center distance
         simpleCameraHandler.setView(new Point3d(0, 1, 3), new Point3d(0, 1, 0));
 
-
-
-
         // show file chooser
         parentActivity.runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(parentActivity, "Please select a skeleton nif file", Toast.LENGTH_SHORT)
                         .show();
-
 
                 bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif");
                 bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
@@ -250,7 +238,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                     public void onTreeNodeClick(TreeNode treeNode, View view) {
                         if (treeNode.getValue() instanceof ArchiveEntry) {
                             skeletonNifModelFile = (ArchiveEntry) treeNode.getValue();
-                            chooserStartFolder = treeNode;
+                            currentTreeNodeDisplayed = treeNode;
                             bsaArchiveFileChooser.dismiss();
                             selectSkins();
                         }
@@ -275,7 +263,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                         if (treeNode.getValue() instanceof ArchiveEntry) {
                             treeNode.setSelected(true);
                             bsaArchiveFileChooser.updateNodesState();
-                            chooserStartFolder = treeNode;
+                            currentTreeNodeDisplayed = treeNode;
                             skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
                             return true;
                         } else {
@@ -292,7 +280,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                         } else if (treeNode.getValue() instanceof ArchiveEntry) {
                             treeNode.setSelected(true);
                             bsaArchiveFileChooser.updateNodesState();
-                            chooserStartFolder = treeNode;
+                            currentTreeNodeDisplayed = treeNode;
                             skinNifFiles.add(((ArchiveEntry) treeNode.getValue()).toString());
                         }
                     }
@@ -300,7 +288,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
 
                 bsaArchiveFileChooser.showDialog();
-                bsaArchiveFileChooser.expandToTreeNode(chooserStartFolder);
+                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
             }
         });
 
@@ -323,8 +311,8 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                             @Override
                             public void onTreeNodeClick(TreeNode treeNode, View view) {
                                 if (treeNode.getValue() instanceof ArchiveEntry) {
-                                    chooserStartFolder = treeNode;
-                                    display(skeletonNifModelFile, skinNifFiles, (ArchiveEntry) treeNode.getValue());
+                                    currentTreeNodeDisplayed = treeNode;
+                                    displayKF(skeletonNifModelFile, skinNifFiles, (ArchiveEntry) treeNode.getValue());
                                     bsaArchiveFileChooser.dismiss();
                                 }
                             }
@@ -332,7 +320,7 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
                     }
 
                     bsaArchiveFileChooser.showDialog();
-                    bsaArchiveFileChooser.expandToTreeNode(chooserStartFolder);
+                    bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
                 }
             });
 
@@ -346,26 +334,59 @@ public class KfDisplayTester implements DragMouseAdapter.Listener {
 
             parentActivity.runOnUiThread(new Runnable() {
                 public void run() {
-                    new Tes3AnimChooser(parentActivity, "Anims availible", j3dNiSequenceStreamHelper.getAllSequences()).setAnimListener(new Tes3AnimChooser.AnimSelectedListener() {
-                        @Override
-                        public void animSelected(String anim) {
-                            nifCharacterTes3.startAnimation(anim, false);
-                        }
-                    }).showDialog();
+                    if(j3dNiSequenceStreamHelper != null ) {
+                        new Tes3AnimChooser(parentActivity, "Anims availible", j3dNiSequenceStreamHelper.getAllSequences()).setAnimListener(new Tes3AnimChooser.AnimSelectedListener() {
+                            @Override
+                            public void animSelected(String anim) {
+                                nifCharacterTes3.startAnimation(anim, false);
+                            }
+                        }).showDialog();
+                    } else {
+                        Toast.makeText(parentActivity, "j3dNiSequenceStreamHelper null", Toast.LENGTH_LONG)
+                                .show();
+                    }
                 }
             });
         }
     }
 
     private void prevKfFile() {
-        //TODO:
+        changeKfInTree(+1);
     }
 
     private void nextKfFile() {
-        //TODO:
+        changeKfInTree(-1);
     }
 
-    private void display(ArchiveEntry skeletonNifFile, ArrayList<String> skinNifFiles2, ArchiveEntry kff) {
+    private void changeKfInTree(int step) {
+        if (currentTreeNodeDisplayed != null) {
+            TreeNode parentDir = currentTreeNodeDisplayed.getParent();
+            if (parentDir != null) {
+                LinkedList<TreeNode> siblings = parentDir.getChildren();
+                if (siblings != null) {
+                    // find ourselves
+                    int currentIdx = siblings.indexOf(currentTreeNodeDisplayed);
+                    if (currentIdx >= 0) {
+                        // display model in step direction (if there is a one)
+                        if (currentIdx + step >= 0 && currentIdx + step < siblings.size()) {
+                            // if value is a folder not nif then this call will do nothing
+                            currentTreeNodeDisplayed = siblings.get(currentIdx + step);
+                            displayKF(skeletonNifModelFile, skinNifFiles, (ArchiveEntry) currentTreeNodeDisplayed.getValue());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void displayKF(ArchiveEntry skeletonNifFile, ArrayList<String> skinNifFiles2, ArchiveEntry kff) {
+        parentActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(parentActivity, "Displaying " + kff, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
         modelGroup.removeAllChildren();
 
         BranchGroup bg = new BranchGroup();

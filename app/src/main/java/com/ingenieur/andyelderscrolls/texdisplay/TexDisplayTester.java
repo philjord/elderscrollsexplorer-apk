@@ -245,7 +245,7 @@ public class TexDisplayTester implements DragMouseAdapter.Listener {
                     int currentIdx = siblings.indexOf(currentTreeNodeDisplayed);
                     if (currentIdx >= 0) {
                         // display model in step direction (if there is a one)
-                        if (currentIdx + step > 0 && currentIdx + step < siblings.size()) {
+                        if (currentIdx + step >= 0 && currentIdx + step < siblings.size()) {
                             // if value is a folder not nif then this call will do nothing
                             treeNodeToDisplay(siblings.get(currentIdx + step));
                         }
@@ -391,6 +391,7 @@ public class TexDisplayTester implements DragMouseAdapter.Listener {
                 }
 
                 bsaArchiveFileChooser.showDialog();
+                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
             }
         });
     }

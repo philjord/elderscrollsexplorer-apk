@@ -121,13 +121,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter<TreeViewHolder> {
         holder.bindTreeNode(currentNode);
 
         holder.itemView.setOnClickListener(v -> {
-            // Handle node selection
-            if (currentNode == currentSelectedNode) {
-                currentSelectedNode.setSelected(!currentSelectedNode.isSelected());
-            } else {
-                if (currentSelectedNode != null) currentSelectedNode.setSelected(false);
-                currentSelectedNode = currentNode;
-            }
+            // Handle node selection removed as single and multiple selection can be decided by the listeners themselves
 
             // Handle node expand and collapse event
             if (!currentNode.getChildren().isEmpty()) {
