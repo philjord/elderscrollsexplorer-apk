@@ -1,4 +1,4 @@
-package com.ingenieur.andyelderscrolls.jbullet;
+package com.ingenieur.andyelderscrolls.display.jbullet;
 
 import android.content.Intent;
 import android.os.Bundle;

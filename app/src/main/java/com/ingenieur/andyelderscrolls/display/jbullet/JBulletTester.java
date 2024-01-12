@@ -1,4 +1,4 @@
-package com.ingenieur.andyelderscrolls.jbullet;
+package com.ingenieur.andyelderscrolls.display.jbullet;
 
 import android.view.View;
 import android.widget.Toast;

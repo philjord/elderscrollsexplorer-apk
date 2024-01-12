@@ -24,6 +24,7 @@
 
 package com.amrdeveloper.treeview;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -143,7 +144,7 @@ public class TreeNodeManager {
      */
     public int expandNode(TreeNode node) {
         int position = rootsNodes.indexOf(node);
-        if (position != -1 && !node.isExpanded()) {
+        if (position != -1) {
             node.setExpanded(true);
             rootsNodes.addAll(position + 1, node.getChildren());
             for (TreeNode child : node.getChildren()) {
@@ -213,30 +214,21 @@ public class TreeNodeManager {
      * @return the index of this node if it exists in the list
      */
     public int expandToNode(TreeNode node) {
-        // go to the first root that's in rootsNodes then go down teh the node given
-        int position = -1;
-        while(!node.isExpanded()) {
-            TreeNode top = node;
-            while (top.getParent() != null && !top.getParent().isExpanded()) {
-                top = top.getParent();
-            }
-            position = expandNode(top);
+        // go to the first root that's in rootsNodes then go down the the node given
+        LinkedList<TreeNode> nodesToRoot = new LinkedList<TreeNode>();
+        TreeNode top = node;
+        while (top != null) {
+            nodesToRoot.add(top);
+            top = top.getParent();
         }
 
-        /*
-        int position = rootsNodes.indexOf(node);
-        if (position != -1 && !node.isExpanded()) {
-            node.setExpanded(true);
-            int index = position + 1;
-            for (TreeNode child : node.getChildren()) {
-                int before = rootsNodes.size();
-                rootsNodes.add(index, child);
-                expandNodeBranch(child);
-                int after = rootsNodes.size();
-                int diff = after - before;
-                index += diff;
-            }
-        }*/
+        Iterator<TreeNode> descIter = nodesToRoot.descendingIterator();
+        int position = -1;
+        while(descIter.hasNext()) {
+            TreeNode tn = descIter.next();
+            position = expandNode(tn);
+        }
+
         return position;
     }
 

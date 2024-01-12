@@ -1,8 +1,4 @@
-package com.ingenieur.andyelderscrolls.nifdisplay;
-
-
-import android.view.View;
-import android.widget.Toast;
+package com.ingenieur.andyelderscrolls.display;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -17,7 +13,6 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
-import org.jogamp.java3d.Alpha;
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.Background;
 import org.jogamp.java3d.BoundingSphere;
@@ -25,9 +20,7 @@ import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.DirectionalLight;
 import org.jogamp.java3d.Group;
 import org.jogamp.java3d.Light;
-import org.jogamp.java3d.Node;
 import org.jogamp.java3d.PointLight;
-import org.jogamp.java3d.RotationInterpolator;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
@@ -39,7 +32,6 @@ import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import bsa.source.BsaMeshSource;
@@ -48,13 +40,8 @@ import bsaio.ArchiveEntry;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
-import nif.BgsmSource;
-import nif.NifJ3dVisPhysRoot;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
-import nif.character.NifJ3dSkeletonRoot;
-import nif.j3d.J3dNiAVObject;
-import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.particles.tes3.J3dNiParticles;
 import nif.shader.NiGeometryAppearanceShader;
 import nif.shader.ShaderSourceIO;
@@ -62,28 +49,24 @@ import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
 import tools3d.utils.scenegraph.SpinTransform;
-import utils.PerFrameUpdateBehavior;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 
-public class NifDisplayTester implements DragMouseAdapter.Listener {
-    private SimpleCameraHandler simpleCameraHandler;
+public abstract class DisplayTester implements DragMouseAdapter.Listener {
 
     private TransformGroup spinTransformGroup = new TransformGroup();
 
     private TransformGroup rotateTransformGroup = new TransformGroup();
 
-    private BranchGroup modelGroup = new BranchGroup();
-
     private SpinTransform spinTransform;
 
     private boolean cycle = true;
 
-    private boolean showHavok = true;
+    protected boolean showHavok = true;
 
-    private boolean showVisual = true;
+    protected boolean showVisual = true;
 
-    private boolean animateModel = true;
+    protected boolean animateModel = true;
 
     private boolean spin = false;
 
@@ -93,22 +76,29 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
 
     public Canvas3D2D canvas3D2D;
 
-    private BranchGroup scene;
-
     private AndyFPSCounter fpsCounter;
-
-    private FragmentActivity parentActivity;
-
-    private TreeNode currentTreeNodeDisplayed;
 
     private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
-    private BSArchiveSet bsaFileSet;
-    private MeshSource meshSource = null;
-    private TextureSource textureSource = null;
+    protected SimpleCameraHandler simpleCameraHandler;
 
-    public NifDisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
+    protected TreeNode currentTreeNodeDisplayed;
+
+    protected BranchGroup modelGroup = new BranchGroup();
+
+    protected FragmentActivity parentActivity;
+
+    protected BSAArchiveFileChooser bsaArchiveFileChooser;
+
+    protected BSArchiveSet bsaFileSet;
+    protected MeshSource meshSource = null;
+    protected TextureSource textureSource = null;
+
+    protected String rootDir;
+
+    public DisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
         this.parentActivity = parentActivity;
+        this.rootDir = rootDir;
         NifToJ3d.SUPPRESS_EXCEPTIONS = false;
         NiGeometryAppearanceShader.OUTPUT_BINDINGS = true;
         ArchiveFile.USE_FILE_MAPS = false;
@@ -159,7 +149,7 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         ambLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
         ambLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
 
-        Color3f dlColor = new Color3f(0.1f, 0.1f, 0.6f);
+        Color3f dlColor = new Color3f(0.8f, 0.8f, 0.6f);
         DirectionalLight dirLight = new DirectionalLight(true, dlColor, new Vector3f(0f, -1f, 0f));
         dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
         dirLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
@@ -215,67 +205,23 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         bgc.setCapability(BranchGroup.ALLOW_DETACH);
         tg.addChild(new Cube(0.002f));
         spinTransformGroup.addChild(bgc);
-        toggleSpin();
 
         simpleUniverse.addBranchGraph(bg);
 
-        canvas3D2D.getView().setBackClipDistance(5000);
-        canvas3D2D.getView().setFrontClipDistance(0.1f);
+        canvas3D2D.getView().setBackClipDistance(2000);
+        canvas3D2D.getView().setFrontClipDistance(0.01f);
         canvas3D2D.getGLWindow().addKeyListener(new KeyHandler());
 
         dragMouseAdapter.setListener(this);
         canvas3D2D.getGLWindow().addMouseListener(dragMouseAdapter);
 
-        // Create the content branch and add it to the universe
-        scene = createSceneGraph();
-        simpleUniverse.addBranchGraph(scene);
-
-        showNifFileChooser();
     }
 
-    public BranchGroup createSceneGraph() {
-        // Create the root of the branch graph
-        BranchGroup objRoot = new BranchGroup();
-
-        // Create the TransformGroup node and initialize it to the identity. Enable the TRANSFORM_WRITE capability so that
-        // our behavior code can modify it at run time. Add it to the root of the subgraph.
-        TransformGroup objTrans = new TransformGroup();
-        objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        objRoot.addChild(objTrans);
-
-        // Create a new Behavior object that will perform the desired operation on the specified transform and add
-        // it into the scene graph.
-        Transform3D yAxis = new Transform3D();
-        Alpha rotationAlpha = new Alpha(-1, 4000);
-
-        RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, objTrans, yAxis, 0.0f, (float) Math.PI * 2.0f);
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-        rotator.setSchedulingBounds(bounds);
-        objRoot.addChild(rotator);
-
-        // Have Java 3D perform optimizations on this scene graph.
-        objRoot.compile();
-
-        return objRoot;
-    }
-
-    /**
-     * TreeNode with a value not of ArchiveEntry are ignored
-     *
-     * @param treeNode
-     */
-    private void treeNodeToDisplay(TreeNode treeNode) {
-        if (treeNode.getValue() instanceof ArchiveEntry) {
-            currentTreeNodeDisplayed = treeNode;
-            displayNif((ArchiveEntry) treeNode.getValue());
-        }
-    }
-
-    private void nextModel() {
+    private void nextItem() {
         changeModelInTree(+1);
     }
 
-    private void prevModel() {
+    private void prevItem() {
         changeModelInTree(-1);
     }
 
@@ -283,15 +229,74 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         if (currentTreeNodeDisplayed != null) {
             TreeNode parentDir = currentTreeNodeDisplayed.getParent();
             if (parentDir != null) {
-                LinkedList<TreeNode> siblings = parentDir.getChildren();
-                if (siblings != null) {
+                LinkedList<TreeNode> siblings = new LinkedList<TreeNode>(parentDir.getChildren());
+                // strip folders
+                for (int i = 0; i < siblings.size(); i++) {
+                    if(siblings.get(i) instanceof BSAArchiveFileChooser.FolderNode) {
+                        siblings.remove(i);
+                        i--;
+                    }
+                }
+
+                if (siblings.size() > 0) {
                     // find ourselves
                     int currentIdx = siblings.indexOf(currentTreeNodeDisplayed);
                     if (currentIdx >= 0) {
                         // display model in step direction (if there is a one)
-                        if (currentIdx + step >= 0 && currentIdx + step < siblings.size()) {
+                        // if it's off check for existing cousin instead
+                        int newPos = currentIdx + step;
+                        if (newPos < 0 || newPos >= siblings.size()) {
+                            TreeNode grandParentDir = parentDir.getParent();
+                            if (grandParentDir != null) {
+                                LinkedList<TreeNode> auntsuncles = new LinkedList<TreeNode>(grandParentDir.getChildren());
+                                // only folders
+                                for (int i = 0; i < siblings.size(); i++) {
+                                    if(!(siblings.get(i) instanceof BSAArchiveFileChooser.FolderNode)) {
+                                        siblings.remove(i);
+                                        i--;
+                                    }
+                                }
+                                if (auntsuncles.size() > 0) {
+                                    int parentIdx = auntsuncles.indexOf(parentDir);
+                                    if (parentIdx >= 0) {
+                                        TreeNode auntuncle = null;
+                                        if (newPos < 0 && parentIdx > 0) {
+                                            auntuncle = auntsuncles.get(parentIdx - 1);
+                                        } else if (newPos >= siblings.size() && parentIdx < auntsuncles.size() -1) {
+                                            auntuncle = auntsuncles.get(parentIdx + 1);
+                                        }
+
+                                        if(auntuncle != null ) {
+                                            LinkedList<TreeNode> cousins = new LinkedList<TreeNode>(auntuncle.getChildren());
+                                            if (cousins != null) {
+                                                // strip folders
+                                                for (int i = 0; i < siblings.size(); i++) {
+                                                    if (siblings.get(i) instanceof BSAArchiveFileChooser.FolderNode) {
+                                                        siblings.remove(i);
+                                                        i--;
+                                                    }
+                                                }
+
+                                                if(cousins.size() > 0) {
+                                                    TreeNode cousin = null;
+                                                    if (newPos < 0) {
+                                                        cousin = cousins.get(cousins.size() - 1);
+                                                    } else if (newPos >= siblings.size()) {
+                                                        cousin = cousins.get(0);
+                                                    }
+
+                                                    if (cousin != null) {
+                                                        treeNodeToDisplay(cousin);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
                             // if value is a folder not nif then this call will do nothing
-                            treeNodeToDisplay(siblings.get(currentIdx + step));
+                            treeNodeToDisplay(siblings.get(newPos));
                         }
                     }
                 }
@@ -299,7 +304,19 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         }
     }
 
-    private void toggleSpin() {
+    /**
+     * TreeNode with a value not of ArchiveEntry are ignored
+     *
+     * @param treeNode
+     */
+    protected void treeNodeToDisplay(TreeNode treeNode) {
+        if (treeNode.getValue() instanceof ArchiveEntry) {
+            currentTreeNodeDisplayed = treeNode;
+            displayItem((ArchiveEntry) treeNode.getValue());
+        }
+    }
+
+    protected void toggleSpin() {
         spin = !spin;
         if (spinTransform != null) {
             spinTransform.setEnable(spin);
@@ -333,173 +350,25 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
         cycle = !cycle;
     }
 
-    public void displayNif(ArchiveEntry archiveEntry) {
-        showNif(archiveEntry, meshSource, textureSource);
-    }
-
-    public void showNif(final ArchiveEntry archiveEntry, MeshSource meshSource, TextureSource textureSource) {
-        parentActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(parentActivity, "Displaying " + archiveEntry, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-        BgsmSource.setBgsmSource(meshSource);
-        //System.out.println("displayNif selected file: " + archiveEntry);
-        display(NifToJ3d.loadNif(archiveEntry.toString(), meshSource, textureSource));
-    }
-
-    private BranchGroup hbg;
-
-    private BranchGroup vbg;
-
-    private void update() {
-        modelGroup.removeAllChildren();
-        if (showHavok) {
-            modelGroup.addChild(hbg);
-        }
-        if (showVisual) {
-            modelGroup.addChild(vbg);
-        }
-    }
-
-    private ArrayList<J3dNiSkinInstance> allSkins;
-    private NifJ3dSkeletonRoot inputSkeleton;
-
-    private void display(NifJ3dVisPhysRoot nif) {
-        if (nif != null) {
-
-            J3dNiAVObject havok = nif.getHavokRoot();
-            if (nif.getVisualRoot().getJ3dNiControllerManager() != null && animateModel) {
-                //note self cleaning uping
-                ControllerInvokerThread controllerInvokerThread = new ControllerInvokerThread(nif.getVisualRoot().getName(),
-                        nif.getVisualRoot().getJ3dNiControllerManager(), havok.getJ3dNiControllerManager());
-                controllerInvokerThread.start();
-            }
-
-            modelGroup.removeAllChildren();
-
-            hbg = new BranchGroup();
-            hbg.setCapability(BranchGroup.ALLOW_DETACH);
-
-            if (showHavok && havok != null) {
-                hbg.addChild(havok);
-                modelGroup.addChild(hbg);
-            }
-
-            vbg = new BranchGroup();
-            vbg.setCapability(BranchGroup.ALLOW_DETACH);
-            vbg.setCapability(Node.ALLOW_BOUNDS_READ);
-
-            if (showVisual) {
-                // check for skins!
-                if (NifJ3dSkeletonRoot.isSkeleton(nif.getNiToJ3dData())) {
-                    inputSkeleton = new NifJ3dSkeletonRoot(nif.getVisualRoot(), nif.getNiToJ3dData());
-                    // create skins from the skeleton and skin nif
-                    allSkins = J3dNiSkinInstance.createSkins(nif.getNiToJ3dData(), inputSkeleton);
-
-                    if (allSkins.size() > 0) {
-                        // add the skins to the scene
-                        for (J3dNiSkinInstance j3dNiSkinInstance : allSkins) {
-                            vbg.addChild(j3dNiSkinInstance);
-                        }
-
-                        PerFrameUpdateBehavior pub = new PerFrameUpdateBehavior(new PerFrameUpdateBehavior.CallBack() {
-                            @Override
-                            public void update() {
-                                // must be called to update the accum transform
-                                inputSkeleton.updateBones();
-                                for (J3dNiSkinInstance j3dNiSkinInstance : allSkins) {
-                                    j3dNiSkinInstance.processSkinInstance();
-                                }
-                            }
-
-                        });
-                        vbg.addChild(inputSkeleton);
-                        vbg.addChild(pub);
-                        modelGroup.addChild(vbg);
-                    }
-                } else {
-                    vbg.addChild(nif.getVisualRoot());
-
-                    //vbg.outputTraversal();
-                    vbg.compile();// oddly this does NOT get called automatically
-                    modelGroup.addChild(vbg);
-                }
-            }
-
-            System.out.println("vbg.getBounds() " + vbg.getBounds());
-            simpleCameraHandler.viewBounds(vbg.getBounds());
-
-            //TODO: the bounds was 0.21 (seems good) and eye was set to 0.8 but this this seems too close?
-            if (vbg.getBounds() instanceof BoundingSphere) {
-                if (((BoundingSphere) vbg.getBounds()).getRadius() < 1f)
-                    simpleCameraHandler.setView(new Point3d(0, 0, 2), new Point3d());
-            }
-
-            //FOR forcing a center distance
-            simpleCameraHandler.setView(new Point3d(0, 1, 4), new Point3d(0, 1, 0));
-
-            spinTransform.setEnable(spin);
-
-        } else {
-            System.out.println("why you give display(NifJ3dVisPhysRoot nif) a null eh?");
-        }
-
-    }
-
-    private BSAArchiveFileChooser bsaArchiveFileChooser;
-
-    private void showNifFileChooser() {
-        // show file chooser
-        parentActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                if (bsaArchiveFileChooser == null) {
-                    bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
-                        @Override
-                        public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
-                            //TODO could pop up a dialog of info or something fun
-                            if (treeNode.getValue() instanceof ArchiveEntry) {
-                                treeNodeToDisplay(treeNode);
-                                bsaArchiveFileChooser.dismiss();
-                            }
-                            return false;
-                        }
-
-                        @Override
-                        public void onTreeNodeClick(TreeNode treeNode, View view) {
-                            if (treeNode.getValue() instanceof ArchiveEntry) {
-                                treeNodeToDisplay(treeNode);
-                                bsaArchiveFileChooser.dismiss();
-                            }
-                        }
-                    }).load();
-                }
-
-                bsaArchiveFileChooser.showDialog();
-                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
-
-            }
-        });
-    }
 
     @Override
     public void dragComplete(final MouseEvent e, DragMouseAdapter.DRAG_TYPE dragType) {
-        //TODO: DragMouseAdapter is my own code so check there first
-        // this drag adapter is VERY flakey on drag left? am I dropping touch events again?? doesn't look like it
-        // but jogamp.newt.WindowImpl.doPointerEvent needs examination!
         if (dragType == DragMouseAdapter.DRAG_TYPE.UP) {
             // show Keyboard
             boolean kbVis = ((com.jogamp.newt.Window) e.getSource()).isKeyboardVisible();
             ((com.jogamp.newt.Window) e.getSource()).setKeyboardVisible(!kbVis);
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.DOWN) {
-            showNifFileChooser();
+            showFileChooser();
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.LEFT) {
-            prevModel();
+            prevItem();
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.RIGHT) {
-            nextModel();
+            nextItem();
         }
     }
+
+    protected abstract void displayItem(ArchiveEntry archiveEntry);
+    protected abstract void update();
+    protected abstract void showFileChooser();
 
     private class KeyHandler extends KeyAdapter {
         public KeyHandler() {
@@ -526,10 +395,17 @@ public class NifDisplayTester implements DragMouseAdapter.Listener {
             } else if (e.getKeyCode() == KeyEvent.VK_P) {
                 toggleBackground();
             } else if (e.getKeyCode() == KeyEvent.VK_N) {
-                nextModel();
+                nextItem();
             } else if (e.getKeyCode() == KeyEvent.VK_M) {
-                prevModel();
+                prevItem();
             }
         }
+    }
+
+    public static String right(String s, int c) {
+        if(s!=null && c<=s.length())
+            return s.substring(s.length()-c);
+        else
+            return s;
     }
 }

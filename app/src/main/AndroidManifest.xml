@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".nifdisplay.NifDisplayActivity"
+            android:name=".display.nifdisplay.NifDisplayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Nif Display"
             android:parentActivityName=".ElderScrollsActivity"
@@ -63,7 +63,7 @@
                 android:value=".ElderScrollsActivity"/>
         </activity>
         <activity
-            android:name=".jbullet.JBulletActivity"
+            android:name=".display.jbullet.JBulletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="JBullet"
             android:parentActivityName=".ElderScrollsActivity"
@@ -73,7 +73,7 @@
                 android:value=".ElderScrollsActivity"/>
         </activity>
         <activity
-            android:name=".kfdisplay.KfDisplayActivity"
+            android:name=".display.kfdisplay.KfDisplayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="KfDisplayActivity"
             android:parentActivityName=".ElderScrollsActivity"
@@ -83,7 +83,7 @@
                 android:value=".ElderScrollsActivity"/>
         </activity>
         <activity
-            android:name=".texdisplay.TexDisplayActivity"
+            android:name=".display.texdisplay.TexDisplayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Texture Display"
             android:parentActivityName=".ElderScrollsActivity"

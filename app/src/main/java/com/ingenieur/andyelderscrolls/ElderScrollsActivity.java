@@ -20,10 +20,10 @@ import android.widget.Toast;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndyESExplorerActivity;
-import com.ingenieur.andyelderscrolls.jbullet.JBulletActivity;
-import com.ingenieur.andyelderscrolls.kfdisplay.KfDisplayActivity;
-import com.ingenieur.andyelderscrolls.nifdisplay.NifDisplayActivity;
-import com.ingenieur.andyelderscrolls.texdisplay.TexDisplayActivity;
+import com.ingenieur.andyelderscrolls.display.jbullet.JBulletActivity;
+import com.ingenieur.andyelderscrolls.display.kfdisplay.KfDisplayActivity;
+import com.ingenieur.andyelderscrolls.display.nifdisplay.NifDisplayActivity;
+import com.ingenieur.andyelderscrolls.display.texdisplay.TexDisplayActivity;
 import com.ingenieur.andyelderscrolls.utils.SopInterceptor;
 
 import org.jogamp.java3d.JoglesPipeline;
@@ -33,10 +33,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import bsa.source.BsaTextureSource;
-import javaawt.VMEventQueue;
-import javaawt.image.VMBufferedImage;
-import javaawt.imageio.VMImageIO;
 import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;

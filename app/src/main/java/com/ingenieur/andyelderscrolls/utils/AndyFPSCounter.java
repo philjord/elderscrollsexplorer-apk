@@ -15,12 +15,10 @@ import java.util.Iterator;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
 
-
 public class AndyFPSCounter
 {
-	public static int FRAME_SAMPLE = 5;
 	public static int TIME_SAMPLE = 500;
-	public static int HEIGHT = 50;
+	public static float HEIGHT = 0.00003F;
 	private long currtime;
 	private long lasttime;
 	private long deltatime;
@@ -48,13 +46,13 @@ public class AndyFPSCounter
 
 	public void addToCanvas(Canvas3D2D canvas3d2d)
 	{
-		float pixelSizeFPS = 0.00015F * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
+		float pixelSizeFPS = HEIGHT * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
 		try
 		{
 			this.fpsLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(fpsLabel);
 			this.fpsLabel.setEnabled(true);
-			this.fpsLabel.moveTo(-0.88F, 0.75F, 0.0F);
+			this.fpsLabel.moveTo(-0.88F, 0.95F, 0.0F);
 			this.fpsLabel.setColor(1.0F, 1.0F, 0.0F, 1.0F);
 		}
 		catch (IOException e)
