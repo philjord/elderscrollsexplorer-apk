@@ -115,7 +115,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                     scrollsExplorerInitCalled = true;
                     final AndyESExplorerActivity activity = (AndyESExplorerActivity) AndyESExplorerFragment.this.getActivity();
 
-                    scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId);
+                    scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId, AndyESExplorerFragment.this);
                     activity.scrollsExplorer = scrollsExplorer;
 
                     moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
@@ -245,5 +245,15 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
         }
 
         super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    public GLWindowOverLay getCharacterSheetOverlay() {
+        return characterSheetOverlay;
+    }
+    public GLWindowOverLay getInventoryOverlay() {
+        return inventoryOverlay;
+    }
+    public GLWindowOverLay getMapOverlay() {
+        return mapOverlay;
     }
 }

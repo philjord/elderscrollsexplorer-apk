@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 
 import com.amrdeveloper.treeview.TreeNode;
+import com.ingenieur.andyelderscrolls.display.DisplayActivity;
 import com.ingenieur.andyelderscrolls.display.DisplayTester;
 import com.ingenieur.andyelderscrolls.utils.BSAArchiveFileChooser;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
@@ -33,13 +34,14 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
 
     private ArrayList<String> skinNifFiles = new ArrayList<String>();
 
-    public KfDisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
+    public KfDisplayTester(DisplayActivity parentActivity, GLWindow gl_window, String rootDir) {
         super(parentActivity, gl_window, rootDir);
 
-        // show file chooser
-        parentActivity.runOnUiThread(new Runnable() {
-            public void run() {
+    }
+    protected void loaded() {
 
+        Thread t = new Thread() {
+            public void run() {
 
                 bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif");
                 bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
@@ -65,18 +67,21 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
                     }
                 }).load();
 
-                Toast.makeText(parentActivity, "Please select a skeleton nif file", Toast.LENGTH_SHORT)
-                        .show();
-                bsaArchiveFileChooser.showDialog();
-            }
-        });
+                // show file chooser
+                parentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(parentActivity, "Please select a skeleton nif file", Toast.LENGTH_SHORT)
+                                .show();
+                        bsaArchiveFileChooser.showDialog();
+                    }
+                });
+            }};
+        t.start();
     }
 
     private void selectSkins() {
         parentActivity.runOnUiThread(new Runnable() {
             public void run() {
-
-
                 bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setMultiple(true).setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
                     @Override
                     public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
@@ -180,9 +185,9 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
 
     protected void displayItem(ArchiveEntry archiveEntry) {
         parentActivity.runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                Toast.makeText(parentActivity, "" + right(archiveEntry.toString(),64), Toast.LENGTH_SHORT)
-                        .show();
+                parentActivity.getDisplayOverlay().setText(right(archiveEntry.toString(),48));
             }
         });
         if (!rootDir.toLowerCase().contains("morrowind")) {

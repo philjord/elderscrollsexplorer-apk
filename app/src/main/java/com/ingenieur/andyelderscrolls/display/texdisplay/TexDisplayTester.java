@@ -1,26 +1,20 @@
 package com.ingenieur.andyelderscrolls.display.texdisplay;
 
 import android.view.View;
-import android.widget.Toast;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.amrdeveloper.treeview.TreeNode;
+import com.ingenieur.andyelderscrolls.display.DisplayActivity;
 import com.ingenieur.andyelderscrolls.display.DisplayTester;
 import com.ingenieur.andyelderscrolls.utils.BSAArchiveFileChooser;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.jogamp.newt.opengl.GLWindow;
 
-import org.jogamp.java3d.Alpha;
-import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.GeometryArray;
 import org.jogamp.java3d.IndexedTriangleArray;
 import org.jogamp.java3d.PolygonAttributes;
-import org.jogamp.java3d.RotationInterpolator;
 import org.jogamp.java3d.Shape3D;
 import org.jogamp.java3d.Texture;
-import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.java3d.utils.shader.SimpleShaderAppearance;
@@ -35,16 +29,19 @@ import bsaio.ArchiveEntry;
 
 public class TexDisplayTester extends DisplayTester implements DragMouseAdapter.Listener {
 
-    public TexDisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
+    public TexDisplayTester(DisplayActivity parentActivity, GLWindow gl_window, String rootDir) {
         super(parentActivity, gl_window, rootDir);
+
+    }
+    protected void loaded() {
         showFileChooser();
     }
 
     protected void displayItem(final ArchiveEntry archiveEntry ) {
         parentActivity.runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                Toast.makeText(parentActivity, "" + right(archiveEntry.toString(),64), Toast.LENGTH_SHORT)
-                        .show();
+                parentActivity.getDisplayOverlay().setText(right(archiveEntry.toString(),48));
             }
         });
 
@@ -128,8 +125,8 @@ public class TexDisplayTester extends DisplayTester implements DragMouseAdapter.
     }
 
     protected void showFileChooser() {
-        // show file chooser
-        parentActivity.runOnUiThread(new Runnable() {
+
+        Thread t = new Thread() {
             public void run() {
                 if (bsaArchiveFileChooser == null) {
                     bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("ktx").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
@@ -152,11 +149,18 @@ public class TexDisplayTester extends DisplayTester implements DragMouseAdapter.
                         }
                     }).load();
                 }
+                // show file chooser
+                parentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
 
-                bsaArchiveFileChooser.showDialog();
-                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
+
+                        bsaArchiveFileChooser.showDialog();
+                        bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
+                    }
+                });
             }
-        });
+        };
+        t.start();
     }
 
 }

@@ -234,7 +234,7 @@ public class AndyESEVRFragment extends NewtBaseFragment
 					scrollsExplorerInitCalled = true;
 					AndyESExplorerActivity activity = (AndyESExplorerActivity) AndyESEVRFragment.this.getActivity();
 
-					scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId);
+					scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId, null);
 					activity.scrollsExplorer = scrollsExplorer;
 
 					moveNavigationPanel = createMoveNavigationPanel(scrollsExplorer.simpleWalkSetup.getNavigationProcessor());

@@ -4,6 +4,8 @@ import static scrollsexplorer.GameConfig.allGameConfigs;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
@@ -29,6 +31,8 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
+import org.jogamp.java3d.ImageComponent2D;
+import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
@@ -39,6 +43,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
@@ -51,6 +58,8 @@ import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
 import bsaio.DBException;
+import compressedtexture.CompressedBufferedImage;
+import compressedtexture.KTXImage;
 import esfilemanager.common.data.plugin.PluginGroup;
 import esfilemanager.common.data.record.Record;
 import esfilemanager.loader.ESMManager;
@@ -63,7 +72,9 @@ import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import etcpack.ETCPack;
 import javaawt.VMEventQueue;
+import javaawt.image.BufferedImage;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
 import nif.BgsmSource;
@@ -119,6 +130,7 @@ public class ScrollsExplorer
     private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
     private FragmentActivity parentActivity;
+    private AndyESExplorerFragment parentFragment;
 
     private GameConfig gameConfigToLoad;
 
@@ -131,9 +143,10 @@ public class ScrollsExplorer
     private boolean saveLoadConfig = false;
     private ProgressBar progressBar;
 
-    public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId) {
+    public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId, AndyESExplorerFragment parentFragment) {
 
         this.parentActivity = parentActivity2;
+        this.parentFragment = parentFragment;
 
         progressBar = (ProgressBar) parentActivity.findViewById(R.id.progressBar);
         //(ProgressBar)parentActivity.viewIinflated.findViewById(R.id.progressBar);
@@ -358,6 +371,20 @@ public class ScrollsExplorer
                             //long distance view
                             //BethRenderSettings.setFarLoadGridCount(16);
                             //
+
+                            Bitmap mapBitmap = getBitmapFromTextureSource("textures/scroll.ktx", textureSource);
+                            Bitmap invBitmap = getBitmapFromTextureSource("levelup/agent.ktx", textureSource);
+                            Bitmap charBitmap = getBitmapFromTextureSource("textures/tex_menutest.ktx", textureSource);
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
+                                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
+                                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
+                                }
+                            });
+
                         } else {
                             AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
 
@@ -480,6 +507,44 @@ public class ScrollsExplorer
         };
         t.start();
     }
+
+
+    private Bitmap getBitmapFromTextureSource(String textureName, BsaTextureSource textureSource) {
+        InputStream inputStream = textureSource.getInputStream(textureName);
+        try {
+            ByteBuffer bb = CompressedTextureLoader.toByteBuffer(inputStream);
+
+            int[] w = new int[1];
+            int[] h = new int[1];
+
+
+            ETCPack ep = new ETCPack();
+            byte[] rawBytes = ep.uncompressImageFromByteBuffer(bb, w, h, true);
+            if(rawBytes != null) {
+                ByteBuffer buffer = ByteBuffer.wrap(rawBytes);
+                int width = w[0];
+                int height = h[0];
+
+                int[] pixels = new int[width * height];
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        //NOTE javadoc on Bitmap.Config.ARGB_8888 says it is actually ABGR!! christ.
+                        pixels[(y * width) + x] = ((buffer.get() & 0xff) << 24 | (buffer.get() & 0xff) << 0 | (buffer.get() & 0xff) << 8
+                                | (buffer.get() & 0xff) << 16);
+                    }
+                }
+
+                //TODO: handle non A types
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                bitmap.copyPixelsFromBuffer(IntBuffer.wrap(pixels));
+                return bitmap;
+            }
+        } catch (IOException e){
+            System.out.println( ""+textureName+ " had a  IO problem  : " + e.getMessage());
+        }
+        return null;
+    }
+
 
     private void organizeMorrowindSounds() {
         //TODO: music to play is using Files and is Morrowinw Specific
@@ -796,8 +861,7 @@ public class ScrollsExplorer
                                             FileOutputStream fos = new ParcelFileDescriptor.AutoCloseOutputStream(ktxPFD);
                                             FileInputStream fisKtx = new ParcelFileDescriptor.AutoCloseInputStream(ktxPFD);
 
-                                            //DO NOT delte file as it is hopefully a restartable fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
-
+                                            //DO NOT delete file as it is hopefully a restartable //->fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
                                             DDSToKTXBsaConverter.StatusUpdateListener sul = new DDSToKTXBsaConverter.StatusUpdateListener() {
                                                 public void updateProgress(int currentProgress) {
                                                     parentActivity.runOnUiThread(new Runnable() {

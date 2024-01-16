@@ -2,12 +2,16 @@ package com.ingenieur.andyelderscrolls.andyesexplorer.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -97,6 +101,34 @@ public class GLWindowOverLay {
                 }
             });
         }
+    }
+
+
+    public void setBitMap(Bitmap newBitmap) {
+        // let's see if we have an ImageView child hereabouts?
+        for(int index = 0; index < ((ViewGroup) popupView).getChildCount(); index++) {
+            View nextChild = ((ViewGroup) popupView).getChildAt(index);
+            if (nextChild instanceof ImageView) {
+                ImageView iv = (ImageView)nextChild;
+                // keep the size the same as current
+                iv.setImageBitmap(Bitmap.createScaledBitmap(newBitmap, iv.getWidth(), iv.getHeight(), true));
+                iv.invalidate();
+            }
+        }
+
+    }
+
+    public void setText(String newText) {
+        // let's see if we have an ImageView child hereabouts?
+        for(int index = 0; index < ((ViewGroup) popupView).getChildCount(); index++) {
+            View nextChild = ((ViewGroup) popupView).getChildAt(index);
+            if (nextChild instanceof TextView) {
+                TextView tv = (TextView)nextChild;
+                tv.setText(newText);
+                tv.invalidate();
+            }
+        }
+
     }
 
     public void hideTooltip() {

@@ -9,9 +9,9 @@
               android:orientation="vertical"
               >
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:src="@drawable/icons8_orc_96"/>
+                android:text="Information here"/>
 </LinearLayout>

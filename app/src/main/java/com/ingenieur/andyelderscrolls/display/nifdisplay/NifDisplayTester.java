@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 
 import com.amrdeveloper.treeview.TreeNode;
+import com.ingenieur.andyelderscrolls.display.DisplayActivity;
 import com.ingenieur.andyelderscrolls.display.DisplayTester;
 import com.ingenieur.andyelderscrolls.utils.BSAArchiveFileChooser;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
@@ -32,16 +33,18 @@ import utils.PerFrameUpdateBehavior;
 
 public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter.Listener {
 
-    public NifDisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
+    public NifDisplayTester(DisplayActivity parentActivity, GLWindow gl_window, String rootDir) {
         super(parentActivity, gl_window, rootDir);
 
         toggleSpin();// enable spin for straight models for funsies
+    }
+    protected void loaded() {
         showFileChooser();
     }
 
     protected void showFileChooser() {
-        // show file chooser
-        parentActivity.runOnUiThread(new Runnable() {
+
+        Thread t = new Thread() {
             public void run() {
                 if (bsaArchiveFileChooser == null) {
                     bsaArchiveFileChooser = new BSAArchiveFileChooser(parentActivity, bsaFileSet).setExtension("nif").setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
@@ -64,21 +67,26 @@ public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter
                         }
                     }).load();
                 }
-
-                bsaArchiveFileChooser.showDialog();
-                bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
-
+                // show file chooser
+                parentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        bsaArchiveFileChooser.showDialog();
+                        bsaArchiveFileChooser.expandToTreeNode(currentTreeNodeDisplayed);
+                    }
+                });
             }
-        });
+        };
+        t.start();
     }
 
     protected void displayItem(ArchiveEntry archiveEntry) {
         parentActivity.runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                Toast.makeText(parentActivity, "" + right(archiveEntry.toString(),64), Toast.LENGTH_SHORT)
-                        .show();
+                parentActivity.getDisplayOverlay().setText(right(archiveEntry.toString(),48));
             }
         });
+
         BgsmSource.setBgsmSource(meshSource);
         //System.out.println("displayNif selected file: " + archiveEntry);
         display(NifToJ3d.loadNif(archiveEntry.toString(), meshSource, textureSource));

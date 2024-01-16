@@ -86,7 +86,7 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
 
     protected BranchGroup modelGroup = new BranchGroup();
 
-    protected FragmentActivity parentActivity;
+    protected DisplayActivity parentActivity;
 
     protected BSAArchiveFileChooser bsaArchiveFileChooser;
 
@@ -96,7 +96,7 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
 
     protected String rootDir;
 
-    public DisplayTester(FragmentActivity parentActivity, GLWindow gl_window, String rootDir) {
+    public DisplayTester(DisplayActivity parentActivity, GLWindow gl_window, String rootDir) {
         this.parentActivity = parentActivity;
         this.rootDir = rootDir;
         NifToJ3d.SUPPRESS_EXCEPTIONS = false;
@@ -109,12 +109,6 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         ShaderSourceIO.ES_SHADERS = true;
 
         BsaMeshSource.FALLBACK_TO_FILE_SOURCE = false;
-
-        String[] BSARoots = new String[]{rootDir};
-
-        bsaFileSet = new BSArchiveSetUri(this.parentActivity, BSARoots, true);
-        meshSource = new BsaMeshSource(bsaFileSet);
-        textureSource = new BsaTextureSource(bsaFileSet);
 
         canvas3D2D = new Canvas3D2D(gl_window);
 
@@ -170,8 +164,8 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
 
         TransformGroup tg = new TransformGroup();
         // light is above like nifskope
-        Transform3D t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 10, 0), 1);
-        tg.setTransform(t);
+        Transform3D t3d = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 10, 0), 1);
+        tg.setTransform(t3d);
         //tg.addChild(new Cube(0.1f));
         tg.addChild(pLight);
         bg.addChild(tg);
@@ -190,16 +184,16 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         bg.addChild(background);
 
         tg = new TransformGroup();
-        t = new Transform3D();
-        t.rotY(Math.PI / 8);
-        t.setTranslation(new Vector3f(0, 0, -5));
-        tg.setTransform(t);
+        t3d = new Transform3D();
+        t3d.rotY(Math.PI / 8);
+        t3d.setTranslation(new Vector3f(0, 0, -5));
+        tg.setTransform(t3d);
         tg.addChild(new Cube(0.01f));
         bg.addChild(tg);
 
         tg = new TransformGroup();
-        t = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0.015f), 1);
-        tg.setTransform(t);
+        t3d = new Transform3D(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0.015f), 1);
+        tg.setTransform(t3d);
         BranchGroup bgc = new BranchGroup();
         bgc.addChild(tg);
         bgc.setCapability(BranchGroup.ALLOW_DETACH);
@@ -212,8 +206,20 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         canvas3D2D.getView().setFrontClipDistance(0.01f);
         canvas3D2D.getGLWindow().addKeyListener(new KeyHandler());
 
-        dragMouseAdapter.setListener(this);
+        dragMouseAdapter.setListener(DisplayTester.this);
         canvas3D2D.getGLWindow().addMouseListener(dragMouseAdapter);
+
+        Thread t = new Thread() {
+            public void run() {
+                String[] BSARoots = new String[]{rootDir};
+
+                bsaFileSet = new BSArchiveSetUri(DisplayTester.this.parentActivity, BSARoots, true);
+                meshSource = new BsaMeshSource(bsaFileSet);
+                textureSource = new BsaTextureSource(bsaFileSet);
+                loaded();
+            }
+        };
+        t.start();
 
     }
 
@@ -250,9 +256,9 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
                             if (grandParentDir != null) {
                                 LinkedList<TreeNode> auntsuncles = new LinkedList<TreeNode>(grandParentDir.getChildren());
                                 // only folders
-                                for (int i = 0; i < siblings.size(); i++) {
-                                    if(!(siblings.get(i) instanceof BSAArchiveFileChooser.FolderNode)) {
-                                        siblings.remove(i);
+                                for (int i = 0; i < auntsuncles.size(); i++) {
+                                    if(!(auntsuncles.get(i) instanceof BSAArchiveFileChooser.FolderNode)) {
+                                        auntsuncles.remove(i);
                                         i--;
                                     }
                                 }
@@ -270,9 +276,9 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
                                             LinkedList<TreeNode> cousins = new LinkedList<TreeNode>(auntuncle.getChildren());
                                             if (cousins != null) {
                                                 // strip folders
-                                                for (int i = 0; i < siblings.size(); i++) {
-                                                    if (siblings.get(i) instanceof BSAArchiveFileChooser.FolderNode) {
-                                                        siblings.remove(i);
+                                                for (int i = 0; i < cousins.size(); i++) {
+                                                    if (cousins.get(i) instanceof BSAArchiveFileChooser.FolderNode) {
+                                                        cousins.remove(i);
                                                         i--;
                                                     }
                                                 }
@@ -366,6 +372,10 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         }
     }
 
+    /**
+     * Called when the inti is done
+     */
+    protected abstract void loaded();
     protected abstract void displayItem(ArchiveEntry archiveEntry);
     protected abstract void update();
     protected abstract void showFileChooser();
