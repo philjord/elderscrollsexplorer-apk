@@ -128,7 +128,8 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                         }
                     });
 
-                    characterSheetOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.charactersheetoverlay, Gravity.RIGHT | Gravity.TOP, true, 0, 0);
+                    // notice the top right is always offset by the width of the overlay so as to no go offscreen (it's a bit odd)
+                    characterSheetOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.charactersheetoverlay, Gravity.RIGHT | Gravity.TOP, true, 50, 0);
                     characterSheetOverlay.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

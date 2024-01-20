@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import esfilemanager.common.data.plugin.PluginRecord;
+import esfilemanager.common.data.record.Record;
 import esfilemanager.loader.FormToFilePointer;
 import esfilemanager.loader.IESMManager;
 
@@ -80,6 +81,13 @@ public class ESMCellChooser {
                 esmName = esmName.substring(sep + 1);
             }
 
+            Record r = new Record(){
+                public String toString(){return "Previous Save";}
+                public int getFormID() {return -1;}};
+            TreeNode prevSave = new TreeNode(r, R.layout.list_item_file);
+            fileRoots.add(prevSave);
+
+
             TreeNode archiveFileRoot = new TreeNode(esmName, R.layout.list_item_file);
             fileRoots.add(archiveFileRoot);
 
@@ -107,7 +115,6 @@ public class ESMCellChooser {
 
                 TreeNode fileNode = new TreeNode(pr, R.layout.list_item_file);
                 folderNode.addChild(fileNode);
-
             }
 
         } catch (Exception e) {

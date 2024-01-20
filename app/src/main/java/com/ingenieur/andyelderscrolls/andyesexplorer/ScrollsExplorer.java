@@ -2,10 +2,10 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import static scrollsexplorer.GameConfig.allGameConfigs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
@@ -31,8 +31,6 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 
-import org.jogamp.java3d.ImageComponent2D;
-import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.compressedtexture.CompressedTextureLoader;
 import org.jogamp.vecmath.Quat4f;
@@ -57,9 +55,8 @@ import bsa.source.DDSToKTXBsaConverter;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
+import bsaio.BsaUtils;
 import bsaio.DBException;
-import compressedtexture.CompressedBufferedImage;
-import compressedtexture.KTXImage;
 import esfilemanager.common.data.plugin.PluginGroup;
 import esfilemanager.common.data.record.Record;
 import esfilemanager.loader.ESMManager;
@@ -74,7 +71,6 @@ import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
 import etcpack.ETCPack;
 import javaawt.VMEventQueue;
-import javaawt.image.BufferedImage;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
 import nif.BgsmSource;
@@ -173,7 +169,7 @@ public class ScrollsExplorer
 
         BethRenderSettings.setOutlineFocused(true);
         BethRenderSettings.setEnablePlacedLights(true);
-        BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;
+        BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;//make false to see the red lines!
         DynamicsEngine.MAX_SUB_STEPS = 3;
         PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
         NiGeometryAppearanceFactoryShader.setAsDefault();
@@ -337,7 +333,7 @@ public class ScrollsExplorer
 
                         if (bsaFileSet == null) {
                             bsaFileSet = new BSArchiveSetUri(parentActivity, selectedGameConfig.scrollsFolder, false);
-                            organiseDDSKTXBSA(rootFolder);
+                            organiseDDSKTXBSA(parentActivity, rootFolder, bsaFileSet, progressBar);
                         }
 
                         // did the load above get anything organised?
@@ -357,6 +353,11 @@ public class ScrollsExplorer
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
+                        String mapTex = null;
+                        String invTex = null;
+                        String charTex = null;
+
+
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
                             BethRenderSettings.setFarLoadGridCount(8);
                             BethRenderSettings.setNearLoadGridCount(2);
@@ -368,56 +369,92 @@ public class ScrollsExplorer
                             //BethWorldVisualBranch.FOG_START = 100;
                             //BethWorldVisualBranch.FOG_END = 250;
 
-                            //long distance view
-                            //BethRenderSettings.setFarLoadGridCount(16);
-                            //
+                            mapTex = "textures/scroll.ktx";
+                            invTex = "levelup/agent.ktx";
+                            charTex = "textures/tex_menutest.ktx";
 
-                            Bitmap mapBitmap = getBitmapFromTextureSource("textures/scroll.ktx", textureSource);
-                            Bitmap invBitmap = getBitmapFromTextureSource("levelup/agent.ktx", textureSource);
-                            Bitmap charBitmap = getBitmapFromTextureSource("textures/tex_menutest.ktx", textureSource);
+                        } else if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
+                            BethRenderSettings.setFarLoadGridCount(4);
+                            BethRenderSettings.setNearLoadGridCount(2);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+                            BethRenderSettings.setObjectFade(100);
+                            BethRenderSettings.setItemFade(80);
+                            BethRenderSettings.setActorFade(40);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
-                                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
-                                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
-                                }
-                            });
+                            mapTex = "textures/menus/map/map_icon_tab_world_map.ktx";
+                            invTex = "textures/menus/inventory/inv_icon_tab_all.ktx";
+                            charTex = "textures/menus/stats/stat_icon_tab_char.ktx";
 
-                        } else {
-                            AndyESExplorerActivity.logFireBaseLevelUp("LoadNonMorrowind", gameConfigToLoad.gameName);
+                        } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
+                            BethRenderSettings.setFarLoadGridCount(3);
+                            BethRenderSettings.setNearLoadGridCount(1);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+                            BethRenderSettings.setObjectFade(80);
+                            BethRenderSettings.setItemFade(70);
+                            BethRenderSettings.setActorFade(35);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
-                            //TODO: must make a per game setting recorder for this gear!
 
-                            //oblivion goes hard, others are cautious for now
-                            if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
-                                BethRenderSettings.setFarLoadGridCount(4);
-                                BethRenderSettings.setNearLoadGridCount(2);
-                                BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
-                                BethRenderSettings.setObjectFade(100);
-                                BethRenderSettings.setItemFade(80);
-                                BethRenderSettings.setActorFade(40);
-                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
-                            }  else if (gameConfigToLoad.folderKey.startsWith("Fallout")) {
-                                BethRenderSettings.setFarLoadGridCount(3);
-                                BethRenderSettings.setNearLoadGridCount(1);
-                                BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
-                                BethRenderSettings.setObjectFade(80);
-                                BethRenderSettings.setItemFade(70);
-                                BethRenderSettings.setActorFade(35);
-                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
-                            }  else  {
-                                //skyrim or fallout 4
-                                BethRenderSettings.setFarLoadGridCount(2);
-                                BethRenderSettings.setNearLoadGridCount(1);
-                                BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
-                                BethRenderSettings.setObjectFade(50);
-                                BethRenderSettings.setItemFade(50);
-                                BethRenderSettings.setActorFade(35);
-                                BethRenderSettings.setFogEnabled(false);//lod make this redundant
-                            }
+                            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
+                            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
+                            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_neutral.ktx";
+                        } else if (gameConfigToLoad.folderKey.startsWith("FalloutNV")) {
+                            BethRenderSettings.setFarLoadGridCount(3);
+                            BethRenderSettings.setNearLoadGridCount(1);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+                            BethRenderSettings.setObjectFade(80);
+                            BethRenderSettings.setItemFade(70);
+                            BethRenderSettings.setActorFade(35);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+                            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
+                            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
+                            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_brotherhood.ktx";
+
+                        } else if (gameConfigToLoad.folderKey.startsWith("Skyrim")) {
+                            BethRenderSettings.setFarLoadGridCount(2);
+                            BethRenderSettings.setNearLoadGridCount(1);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+                            BethRenderSettings.setObjectFade(50);
+                            BethRenderSettings.setItemFade(50);
+                            BethRenderSettings.setActorFade(35);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+                            mapTex = "interface/exported/m.png.ktx";
+                            invTex = "interface/exported/i.png.ktx";
+                            charTex = "interface/exported/c.png.ktx";
+
+                        } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
+                            BethRenderSettings.setFarLoadGridCount(2);
+                            BethRenderSettings.setNearLoadGridCount(1);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+                            BethRenderSettings.setObjectFade(50);
+                            BethRenderSettings.setItemFade(50);
+                            BethRenderSettings.setActorFade(35);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+                            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
+                            invTex = "textures/interface/note/parchment_d.ktx";
+                            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
                         }
+
+                        Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
+                        Bitmap invBitmap = BsaUtils.getBitmapFromTextureSource(invTex, textureSource);
+                        Bitmap charBitmap = BsaUtils.getBitmapFromTextureSource(charTex, textureSource);
+
+                        parentActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mapBitmap != null)
+                                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
+                                if (invBitmap != null)
+                                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
+                                if (charBitmap != null)
+                                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
+                            }
+                        });
+
 
                         simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 
@@ -464,39 +501,7 @@ public class ScrollsExplorer
                             simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
                             display(prevCellformid);
                         } else {
-                            // display the cell picker and create a start location from the selected cell
-                            parentActivity.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    esmCellChooser = new ESMCellChooser(parentActivity, esmManager).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
-                                        @Override
-                                        public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
-                                            return true;
-                                        }
-
-                                        @Override
-                                        public void onTreeNodeClick(TreeNode treeNode, View view) {
-                                            if (treeNode.getValue() instanceof Record) {
-                                                esmCellChooser.dismiss();
-
-                                                int formToLoad = ((Record) treeNode.getValue()).getFormID();
-                                                YawPitch yp = selectedGameConfig.startYP;
-                                                Vector3f trans = selectedGameConfig.startLocation;
-
-                                                // need to set Trans to a door somewhere?
-                                                findADoor(formToLoad, yp, trans);
-
-                                                AndyESExplorerActivity.logFireBaseContent("selectedGameConfig", "startCellId " + formToLoad + " trans " + trans);
-
-                                                simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
-                                                display(((Record) treeNode.getValue()).getFormID());
-                                            }
-                                        }
-                                    }).load();
-
-                                    esmCellChooser.showDialog();
-                                }
-                            });
-
+                            showCellPicker();
                         }
 
                     } else {
@@ -508,41 +513,53 @@ public class ScrollsExplorer
         t.start();
     }
 
-
-    private Bitmap getBitmapFromTextureSource(String textureName, BsaTextureSource textureSource) {
-        InputStream inputStream = textureSource.getInputStream(textureName);
-        try {
-            ByteBuffer bb = CompressedTextureLoader.toByteBuffer(inputStream);
-
-            int[] w = new int[1];
-            int[] h = new int[1];
-
-
-            ETCPack ep = new ETCPack();
-            byte[] rawBytes = ep.uncompressImageFromByteBuffer(bb, w, h, true);
-            if(rawBytes != null) {
-                ByteBuffer buffer = ByteBuffer.wrap(rawBytes);
-                int width = w[0];
-                int height = h[0];
-
-                int[] pixels = new int[width * height];
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        //NOTE javadoc on Bitmap.Config.ARGB_8888 says it is actually ABGR!! christ.
-                        pixels[(y * width) + x] = ((buffer.get() & 0xff) << 24 | (buffer.get() & 0xff) << 0 | (buffer.get() & 0xff) << 8
-                                | (buffer.get() & 0xff) << 16);
+    public void showCellPicker() {
+        // display the cell picker and create a start location from the selected cell
+        parentActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                esmCellChooser = new ESMCellChooser(parentActivity, esmManager).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
+                    @Override
+                    public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
+                        return true;
                     }
-                }
 
-                //TODO: handle non A types
-                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                bitmap.copyPixelsFromBuffer(IntBuffer.wrap(pixels));
-                return bitmap;
+                    @Override
+                    public void onTreeNodeClick(TreeNode treeNode, View view) {
+                        if (treeNode.getValue() instanceof Record) {
+
+
+                            // defaults
+                            YawPitch yp = selectedGameConfig.startYP;
+                            Vector3f trans = selectedGameConfig.startLocation;
+
+                            int cellFormId = ((Record) treeNode.getValue()).getFormID();
+
+                            //-1 is load previous
+                            if( cellFormId == -1 ) {
+
+                                yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
+                                trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
+                                        selectedGameConfig.startLocation.toString()));
+
+                                cellFormId = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
+
+                                // no cell means ignore the click
+                                if(cellFormId == -1)
+                                    return;
+
+                            } else {
+                                findADoor(cellFormId, yp, trans);
+                            }
+                            esmCellChooser.dismiss();
+                            simpleWalkSetup.getAvatarLocation().set(yp.get(new Quat4f()), trans);
+                            display(cellFormId);
+                        }
+                    }
+                }).load();
+
+                esmCellChooser.showDialog();
             }
-        } catch (IOException e){
-            System.out.println( ""+textureName+ " had a  IO problem  : " + e.getMessage());
-        }
-        return null;
+        });
     }
 
 
@@ -608,24 +625,26 @@ public class ScrollsExplorer
             if (selectedGameConfig.gameName != "TESIII: Morrowind") {
                 // if SimpleBethCellManager.setSources has been called the persistent children will have been loaded
                 PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
-                for (Record record : cellChildGroups.getRecordList()) {
-                    // is this a door way?
-                    if (record.getRecordType().equals("REFR")) {
-                        // don't go game specific just the common data needed (which include XTEL!)
-                        CommonREFR commonREFR = new CommonREFR(record, true);
-                        XTEL xtel = commonREFR.XTEL;
-                        //if we are a door outward we have a door inward
-                        if (xtel != null) {
-                            Record otherDoor;
-                            if (xtel.doorFormId != 0) {
-                                otherDoor = j3dCellFactory.getRecord(xtel.doorFormId);
-                                if (otherDoor != null) {
-                                    CommonREFR otherDoorCommonREFR = new CommonREFR(otherDoor, true);
-                                    doors.add(otherDoorCommonREFR);
+                if(cellChildGroups != null) {
+                    for (Record record : cellChildGroups.getRecordList()) {
+                        // is this a door way?
+                        if (record.getRecordType().equals("REFR")) {
+                            // don't go game specific just the common data needed (which include XTEL!)
+                            CommonREFR commonREFR = new CommonREFR(record, true);
+                            XTEL xtel = commonREFR.XTEL;
+                            //if we are a door outward we have a door inward
+                            if (xtel != null) {
+                                Record otherDoor;
+                                if (xtel.doorFormId != 0) {
+                                    otherDoor = j3dCellFactory.getRecord(xtel.doorFormId);
+                                    if (otherDoor != null) {
+                                        CommonREFR otherDoorCommonREFR = new CommonREFR(otherDoor, true);
+                                        doors.add(otherDoorCommonREFR);
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
             } else {
@@ -704,8 +723,8 @@ public class ScrollsExplorer
                     Quat4f r = ActionableMouseOverHandler.getRot(rot.x, rot.y, rot.z);
 
                     // now push forward by 1 meter to see if we are in front of the door
-                    Transform3D t3d = new Transform3D(r,new Vector3f(0,0,0), 1f);
-                    Vector3f f = new Vector3f(0,0,1);
+                    Transform3D t3d = new Transform3D(r, new Vector3f(0, 0, 0), 1f);
+                    Vector3f f = new Vector3f(0, 0, 1);
                     t3d.transform(f);
                     t.add(f);
 
@@ -741,7 +760,7 @@ public class ScrollsExplorer
             boolean kbVis = ((com.jogamp.newt.Window) e.getSource()).isKeyboardVisible();
             ((com.jogamp.newt.Window) e.getSource()).setKeyboardVisible(!kbVis);
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.DOWN) {
-
+            showCellPicker();
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.LEFT) {
 
         } else if (dragType == DragMouseAdapter.DRAG_TYPE.RIGHT) {
@@ -757,8 +776,7 @@ public class ScrollsExplorer
     }
 
 
-
-    private void organiseDDSKTXBSA(DocumentFile rootFolder) {
+    private static void organiseDDSKTXBSA(Activity parentActivity, DocumentFile rootFolder, BSArchiveSet bsaFileSet, ProgressBar progressBar) {
         //OK time to check that each bsa file that holds dds has a ktx equivalent and drop the dds version
         // or if not to convert the dds to ktx then drop the dds version
 
@@ -777,7 +795,7 @@ public class ScrollsExplorer
             // we want a archive with the same name but _ktx before the extension holding KTX files
             String ddsArchiveName = ddsArchive.getName();
             String ext = ddsArchiveName.substring(ddsArchiveName.lastIndexOf("."));
-            String ktxArchiveName = ddsArchiveName.substring(0,ddsArchiveName.lastIndexOf("."));
+            String ktxArchiveName = ddsArchiveName.substring(0, ddsArchiveName.lastIndexOf("."));
             ktxArchiveName = ktxArchiveName + "_ktx" + ext;
             boolean found = false;
             for (ArchiveFile ktxArchive : bsaFileSet) {
@@ -795,19 +813,19 @@ public class ScrollsExplorer
                 }
             }
 
-            if(!found) {
+            if (!found) {
                 neededBsas.put(ktxArchiveName, ddsArchive);
             }
         }
 
         // are there any that might be converted or possibly just run "on the fly"
-        if(neededBsas.size() > 0 ) {
+        if (neededBsas.size() > 0) {
 
             CountDownLatch waitForAnswer = new CountDownLatch(1);
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(which == DialogInterface.BUTTON_POSITIVE) {
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
                         Thread t = new Thread() {
                             public void run() {
                                 for (String ktxArchiveName : neededBsas.keySet()) {

@@ -43,8 +43,8 @@ public class GLWindowOverLay {
      * @param viewId
      * @param gravity
      * @param movable
-     * @param offSetX
-     * @param offSetY
+     * @param offSetX in dp
+     * @param offSetY in dp
      */
     public GLWindowOverLay(Context context, View parent, int viewId, int gravity, boolean movable, int offSetX, int offSetY) {
         this.context = context;

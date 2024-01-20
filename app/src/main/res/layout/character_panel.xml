@@ -9,73 +9,86 @@
     android:background="#ABABAB"
     >
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Free Fly"
-                />
-            <ToggleButton
-               android:id="@+id/freeflybutton"
-               android:layout_width="150dp"
-               android:layout_height="50dp"
-               android:text="Free Fly"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Show Physics"
-                />
-            <ToggleButton
-                android:id="@+id/showphysicsbutton"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Show Physics"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Show Visuals"
-                />
-            <ToggleButton
-                android:id="@+id/showvisualsbutton"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Show Visuals"
-                android:checked="true"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text=""
-                />
-            <Button
-                android:id="@+id/optionsbutton"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:text="Options"
-                />
-        </TableRow>
-    </TableLayout>>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:text="Free Fly"
+                    />
+                <ToggleButton
+                   android:id="@+id/freeflybutton"
+                   android:layout_width="150dp"
+                   android:layout_height="50dp"
+                   android:text="Free Fly"
+                    />
+            </TableRow>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:text="Show Physics"
+                    />
+                <ToggleButton
+                    android:id="@+id/showphysicsbutton"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:text="Show Physics"
+                    />
+            </TableRow>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:text="Show Visuals"
+                    />
+                <ToggleButton
+                    android:id="@+id/showvisualsbutton"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:text="Show Visuals"
+                    android:checked="true"
+                    />
+            </TableRow>
+        </TableLayout>
+        <Button
+            android:id="@+id/savebutton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Save location"
+            />
+        <Button
+            android:id="@+id/changecellbutton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="change cell"
+            />
+        <Button
+            android:id="@+id/changelocationbutton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="change location"
+            />
+        <Button
+            android:id="@+id/optionsbutton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Options"
+            />
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/closeCharacterSheet"
