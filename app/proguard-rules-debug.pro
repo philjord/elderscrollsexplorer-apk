@@ -46,6 +46,10 @@
 -dontwarn tools.zip.**
 -dontwarn esmj3dfo4.j3d.cell.J3dCELL
 -dontwarn scrollsexplorer.ScrollsExplorerNewt
+-dontwarn com.jogamp.nativewindow.awt.AWTGraphicsConfiguration
+-dontwarn com.jogamp.nativewindow.awt.JAWTWindow
+-dontwarn java.awt.**
+-dontwarn jogamp.nativewindow.x11.X11Util
 
 #sound libs
 -dontwarn javazoom.**

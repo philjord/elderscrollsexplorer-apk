@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    //https://stackoverflow.com/questions/66579530/error-the-apk-for-your-currently-selected-variant-unknown-output-is-not-signe
+    /*signingConfigs {
+        debug {
+            storeFile file('E:\\Java\\keystore.jks')
+            keyAlias 'callofredmountain'
+            storePassword '****' //set to password when debugging the release apk on Android studio
+            keyPassword '****'
+        }
+    }*/
     compileSdkVersion 33
 
     defaultConfig {
@@ -17,6 +26,7 @@ android {
             // and google vr only has armeabi-v7a! so I copied my armeabi into armeabi-v7a
             // TODO: but now that's dead possibly drop that copy?
         }
+//        signingConfig signingConfigs.debug
 
     }
 

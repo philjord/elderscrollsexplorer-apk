@@ -20,20 +20,26 @@
 #-ignorewarnings
 
 #http://stackoverflow.com/questions/35321742/android-proguard-most-aggressive-optimizations
--optimizationpasses 3
+-optimizationpasses 2
 -allowaccessmodification
--overloadaggressively
 -repackageclasses ''
 -dontskipnonpubliclibraryclasses
 -dontpreverify
 -verbose
--optimizations **
-# oddly removing the lines above seems to make thigns slower?
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 
 #-optimizations code/simplification/arithmetic
 #-optimizations code/simplification/cast
 #-optimizations field/*
 #-optimizations class/merging/*
+
+
+#jogl
+-dontwarn jogamp.opengl.**
+-dontwarn com.jogamp.opengl.**
+-dontwarn com.jogamp.common.util.awt.**
+-dontwarn com.jogamp.nativewindow.**
+
 
 # my code
 -dontwarn old.**
@@ -46,6 +52,8 @@
 -dontwarn tools.zip.**
 -dontwarn esmj3dfo4.j3d.cell.J3dCELL
 -dontwarn scrollsexplorer.ScrollsExplorerNewt
+-dontwarn java.awt.**
+
 
 #sound libs
 -dontwarn javazoom.**
@@ -63,4 +71,23 @@
 -keep class nif.** { *; }
 
 
+
+#######################################required to deploy JOGL on play store!
+#gluegen-rt-android.jar
+-keep class jogamp.common.os.android.AndroidUtilsImpl { *; }
+
+#joal-android.jar
+-keep class com.jogamp.openal.** { *; }
+-keep class jogamp.openal.** { *; }
+
+#jogl-all-android.jar
+-keep class com.jogamp.nativewindow.egl.EGLGraphicsDevice { *; }
+-keep class com.jogamp.opengl.egl.** { *; }
+
+
+-keep class jogamp.graph.font.typecast.TypecastFontConstructor { *; }
+-keep class jogamp.graph.curve.opengl.shader.** { *; }
+
+-keep class jogamp.newt.driver.** { *; }
+-keep class jogamp.opengl.** { *; }
 
