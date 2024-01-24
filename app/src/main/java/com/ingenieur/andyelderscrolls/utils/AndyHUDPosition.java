@@ -17,6 +17,7 @@ import tools3d.utils.scenegraph.LocationUpdateListener;
 public class AndyHUDPosition implements LocationUpdateListener
 {
 	private Label posLabel;
+	public static float HEIGHT = 0.00006F;
 
 	public AndyHUDPosition()
 	{
@@ -24,14 +25,14 @@ public class AndyHUDPosition implements LocationUpdateListener
 
 	public void addToCanvas(Canvas3D2D canvas3d2d)
 	{
-		float pixelSizeFPS = 0.00008F * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
+		float pixelSizeFPS = HEIGHT * (float) canvas3d2d.getGLWindow().getSurfaceHeight();
 		try
 		{
 			posLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(posLabel);
 			posLabel.setEnabled(true);
-			posLabel.moveTo(-0.88F, 0.67F, 0f);
-			posLabel.setColor(0.0f, 0.1f, 0.1f, 0.85f);
+			posLabel.moveTo(-1F, 0.85F, 0f);
+			posLabel.setColor(0.3f, 0.0f, 0.3f, 0.85f);
 		}
 		catch (IOException e)
 		{

@@ -192,7 +192,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
         behaviourBranch.addChild(fpsCounter.getBehaviorBranchGroup());
 
-        loadInfo = new HUDText(new Point2f(-0.95f, -0.1f), 18, false, "Loading...");
+        loadInfo = new HUDText(new Point2f(-0.95f, 0.2f), 18, false, "Loading...");
         loadingInfoBehavior = new LoadingInfoBehavior(loadInfo);
         behaviourBranch.addChild(loadingInfoBehavior);
 

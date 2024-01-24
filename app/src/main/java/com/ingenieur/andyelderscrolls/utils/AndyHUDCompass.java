@@ -20,6 +20,7 @@ public class AndyHUDCompass implements LocationUpdateListener
 {
 	private Label textElementBear;
 	private Label textElementAzi;
+	public static float HEIGHT = 0.00006F;
 
 
 	public AndyHUDCompass()
@@ -28,20 +29,20 @@ public class AndyHUDCompass implements LocationUpdateListener
 
 	public void addToCanvas(Canvas3D2D canvas)
 	{
-		float pixelSizeFPS = 0.00008F * (float) canvas.getGLWindow().getSurfaceHeight();
+		float pixelSizeFPS = HEIGHT * (float) canvas.getGLWindow().getSurfaceHeight();
 		try
 		{
 			textElementBear = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementBear);
 			textElementBear.setEnabled(true);
-			textElementBear.moveTo(-0.88F, 0.59F, 0f);
-			textElementBear.setColor(0f, 0f, 0f, 1f);
+			textElementBear.moveTo(-1F, 0.80F, 0f);
+			textElementBear.setColor(0.3f, 0f, 0.3f, 0.85f);
 
 			textElementAzi = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementAzi);
 			textElementAzi.setEnabled(true);
-			textElementAzi.moveTo(-0.88f, 0.52f, 0f);
-			textElementAzi.setColor(0f, 0f, 0f, 1f);
+			textElementAzi.moveTo(-1f, 0.75f, 0f);
+			textElementAzi.setColor(0.3f, 0f, 0.3f, 0.85f);
 
 		}
 		catch (IOException e)
@@ -68,7 +69,7 @@ public class AndyHUDCompass implements LocationUpdateListener
 			int yawDeg = (int) CompassRotation.wrapToMax(-CompassRotation.radToDeg(yawPitch.getYaw()), 360);
 
 			textElementBear.setText("" + yawDeg + " " + bearings[(yawDeg + 22) % 360 / 45]);
-			textElementAzi.setText("Azi " + (int) CompassRotation.radToDeg(yawPitch.getPitch()));
+			textElementAzi.setText("" + (int) CompassRotation.radToDeg(yawPitch.getPitch()));
 
 			//double yawRad = -yawPitch.getYaw();
 			//compassNeedleElement.clear();
