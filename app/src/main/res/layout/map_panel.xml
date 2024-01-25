@@ -7,9 +7,9 @@
     android:orientation="horizontal"
     >
 
-    <view class="com.ingenieur.andyelderscrolls.andyesexplorer.MapFragment$MapImage"
+    <ImageView
         android:id="@+id/map"
-        android:src="@drawable/mw_map_vvardenfell"
+        android:src="@drawable/map_mw_map_vvardenfell"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
         />

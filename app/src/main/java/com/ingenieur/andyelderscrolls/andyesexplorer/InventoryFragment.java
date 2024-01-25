@@ -10,7 +10,7 @@ import com.ingenieur.andyelderscrolls.R;
 
 import androidx.fragment.app.Fragment;
 
-public class InteriorListFragment extends Fragment
+public class InventoryFragment extends Fragment
 {
 	private View rootView;
 	private ScrollsExplorer scrollsExplorer;

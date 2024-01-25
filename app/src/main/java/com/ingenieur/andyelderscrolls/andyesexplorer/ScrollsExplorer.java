@@ -22,6 +22,13 @@ import com.amrdeveloper.treeview.TreeNode;
 import com.ingenieur.andyelderscrolls.ElderScrollsActivity;
 import com.ingenieur.andyelderscrolls.MorrowindActivity;
 import com.ingenieur.andyelderscrolls.R;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.fallout3.Fallout3MapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.fallout4.Fallout4MapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.falloutnv.FalloutNVMapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.morrowind.MorrowindMapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.oblivion.OblivionMapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.skyrim.SkyrimMapImage;
+import com.ingenieur.andyelderscrolls.andyesexplorer.games.starfield.StarfieldMapImage;
 import com.ingenieur.andyelderscrolls.utils.DragMouseAdapter;
 import com.ingenieur.andyelderscrolls.utils.ESMCellChooser;
 import com.jogamp.newt.event.KeyAdapter;
@@ -41,9 +48,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
@@ -69,7 +73,6 @@ import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
-import etcpack.ETCPack;
 import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
@@ -138,6 +141,7 @@ public class ScrollsExplorer
 
     private boolean saveLoadConfig = false;
     private ProgressBar progressBar;
+    private MapFragment.MapImageInterface map;
 
     public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId, AndyESExplorerFragment parentFragment) {
 
@@ -145,7 +149,6 @@ public class ScrollsExplorer
         this.parentFragment = parentFragment;
 
         progressBar = (ProgressBar) parentActivity.findViewById(R.id.progressBar);
-        //(ProgressBar)parentActivity.viewIinflated.findViewById(R.id.progressBar);
 
         Camera.FRONT_CLIP = 0.2f;
         Camera.BACK_CLIP = 300f;
@@ -358,6 +361,9 @@ public class ScrollsExplorer
                         String charTex = null;
 
 
+
+
+
                         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
                             BethRenderSettings.setFarLoadGridCount(8);
                             BethRenderSettings.setNearLoadGridCount(2);
@@ -373,6 +379,14 @@ public class ScrollsExplorer
                             invTex = "levelup/agent.ktx";
                             charTex = "textures/tex_menutest.ktx";
 
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
+
                         } else if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
                             BethRenderSettings.setFarLoadGridCount(4);
                             BethRenderSettings.setNearLoadGridCount(2);
@@ -385,6 +399,14 @@ public class ScrollsExplorer
                             mapTex = "textures/menus/map/map_icon_tab_world_map.ktx";
                             invTex = "textures/menus/inventory/inv_icon_tab_all.ktx";
                             charTex = "textures/menus/stats/stat_icon_tab_char.ktx";
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
 
                         } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
                             BethRenderSettings.setFarLoadGridCount(3);
@@ -399,6 +421,15 @@ public class ScrollsExplorer
                             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
                             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
                             charTex = "textures/interface/icons/message icons/glow_message_vaultboy_neutral.ktx";
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
+
                         } else if (gameConfigToLoad.folderKey.startsWith("FalloutNV")) {
                             BethRenderSettings.setFarLoadGridCount(3);
                             BethRenderSettings.setNearLoadGridCount(1);
@@ -411,6 +442,14 @@ public class ScrollsExplorer
                             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
                             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
                             charTex = "textures/interface/icons/message icons/glow_message_vaultboy_brotherhood.ktx";
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
 
                         } else if (gameConfigToLoad.folderKey.startsWith("Skyrim")) {
                             BethRenderSettings.setFarLoadGridCount(2);
@@ -425,6 +464,14 @@ public class ScrollsExplorer
                             invTex = "interface/exported/i.png.ktx";
                             charTex = "interface/exported/c.png.ktx";
 
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
+
                         } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
                             BethRenderSettings.setFarLoadGridCount(2);
                             BethRenderSettings.setNearLoadGridCount(1);
@@ -437,7 +484,37 @@ public class ScrollsExplorer
                             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
                             invTex = "textures/interface/note/parchment_d.ktx";
                             charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
+                        }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
+                            BethRenderSettings.setFarLoadGridCount(2);
+                            BethRenderSettings.setNearLoadGridCount(1);
+                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+                            BethRenderSettings.setObjectFade(50);
+                            BethRenderSettings.setItemFade(50);
+                            BethRenderSettings.setActorFade(35);
+                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+                            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
+                            invTex = "textures/interface/note/parchment_d.ktx";
+                            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
+
+                            parentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                }
+                            });
                         }
+
+
 
                         Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
                         Bitmap invBitmap = BsaUtils.getBitmapFromTextureSource(invTex, textureSource);
@@ -965,6 +1042,10 @@ public class ScrollsExplorer
             }
         }
 
+    }
+
+    public MapFragment.MapImageInterface getMap() {
+        return map;
     }
 
 

@@ -93,7 +93,6 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
         }
 
         gl_window.addGLEventListener(glWindowInitListener);
-
     }
 
 

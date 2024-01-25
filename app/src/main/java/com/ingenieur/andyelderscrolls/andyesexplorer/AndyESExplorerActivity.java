@@ -34,7 +34,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 	public String gameName;
 
 
-	private AndyESExplorerPagerAdapter mPagerAdapter;
+	public AndyESExplorerPagerAdapter mPagerAdapter;
 	public ViewPager mViewPager; // public to allow fragment to move around by button
 
 	/**
