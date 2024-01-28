@@ -356,7 +356,7 @@ public class ScrollsExplorer
 
                         if (bsaFileSet == null) {
                             bsaFileSet = new BSArchiveSetUri(parentActivity, selectedGameConfig.scrollsFolder, false);
-                            organiseDDSKTXBSA(parentActivity, rootFolder, bsaFileSet, progressBar);
+                            BsaUtils.organiseDDSKTXBSA(parentActivity, rootFolder, bsaFileSet, progressBar);
                         }
 
                         // did the load above get anything organised?
@@ -376,181 +376,8 @@ public class ScrollsExplorer
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
-                        String mapTex = null;
-                        String invTex = null;
-                        String charTex = null;
+                        sortoutGameSpecificConfig(textureSource);
 
-
-
-
-
-                        if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
-                            BethRenderSettings.setFarLoadGridCount(8);
-                            BethRenderSettings.setNearLoadGridCount(2);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
-                            BethRenderSettings.setObjectFade(150);
-                            BethRenderSettings.setItemFade(120);
-                            BethRenderSettings.setActorFade(50);
-                            BethRenderSettings.setFogEnabled(false);
-                            //BethWorldVisualBranch.FOG_START = 100;
-                            //BethWorldVisualBranch.FOG_END = 250;
-
-                            mapTex = "textures/scroll.ktx";
-                            invTex = "levelup/agent.ktx";
-                            charTex = "textures/tex_menutest.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-
-                        } else if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
-                            BethRenderSettings.setFarLoadGridCount(4);
-                            BethRenderSettings.setNearLoadGridCount(2);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
-                            BethRenderSettings.setObjectFade(100);
-                            BethRenderSettings.setItemFade(80);
-                            BethRenderSettings.setActorFade(40);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-                            mapTex = "textures/menus/map/map_icon_tab_world_map.ktx";
-                            invTex = "textures/menus/inventory/inv_icon_tab_all.ktx";
-                            charTex = "textures/menus/stats/stat_icon_tab_char.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-
-                        } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
-                            BethRenderSettings.setFarLoadGridCount(3);
-                            BethRenderSettings.setNearLoadGridCount(1);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
-                            BethRenderSettings.setObjectFade(80);
-                            BethRenderSettings.setItemFade(70);
-                            BethRenderSettings.setActorFade(35);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-
-                            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
-                            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
-                            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_neutral.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-
-                        } else if (gameConfigToLoad.folderKey.startsWith("FalloutNV")) {
-                            BethRenderSettings.setFarLoadGridCount(3);
-                            BethRenderSettings.setNearLoadGridCount(1);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
-                            BethRenderSettings.setObjectFade(80);
-                            BethRenderSettings.setItemFade(70);
-                            BethRenderSettings.setActorFade(35);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-                            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
-                            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
-                            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_brotherhood.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-
-                        } else if (gameConfigToLoad.folderKey.startsWith("Skyrim")) {
-                            BethRenderSettings.setFarLoadGridCount(2);
-                            BethRenderSettings.setNearLoadGridCount(1);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
-                            BethRenderSettings.setObjectFade(50);
-                            BethRenderSettings.setItemFade(50);
-                            BethRenderSettings.setActorFade(35);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-                            mapTex = "interface/exported/m.png.ktx";
-                            invTex = "interface/exported/i.png.ktx";
-                            charTex = "interface/exported/c.png.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-
-                        } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
-                            BethRenderSettings.setFarLoadGridCount(2);
-                            BethRenderSettings.setNearLoadGridCount(1);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
-                            BethRenderSettings.setObjectFade(50);
-                            BethRenderSettings.setItemFade(50);
-                            BethRenderSettings.setActorFade(35);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-                            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
-                            invTex = "textures/interface/note/parchment_d.ktx";
-                            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-                        }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
-                            BethRenderSettings.setFarLoadGridCount(2);
-                            BethRenderSettings.setNearLoadGridCount(1);
-                            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
-                            BethRenderSettings.setObjectFade(50);
-                            BethRenderSettings.setItemFade(50);
-                            BethRenderSettings.setActorFade(35);
-                            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
-                            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
-                            invTex = "textures/interface/note/parchment_d.ktx";
-                            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
-
-                            parentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
-                                }
-                            });
-                        }
-
-
-
-                        Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
-                        Bitmap invBitmap = BsaUtils.getBitmapFromTextureSource(invTex, textureSource);
-                        Bitmap charBitmap = BsaUtils.getBitmapFromTextureSource(charTex, textureSource);
-
-                        parentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mapBitmap != null)
-                                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
-                                if (invBitmap != null)
-                                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
-                                if (charBitmap != null)
-                                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
-                            }
-                        });
 
 
                         simpleWalkSetup.configure(meshSource, simpleBethCellManager);
@@ -609,6 +436,8 @@ public class ScrollsExplorer
         };
         t.start();
     }
+
+
 
     public void showCellPicker() {
         // display the cell picker and create a start location from the selected cell
@@ -873,210 +702,12 @@ public class ScrollsExplorer
     }
 
 
-    private static void organiseDDSKTXBSA(Activity parentActivity, DocumentFile rootFolder, BSArchiveSet bsaFileSet, ProgressBar progressBar) {
-        //OK time to check that each bsa file that holds dds has a ktx equivalent and drop the dds version
-        // or if not to convert the dds to ktx then drop the dds version
-
-        //a list of dds archives that might have a ktx equivalent
-        ArrayList<ArchiveFile> ddsBsas = new ArrayList<ArchiveFile>();
-        for (ArchiveFile archiveFile : bsaFileSet) {
-            if (archiveFile != null && archiveFile.hasDDS()) {
-                // we want a archive with the same name but _ktx before the extension holding KTX files
-                ddsBsas.add(archiveFile);
-            }
-        }
-
-        // search for ktx existing and drop the dds if so
-        HashMap<String, ArchiveFile> neededBsas = new HashMap<String, ArchiveFile>();
-        for (ArchiveFile ddsArchive : ddsBsas) {
-            // we want a archive with the same name but _ktx before the extension holding KTX files
-            String ddsArchiveName = ddsArchive.getName();
-            String ext = ddsArchiveName.substring(ddsArchiveName.lastIndexOf("."));
-            String ktxArchiveName = ddsArchiveName.substring(0, ddsArchiveName.lastIndexOf("."));
-            ktxArchiveName = ktxArchiveName + "_ktx" + ext;
-            boolean found = false;
-            for (ArchiveFile ktxArchive : bsaFileSet) {
-                //TODO: should see  if it's got ktx in it, but for now let's just prey
-                if (ktxArchive != null && ktxArchive.getName().equals(ktxArchiveName)) {
-                    found = true;
-                    //remove the dds version archive
-                    try {
-                        ddsArchive.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    bsaFileSet.remove(ddsArchive);
-                    break;
-                }
-            }
-
-            if (!found) {
-                neededBsas.put(ktxArchiveName, ddsArchive);
-            }
-        }
-
-        // are there any that might be converted or possibly just run "on the fly"
-        if (neededBsas.size() > 0) {
-
-            CountDownLatch waitForAnswer = new CountDownLatch(1);
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == DialogInterface.BUTTON_POSITIVE) {
-                        Thread t = new Thread() {
-                            public void run() {
-                                for (String ktxArchiveName : neededBsas.keySet()) {
-                                    ArchiveFile ddsArchive = neededBsas.get(ktxArchiveName);
-                                    String ddsArchiveName = ddsArchive.getName();
-                                    //remove the dds version archive either way
-                                    try {
-                                        ddsArchive.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    bsaFileSet.remove(ddsArchive);
-                                    ddsArchive = null;
-
-                                    boolean found = false;
-                                    for (ArchiveFile archiveFile : bsaFileSet) {
-                                        //TODO: should see  if it's got ktx in it, but for now let's just prey
-                                        if (archiveFile != null && archiveFile.getName().equals(ktxArchiveName)) {
-                                            found = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (!found) {
-                                        System.out.println("Not found: " + ktxArchiveName + " creating now");
-
-                                        // I need the displayable version to convert so let's load a new copy of ddsArchive
-                                        FileInputStream fis;
-                                        try {
-                                            long tstart2 = System.currentTimeMillis();
-                                            DocumentFile ddsDF = rootFolder.findFile(ddsArchiveName);
-
-                                            Uri ddsUri = ddsDF.getUri();
-                                            System.out.println("Reloading as in displayable format " + ddsDF.getUri());
-
-                                            ParcelFileDescriptor ddsPFD = parentActivity.getContentResolver().openFileDescriptor(ddsUri, "r");
-                                            fis = new ParcelFileDescriptor.AutoCloseInputStream(ddsPFD);
-                                            ArchiveFile archiveFile = ArchiveFile.createArchiveFile(fis.getChannel(), ddsArchiveName);
-                                            archiveFile.load(true);//blocking call
-                                            System.out.println("loaded as displayable " + ddsUri + " in " + (System.currentTimeMillis() - tstart2));
-                                            //converting
-                                            final long tstart = System.currentTimeMillis();
-                                            // find it
-                                            DocumentFile ktxDF = rootFolder.findFile(ktxArchiveName);
-                                            // or create it (if not found)
-                                            if (ktxDF == null) {
-                                                ktxDF = rootFolder.createFile("application/octet-stream", ktxArchiveName);
-                                            }
-
-                                            ParcelFileDescriptor ktxPFD = parentActivity.getContentResolver().openFileDescriptor(ktxDF.getUri(), "rw");
-                                            FileOutputStream fos = new ParcelFileDescriptor.AutoCloseOutputStream(ktxPFD);
-                                            FileInputStream fisKtx = new ParcelFileDescriptor.AutoCloseInputStream(ktxPFD);
-
-                                            //DO NOT delete file as it is hopefully a restartable //->fos.getChannel().truncate(0);//in case the file already exists somehow, this is a delete type action
-                                            DDSToKTXBsaConverter.StatusUpdateListener sul = new DDSToKTXBsaConverter.StatusUpdateListener() {
-                                                public void updateProgress(int currentProgress) {
-                                                    parentActivity.runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            progressBar.setProgress(currentProgress);
-                                                            System.out.println("CurrentProgress " + currentProgress + "%  in " + (System.currentTimeMillis() - tstart) + "ms for " + ktxArchiveName);
-                                                        }
-                                                    });
-                                                }
-                                            };
-
-
-                                            DDSToKTXBsaConverter convert = new DDSToKTXBsaConverter(fos.getChannel(), fisKtx.getChannel(), archiveFile, sul);
-                                            System.out.println("Converting " + ddsArchiveName + " to ktx version, this may take ages!");
-                                            parentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    //screen still sleeps just after a long time, CPU processing appears to continue anyway
-                                                    parentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    progressBar.setIndeterminate(false);
-                                                    progressBar.setVisibility(ProgressBar.VISIBLE);
-                                                    progressBar.setProgress(0);
-                                                    progressBar.setMax(100);
-                                                }
-                                            });
-
-                                            convert.start();
-                                            try {
-                                                convert.join();
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                            parentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    parentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                                                    progressBar.setVisibility(ProgressBar.GONE);
-                                                }
-                                            });
-                                            System.out.println("" + (System.currentTimeMillis() - tstart) + "ms to compress " + ktxArchiveName);
-                                            // have to re locate it for some reason to load it
-                                            ktxDF = rootFolder.findFile(ktxArchiveName);
-                                            ktxPFD = parentActivity.getContentResolver().openFileDescriptor(ktxDF.getUri(), "r");
-                                            // now load that newly created file into the system
-                                            fis = new ParcelFileDescriptor.AutoCloseInputStream(ktxPFD);
-                                            bsaFileSet.loadFileAndWait(fis.getChannel(), ktxArchiveName);
-
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (DBException e1) {
-                                            e1.printStackTrace();
-                                        } catch (IOException e1) {
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-                                }
-                                waitForAnswer.countDown();
-                            }
-                        };
-                        t.start();
-                    } else {
-                        waitForAnswer.countDown();
-                    }
-                }
-            };
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-            parentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    builder.setMessage("Convert " + neededBsas.size() + " bsa files from dds to ktx, this may take ages...").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
-                }
-            });
-
-            try {
-                waitForAnswer.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-
-
-
+    /**
+     * left here as a key press example, for desktop (not lean back) style I guess
+     */
     private class KeyHandler extends KeyAdapter {
         public KeyHandler() {
-			/*System.out.println("H toggle havok display");
-			System.out.println("L toggle visual display");
-			System.out.println("J toggle spin");
-			System.out.println("K toggle animate model");
-			System.out.println("P toggle background color");
-			System.out.println("Space toggle cycle through files");*/
         }
-
 
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_1) {
@@ -1098,9 +729,184 @@ public class ScrollsExplorer
                     }
                 });
             }
-
-
         }
+    }
+
+
+
+
+    private void sortoutGameSpecificConfig(BsaTextureSource textureSource) {
+        String mapTex = null;
+        String invTex = null;
+        String charTex = null;
+
+        if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
+            BethRenderSettings.setFarLoadGridCount(8);
+            BethRenderSettings.setNearLoadGridCount(2);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+            BethRenderSettings.setObjectFade(150);
+            BethRenderSettings.setItemFade(120);
+            BethRenderSettings.setActorFade(50);
+            BethRenderSettings.setFogEnabled(false);
+            //BethWorldVisualBranch.FOG_START = 100;
+            //BethWorldVisualBranch.FOG_END = 250;
+
+            mapTex = "textures/scroll.ktx";
+            invTex = "levelup/agent.ktx";
+            charTex = "textures/tex_menutest.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+
+        } else if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
+            BethRenderSettings.setFarLoadGridCount(4);
+            BethRenderSettings.setNearLoadGridCount(2);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setObjectFade(100);
+            BethRenderSettings.setItemFade(80);
+            BethRenderSettings.setActorFade(40);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+            mapTex = "textures/menus/map/map_icon_tab_world_map.ktx";
+            invTex = "textures/menus/inventory/inv_icon_tab_all.ktx";
+            charTex = "textures/menus/stats/stat_icon_tab_char.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+
+        } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
+            BethRenderSettings.setFarLoadGridCount(3);
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setObjectFade(80);
+            BethRenderSettings.setItemFade(70);
+            BethRenderSettings.setActorFade(35);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+
+            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
+            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
+            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_neutral.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+
+        } else if (gameConfigToLoad.folderKey.startsWith("FalloutNV")) {
+            BethRenderSettings.setFarLoadGridCount(3);
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setObjectFade(80);
+            BethRenderSettings.setItemFade(70);
+            BethRenderSettings.setActorFade(35);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+            mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
+            invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
+            charTex = "textures/interface/icons/message icons/glow_message_vaultboy_brotherhood.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+
+        } else if (gameConfigToLoad.folderKey.startsWith("Skyrim")) {
+            BethRenderSettings.setFarLoadGridCount(2);
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setObjectFade(50);
+            BethRenderSettings.setItemFade(50);
+            BethRenderSettings.setActorFade(35);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+            mapTex = "interface/exported/m.png.ktx";
+            invTex = "interface/exported/i.png.ktx";
+            charTex = "interface/exported/c.png.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+
+        } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
+            BethRenderSettings.setFarLoadGridCount(2);
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setObjectFade(50);
+            BethRenderSettings.setItemFade(50);
+            BethRenderSettings.setActorFade(35);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
+            invTex = "textures/interface/note/parchment_d.ktx";
+            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+        }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
+            BethRenderSettings.setFarLoadGridCount(2);
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setObjectFade(50);
+            BethRenderSettings.setItemFade(50);
+            BethRenderSettings.setActorFade(35);
+            BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
+            invTex = "textures/interface/note/parchment_d.ktx";
+            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
+
+            parentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                }
+            });
+        }
+
+
+
+        Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
+        Bitmap invBitmap = BsaUtils.getBitmapFromTextureSource(invTex, textureSource);
+        Bitmap charBitmap = BsaUtils.getBitmapFromTextureSource(charTex, textureSource);
+
+        parentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mapBitmap != null)
+                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
+                if (invBitmap != null)
+                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
+                if (charBitmap != null)
+                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
+            }
+        });
     }
 }
 

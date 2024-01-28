@@ -28,12 +28,12 @@ public class Fallout3MapImage extends MapFragment.MapImageInterface {
         // don't go too far out
         setMinZoom(3);
         banner = 0;
-        margin = 0;
+        margin = 320;
 
         xMin = -1700;
-        xMax = 1220;
-        yMin = -1260;
-        yMax = 1900;
+        xMax = 1280;
+        yMin = -1700;
+        yMax = 1050;// map grids are about 160? each 17grid up/down = 3400, min = -1750?
 
         // for glowing background
         //https://medium.com/@yuriyskul/different-ways-to-create-glowing-shapes-in-android-canvas-8b73010411fe

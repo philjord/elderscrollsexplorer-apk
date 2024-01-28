@@ -193,10 +193,10 @@ public class MapFragment extends Fragment {
 			PointF p = new PointF(loc.x, loc.z);
 
 			p.x += -xMin + margin;
-			p.y += -yMin + banner + margin;
+			p.y += -yMin + margin + banner;
 
 			p.x /= -xMin+xMax + (margin * 2); //range plus each margin so now normalized
-			p.y /= -yMin+yMax + banner + (margin * 2); //range plus each margin so now normalized
+			p.y /= -yMin+yMax + (margin * 2) + banner; //range plus each margin so now normalized
 
 			// z is naturally in y down mode (big z is more south) no swap required
 			return p;
@@ -245,11 +245,11 @@ public class MapFragment extends Fragment {
 			loc.x /= imageWidth;
 			loc.z /= imageHeight;
 
-			loc.x *= -xMin+xMax + margin; //range plus margin
-			loc.z *= -yMin+yMax + banner + margin; //range plus margin
+			loc.x *= -xMin+xMax + (margin * 2); //range plus margins
+			loc.z *= -yMin+yMax + (margin * 2) + banner; //range plus margins
 
 			loc.x -= -xMin + margin;
-			loc.z -= -yMin + banner + margin;
+			loc.z -= -yMin + margin + banner;
 
 			return loc;
 		}
