@@ -1,9 +1,13 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer.games.oblivion;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
+
 
 import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.andyesexplorer.MapFragment;
@@ -11,16 +15,37 @@ import com.ingenieur.andyelderscrolls.andyesexplorer.ScrollsExplorer;
 
 import org.jogamp.vecmath.Vector3f;
 
-import java.util.Random;
+import bsa.source.BsaTextureSource;
+import bsaio.BsaUtils;
 
 
 public class OblivionMapImage extends MapFragment.MapImageInterface {
 
-    Paint defaultPaint = new Paint();
+    private Bitmap youAreHere;
+    private Paint youAreHerePaint = new Paint();
 
-    public OblivionMapImage(Context context, ScrollsExplorer scrollsExplorer) {
-        super(context, scrollsExplorer);
-        setImageResource(R.drawable.vr_icon);
+    public OblivionMapImage(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
+        super(context, scrollsExplorer, textureSource);
+
+        Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource("textures\\menus\\map\\world\\cyrodiil_resized.ktx", textureSource);
+        // image used has a big ass black line to make it square
+        mapBitmap = Bitmap.createBitmap(mapBitmap, 0, 0, 2048, 2048-372);
+        setImageBitmap(mapBitmap);
+
+        youAreHere = BsaUtils.getBitmapFromTextureSource("textures\\menus\\map\\world\\world_map_marker_you_are_here.ktx", textureSource);
+
+        // zoom in a bit
+        setZoom(5, 0, 0, ScaleType.FIT_CENTER);
+        // don't go too far out
+        setMinZoom(3);
+
+        banner = 0;
+        margin = 0;
+
+        xMin = -3000;
+        xMax = 3000;
+        yMin = -2320;
+        yMax = 2850;
     }
 
     @Override
@@ -32,96 +57,14 @@ public class OblivionMapImage extends MapFragment.MapImageInterface {
 
         PointF p = transformToImageCoords(loc);
 
-        defaultPaint.setARGB(128, 0, 0, 255);
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+        //p.x -= youAreHere.getWidth()/2;
+        //p.y -= youAreHere.getHeight()/2;
+        // todo translate to dp so it's consistent
+        RectF dst = new RectF(p.x - 40, p.y - 40, p.x + 40, p.y + 40);
+        //FIXME: what the hell!!! what's the correct blend mode?
+        youAreHerePaint.setBlendMode(BlendMode.SRC_OVER);
+        canvas.drawBitmap(youAreHere, null, dst, youAreHerePaint);
 
-        //zero
-        p = transformToImageCoords(new Vector3f(0, 0, 0));
-        defaultPaint.setARGB(255, 255, 255, 255);
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-        //top left
-        p = transformToImageCoords(new Vector3f(-1880, 19, -2660));
-        defaultPaint.setARGB(255, 0, 255, 255);
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-        //bottom right
-        p = transformToImageCoords(new Vector3f(450, 19, 1660));
-        defaultPaint.setARGB(255, 255, 0, 255);
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-
-    }
-
-    protected PointF transformToImageCoords(Vector3f loc) {
-        PointF p = new PointF(loc.x, loc.z);
-
-        // ok all work on the image needs to be done in normalize coords
-        // put loc into normalized morrowind coords (versus the map image bounds)
-
-        // note the map image has a banner which is well abve the center top figure of -2660
-        // and a bit of a margin too, but these figures are in morrowind coords not pixels
-        int banner = 350;
-        int margin = 100;
-        p.x += 1880 + margin; //-1880 x lowest
-        p.y += 2660 + banner + margin; //(2660 lowest value)
-
-        p.x /= 2550 + 1880 + (margin * 2); //x highest 2400
-        p.y /= 1660 + 2660 + banner + (margin * 2); // 16060 highest y value
-
-        // z is naturally in y down mode (big z is more south) no swap required
-
-        int width = this.getWidth();
-        float imageWidth = getImageWidth();
-        int height = this.getHeight();
-        float imageHeight = getImageHeight();// this includes the zoom scale and is the height after scale to fit it as well it's literaally the on screen size
-
-        p.x *= imageWidth;
-        p.y *= imageHeight;
-
-        float imageWidthStart = (width / 2) - (imageWidth / 2);
-        p.x += imageWidthStart;
-        float imageHeightStart = (height / 2) - (imageHeight / 2);
-        p.y += imageHeightStart;
-
-        PointF scroll = getScrollPosition();
-        p.x -= (scroll.x - 0.5) * imageWidth;
-        p.y -= (scroll.y - 0.5) * imageHeight;
-        return p;
-    }
-
-
-    protected Vector3f transformToMWCoords(PointF mousePoint) {
-        Vector3f loc = new Vector3f(mousePoint.x, 0, mousePoint.y);
-
-        int width = this.getWidth();
-        float imageWidth = getImageWidth();
-        int height = this.getHeight();
-        float imageHeight = getImageHeight();
-
-        PointF scroll = getScrollPosition();
-        loc.x += (scroll.x - 0.5) * imageWidth;
-        loc.z += (scroll.y - 0.5) * imageHeight;
-
-
-        float imageWidthStart = (width / 2) - (imageWidth / 2);
-        loc.x -= imageWidthStart;
-        float imageHeightStart = (height / 2) - (imageHeight / 2);
-        loc.z -= imageHeightStart;
-
-        loc.x /= imageWidth;
-        loc.z /= imageHeight;
-
-        //FIXME: feels like I'm out by about 100 or so, so perhaps something needs fixing up here?
-        int banner = 400;
-        int margin = 100;
-        loc.x *= 2400 + 1880 + margin; //x highest 2400
-        loc.z *= 1660 + 2660 + banner + margin; // 1660 highest y value
-
-        loc.x -= 1880 + margin; //-1880 x lowest
-        loc.z -= 2660 + banner + margin; //(2660 lowest value)
-
-        return loc;
+        drawLayoutPoints(canvas);
     }
 }

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingenieur.andyelderscrolls.BuildConfig;
@@ -167,8 +168,7 @@ public class AndyESExplorerActivity extends FragmentActivity
 	@Override
 	public void onPause()
 	{
-		if (scrollsExplorer != null)
-		{
+		if (scrollsExplorer != null) {
 			scrollsExplorer.closingTime();
 			// note stop renderer also calls removenotify
 			scrollsExplorer.stopRenderer();
@@ -187,10 +187,12 @@ public class AndyESExplorerActivity extends FragmentActivity
 	@Override
 	public void onDestroy()
 	{
-		scrollsExplorer.closingTime();
-		scrollsExplorer.destroy();
-		scrollsExplorer = null;
-		System.out.println("onDestroy called");
+		// are we closing up shop for good, (or just sleeping)
+		if(isFinishing()) {
+			System.out.println("AndyESExplorerActivity onDestroy isFinishing called");
+			scrollsExplorer.destroy();
+		}
+
 		super.onDestroy();
 	}
 

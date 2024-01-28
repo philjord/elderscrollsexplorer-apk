@@ -98,16 +98,11 @@
             android:label="ESExplorer"
             android:parentActivityName=".ElderScrollsActivity"
             android:screenOrientation="sensorLandscape"
+            android:noHistory="true"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ElderScrollsActivity"/>
         </activity>
-        <activity android:label="@string/app_name"
-                  android:name="simpleandroid.JoglStatusActivity"/>
-        <activity android:label="@string/app_name"
-            android:name="simpleandroid.JoglHelloWorldActivity"/>
-
-
     </application>
 </manifest>

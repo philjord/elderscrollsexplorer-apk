@@ -129,6 +129,7 @@ public class ScrollsExplorer
     private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
     private FragmentActivity parentActivity;
+
     private AndyESExplorerFragment parentFragment;
 
     private GameConfig gameConfigToLoad;
@@ -143,7 +144,18 @@ public class ScrollsExplorer
     private ProgressBar progressBar;
     private MapFragment.MapImageInterface map;
 
+    // to chase memory leaks
+    protected void finalize() throws Throwable {
+        try {
+            System.out.println("ONE ScrollsExplorer CLEANED UP");
+        } finally {
+            super.finalize();
+        }
+    }
+
     public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId, AndyESExplorerFragment parentFragment) {
+
+        System.out.println("ONE ScrollsExplorer CREATED");
 
         this.parentActivity = parentActivity2;
         this.parentFragment = parentFragment;
@@ -215,7 +227,7 @@ public class ScrollsExplorer
 
         dragMouseAdapter.setListener(this);
 
-        // start the actual game up!
+       // start the actual game up!
         if (hasESMAndBSAFiles(gameConfigToLoad)) {
             setSelectedGameConfig(gameConfigToLoad);
         } else {
@@ -268,9 +280,17 @@ public class ScrollsExplorer
     }
 
     public void destroy() {
+
+        //FIXME: if the esm and bsa files aren't loaded up, I might well be in the middle of teh
+        //setSelectedGameConfig(GameConfig newGameConfig) { t Thread work, so this guy needs to be a little careful about what it does
+        // setting things to null will cause many NPE
+        // also I want this destroy to stop the work being done by the loady up thread to avoid OOMs
+
+        if(simpleWalkSetup != null)
+            simpleWalkSetup.destroy();
         // our anonymous class holds a reference to this instance
         SimpleSounds.mp3SystemMediaPlayer = null;
-        //simpleWalkSetup.destroy();
+
         //simpleBethCellManager.destroy();
     }
 
@@ -307,7 +327,7 @@ public class ScrollsExplorer
         Thread t = new Thread() {
             public void run() {
                 synchronized (selectedGameConfig) {
-                    //FIXME: this is how oyu get more debug info out from this non close called issue
+                    //FIXME: this is how you get more debug info out from this non close called issue
                     // Inflater in ArchiveInputStream seems to be at fault, but idk
                     //   System                  com.ingenieur.ese.eseandroid         W  A resource failed to call end.
                     /*    try {
@@ -382,8 +402,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
 
@@ -403,8 +423,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
 
@@ -425,8 +445,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
 
@@ -446,8 +466,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
 
@@ -467,8 +487,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
 
@@ -488,8 +508,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
                         }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
@@ -508,8 +528,8 @@ public class ScrollsExplorer
                             parentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this);
-                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(getMap());
+                                    map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                                 }
                             });
                         }
@@ -1044,9 +1064,7 @@ public class ScrollsExplorer
 
     }
 
-    public MapFragment.MapImageInterface getMap() {
-        return map;
-    }
+
 
 
     private class KeyHandler extends KeyAdapter {

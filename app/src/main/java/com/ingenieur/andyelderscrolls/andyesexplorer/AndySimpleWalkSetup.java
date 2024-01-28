@@ -8,6 +8,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GLStateKeeper;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.BoundingSphere;
@@ -230,29 +231,26 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         }
     }
 
-    //TODO: this is part of the attempt to get a back button to work, but it's not a good system.
-/*	public void destroy()
-	{
-		if(cameraMouseOver!=null)
-	 		cameraMouseOver.destroy();
-		if(cameraAdminMouseOverHandler!=null)
-			cameraAdminMouseOverHandler.destroy();
-
-
-		stopRenderer();
-		// universe is not simple universe so can't call clean up
-		universe.removeAllLocales();//?
-
-		physicsSystem.destroy();
-	}*/
-
     /* (non-Javadoc)
      * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#closingTime()
      */
     @Override
     public void closingTime() {
-        //stopRenderer();
+        stopRenderer();
     }
+
+    public void destroy() {
+        universe.removeAllLocales();
+        //getWindow().preserveGLStateAtDestroy(false);
+        //getWindow().clearPreservedGLState();
+        //getWindow().destroy();
+        //getWindow().setGLStateKeeperListener(null);
+
+        //cameraPanel.getCanvas3D2D().setNewGLWindow(null);
+
+        //physicsSystem.destroy();//?
+    }
+
 
     /* (non-Javadoc)
      * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#getWindow()

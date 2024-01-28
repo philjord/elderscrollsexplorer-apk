@@ -43,7 +43,6 @@ import nif.j3d.J3dNiTriBasedGeom;
 import scrollsexplorer.GameConfig;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
-import simpleandroid.JoglHelloWorldActivity;
 import tools3d.utils.YawPitch;
 
 /**
@@ -181,9 +180,6 @@ public class MorrowindActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_test_3d:
-                test3d();
-                return true;
             case R.id.menu_optomize:
                 item.setChecked(!item.isChecked());
                 setOptimize(item.isChecked());
@@ -263,14 +259,6 @@ public class MorrowindActivity extends Activity {
             }
         }
     }
-
-
-    private void test3d() {
-        Intent myIntent = new Intent(this, JoglHelloWorldActivity.class);//JoglStatusActivity.class);
-        this.startActivity(myIntent);
-    }
-
-
 
     /**
      * new version for getting a whole directory

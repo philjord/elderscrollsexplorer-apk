@@ -13,8 +13,6 @@ import java.util.zip.DataFormatException;
 import esfilemanager.common.data.plugin.MasterFC;
 import esfilemanager.common.PluginException;
 import esfilemanager.common.data.plugin.Master;
-import esfilemanager.loader.ESMManager;
-import esfilemanager.loader.IESMManager;
 import esfilemanager.tes3.ESMManagerTes3Uri;
 
 /** For desktop to swap File path strings into ByteBuffer or randomaccessfile or io streams

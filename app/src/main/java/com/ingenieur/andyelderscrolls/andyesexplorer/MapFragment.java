@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +20,7 @@ import com.ingenieur.andyelderscrolls.utils.TouchImageView;
 import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
+import bsa.source.BsaTextureSource;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 
 public class MapFragment extends Fragment {
@@ -72,7 +72,7 @@ public class MapFragment extends Fragment {
 			public void onLongPress(MotionEvent e) {
 
 				if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null) {
-					Vector3f warpTo = map.transformToMWCoords(new PointF(e.getX(), e.getY()));
+					Vector3f warpTo = map.transformToESCoords(new PointF(e.getX(), e.getY()));
 
 
 					//FIXME: very much need to work out a good height to warp to
@@ -96,7 +96,8 @@ public class MapFragment extends Fragment {
 			}
 		});
 
-
+		if(map != null)
+			replaceView(holder,map);
 
 		return rootView;
 	}
@@ -112,7 +113,8 @@ public class MapFragment extends Fragment {
 				return mDetector.onTouchEvent(event);
 			}
 		});
-		replaceView(holder,map);
+		if(holder != null)
+			replaceView(holder, map);
 	}
 
 
@@ -124,16 +126,35 @@ public class MapFragment extends Fragment {
 		par.addView(newV,i1);
 	}
 
-	public static abstract class MapImageInterface extends TouchImageView  {
-		public ScrollsExplorer scrollsExplorer;
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if(map != null)
+			map.panToCharacter();
+	}
+
+	public static abstract class MapImageInterface extends TouchImageView {
+
+		protected int banner = 0;
+		protected int margin = 0;
+
+		protected float xMin = 0;
+		protected float xMax = 0;
+		protected float yMin = 0;
+		protected float yMax = 0;
+
+		protected ScrollsExplorer scrollsExplorer;
 
 		private LocationUpdateListener locationUpdateListener;
 
-		private Paint defaultPaint = new Paint();
+		protected Paint defaultPaint = new Paint();
 
-		public MapImageInterface(Context context, ScrollsExplorer scrollsExplorer) {
+		protected BsaTextureSource textureSource;
+
+		public MapImageInterface(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
 			super(context);
 			this.scrollsExplorer = scrollsExplorer;
+			this.textureSource = textureSource;
 		}
 
 		@Override
@@ -163,10 +184,101 @@ public class MapFragment extends Fragment {
 			}
 		}
 
+		/**
+		 * from EXExplorer location x,y
+		 * @param loc
+		 * @return
+		 */
+		protected PointF toImageNormalizedCoords(Vector3f loc) {
+			PointF p = new PointF(loc.x, loc.z);
+
+			p.x += -xMin + margin;
+			p.y += -yMin + banner + margin;
+
+			p.x /= -xMin+xMax + (margin * 2); //range plus each margin so now normalized
+			p.y /= -yMin+yMax + banner + (margin * 2); //range plus each margin so now normalized
+
+			// z is naturally in y down mode (big z is more south) no swap required
+			return p;
+		}
+
+		protected PointF transformToImageCoords(Vector3f loc) {
+			PointF p = toImageNormalizedCoords(loc);
+
+			int width = this.getWidth();
+			float imageWidth = getImageWidth();
+			int height = this.getHeight();
+			float imageHeight = getImageHeight();// this includes the zoom scale and is the height after scale to fit it as well it's literaally the on screen size
+
+			p.x *= imageWidth;
+			p.y *= imageHeight;
+
+			float imageWidthStart = (width / 2) - (imageWidth / 2);
+			p.x += imageWidthStart;
+			float imageHeightStart = (height / 2) - (imageHeight / 2);
+			p.y += imageHeightStart;
+
+			PointF scroll = getScrollPosition();
+			p.x -= (scroll.x - 0.5) * imageWidth;
+			p.y -= (scroll.y - 0.5) * imageHeight;
+			return p;
+		}
+
+
+		protected Vector3f transformToESCoords(PointF mousePoint) {
+			Vector3f loc = new Vector3f(mousePoint.x, 0, mousePoint.y);
+
+			int width = this.getWidth();
+			float imageWidth = getImageWidth();
+			int height = this.getHeight();
+			float imageHeight = getImageHeight();
+
+			PointF scroll = getScrollPosition();
+			loc.x += (scroll.x - 0.5) * imageWidth;
+			loc.z += (scroll.y - 0.5) * imageHeight;
+
+			float imageWidthStart = (width / 2) - (imageWidth / 2);
+			loc.x -= imageWidthStart;
+			float imageHeightStart = (height / 2) - (imageHeight / 2);
+			loc.z -= imageHeightStart;
+
+			loc.x /= imageWidth;
+			loc.z /= imageHeight;
+
+			loc.x *= -xMin+xMax + margin; //range plus margin
+			loc.z *= -yMin+yMax + banner + margin; //range plus margin
+
+			loc.x -= -xMin + margin;
+			loc.z -= -yMin + banner + margin;
+
+			return loc;
+		}
+
+		protected void  drawLayoutPoints(Canvas canvas){
+			//zero
+			PointF p = transformToImageCoords(new Vector3f(0, 0, 0));
+			defaultPaint.setARGB(255, 255, 0, 255);
+			canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+			canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+			//top left
+			p = transformToImageCoords(new Vector3f(xMin, 19, yMin));
+			defaultPaint.setARGB(255, 0, 255, 255);
+			canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+			canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+			//bottom right
+			p = transformToImageCoords(new Vector3f(xMax, 19, yMax));
+			defaultPaint.setARGB(255, 255, 255, 0);
+			canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
+			canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
+		}
+
 		protected abstract void onDrawCustom(Canvas canvas);
 
-		protected abstract PointF transformToImageCoords(Vector3f loc);
-
-		protected abstract Vector3f transformToMWCoords(PointF mousePoint);
+		public void panToCharacter() {
+			Vector3f trans = new Vector3f();
+			scrollsExplorer.simpleWalkSetup.getAvatarLocation().get(trans);
+			PointF charLoc = toImageNormalizedCoords(trans);
+			this.setScrollPosition(charLoc.x,charLoc.y);
+		}
 	}
 }

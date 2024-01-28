@@ -15,6 +15,9 @@ import etcpack.ETCPack;
 public class BsaUtils {
 
     public static Bitmap getBitmapFromTextureSource(String textureName, BsaTextureSource textureSource) {
+        return getBitmapFromTextureSource(textureName, textureSource, false);
+    }
+    public static Bitmap getBitmapFromTextureSource(String textureName, BsaTextureSource textureSource, boolean invert) {
         if (textureName != null && textureName.length() > 0) {
             InputStream inputStream = textureSource.getInputStream(textureName);
             if(inputStream != null) {
@@ -35,8 +38,9 @@ public class BsaUtils {
                         int[] pixels = new int[width * height];
                         for (int y = 0; y < height; y++) {
                             for (int x = 0; x < width; x++) {
+                                int y2 = invert ? (height-1) - y : y;
                                 //NOTE javadoc on Bitmap.Config.ARGB_8888 says it is actually ABGR!! christ.
-                                pixels[(y * width) + x] = ((buffer.get() & 0xff) << 24 | (buffer.get() & 0xff) << 0 | (buffer.get() & 0xff) << 8
+                                pixels[(y2 * width) + x] = ((buffer.get() & 0xff) << 24 | (buffer.get() & 0xff) << 0 | (buffer.get() & 0xff) << 8
                                         | (buffer.get() & 0xff) << 16);
                             }
                         }

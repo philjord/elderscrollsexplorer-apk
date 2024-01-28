@@ -211,6 +211,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
 
     @Override
     public void onDestroy() {
+        // does this help gc at all?
         gl_window.destroy();
         gl_window = null;
         super.onDestroy();
