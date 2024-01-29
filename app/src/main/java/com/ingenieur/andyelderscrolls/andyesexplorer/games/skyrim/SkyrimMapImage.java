@@ -42,6 +42,7 @@ public class SkyrimMapImage extends MapFragment.MapImageInterface {
         canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
         drawLayoutPoints(canvas);
+        drawGrid(canvas, 180);
     }
 
 }

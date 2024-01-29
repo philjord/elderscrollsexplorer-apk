@@ -26,13 +26,13 @@ public class MorrowindMapImage extends MapFragment.MapImageInterface {
         // don't go too far out
         setMinZoom(3);
 
-        banner = 350;
-        margin = 100;
+        banner = 300;
+        margin = 50;
 
-        xMin = -1880;
-        xMax = 2550;
+        xMin = -1560;
+        xMax = 2200;
         yMin = -2660;
-        yMax = 1660;
+        yMax = 1580;
     }
 
     private LocationUpdateListener locationUpdateListener;
@@ -50,27 +50,8 @@ public class MorrowindMapImage extends MapFragment.MapImageInterface {
         canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
         canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
-
-        //sydaneen
-        Random rnd = new Random();
-        p = transformToImageCoords(new Vector3f(-108, 3, 936));
-        defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-        //vivec
-        p = transformToImageCoords(new Vector3f(423, 8, 1079));
-        defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-        //vos
-        p = transformToImageCoords(new Vector3f(1225, 19, -1465));
-        defaultPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
-        canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
-
-
-
-        drawLayoutPoints(canvas);
+        //drawLayoutPoints(canvas);
+        //drawGrid(canvas, 200);
     }
 
 }

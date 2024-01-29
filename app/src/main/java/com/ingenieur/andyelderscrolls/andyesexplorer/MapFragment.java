@@ -272,6 +272,28 @@ public class MapFragment extends Fragment {
 			canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 		}
 
+		protected void  drawGrid(Canvas canvas, int gridSize) {
+			int width = this.getWidth();
+			float imageWidth = getImageWidth();
+			int height = this.getHeight();
+			float imageHeight = getImageHeight();
+			defaultPaint.setARGB(32, 255, 128, 255);
+			for(int x = 0; x <= xMax; x+=gridSize) {
+				for(int y = 0; y <= yMax; y+=gridSize) {
+					PointF p = transformToImageCoords(new Vector3f(x, 0, y));
+					canvas.drawLine(p.x, 0, p.x, imageHeight, defaultPaint);
+					canvas.drawLine(0, p.y, imageWidth, p.y, defaultPaint);
+				}
+			}
+			for(int x = 0; x >= (int) xMin; x-=gridSize) {
+				for(int y = 0; y >= (int) yMin; y-=gridSize) {
+					PointF p = transformToImageCoords(new Vector3f(x, 0, y));
+					canvas.drawLine(p.x, 0, p.x, imageHeight, defaultPaint);
+					canvas.drawLine(0, p.y, imageWidth, p.y, defaultPaint);
+				}
+			}
+		}
+
 		protected abstract void onDrawCustom(Canvas canvas);
 
 		public void panToCharacter() {

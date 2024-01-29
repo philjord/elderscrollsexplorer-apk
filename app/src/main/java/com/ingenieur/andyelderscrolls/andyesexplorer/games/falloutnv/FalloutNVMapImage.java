@@ -17,6 +17,8 @@ import bsaio.BsaUtils;
 
 public class FalloutNVMapImage extends MapFragment.MapImageInterface {
 
+    private int gridspace = 180;
+
     public FalloutNVMapImage(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
         super(context, scrollsExplorer, textureSource);
         Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource("textures\\interface\\worldmap\\wasteland_nv_2048_no_map.ktx", textureSource);
@@ -26,14 +28,20 @@ public class FalloutNVMapImage extends MapFragment.MapImageInterface {
         setZoom(5, 0, 0, ScaleType.FIT_CENTER);
         // don't go too far out
         setMinZoom(3);
-
         banner = 0;
-        margin = 0;
 
-        xMin = -1700;
-        xMax = 1220;
-        yMin = -1260;
-        yMax = 1900;
+        // map grids are about 180 each 17grid up/down
+        margin = (int) (gridspace * 3.66f);
+
+
+        //zero is offset by 1.5 and 1.75 grids worth
+        float xoff = 1.5f*gridspace;
+        float yoff = 1.75f*gridspace;
+
+        xMin = -(gridspace*7f) - xoff;
+        xMax = (gridspace*7f) - xoff;
+        yMin = -(gridspace*7f) - yoff;
+        yMax = (gridspace*7f) - yoff;
     }
 
     @Override
@@ -50,6 +58,7 @@ public class FalloutNVMapImage extends MapFragment.MapImageInterface {
         canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
         drawLayoutPoints(canvas);
+        drawGrid(canvas, gridspace);
     }
 
 

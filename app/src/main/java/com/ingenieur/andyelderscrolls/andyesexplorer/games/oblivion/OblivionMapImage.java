@@ -17,12 +17,15 @@ import org.jogamp.vecmath.Vector3f;
 
 import bsa.source.BsaTextureSource;
 import bsaio.BsaUtils;
+import esmj3d.j3d.j3drecords.inst.J3dLAND;
 
 
 public class OblivionMapImage extends MapFragment.MapImageInterface {
 
     private Bitmap youAreHere;
     private Paint youAreHerePaint = new Paint();
+
+    private float gridspace = J3dLAND.LAND_SIZE;
 
     public OblivionMapImage(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
         super(context, scrollsExplorer, textureSource);
@@ -42,10 +45,15 @@ public class OblivionMapImage extends MapFragment.MapImageInterface {
         banner = 0;
         margin = 0;
 
-        xMin = -3000;
-        xMax = 3000;
-        yMin = -2320;
-        yMax = 2850;
+        // range x = 6000, y = 5150  (2048x1676) (1x0.8184)
+        float xoff = gridspace/3.0f;
+        float yoff = gridspace/4.0f;
+
+
+        xMin = -(gridspace*56f) - xoff;
+        xMax = (gridspace*56f) - xoff;
+        yMin = -(gridspace*46f) - yoff;
+        yMax = (gridspace*46f) - yoff;
     }
 
     @Override
@@ -65,6 +73,7 @@ public class OblivionMapImage extends MapFragment.MapImageInterface {
         youAreHerePaint.setBlendMode(BlendMode.SRC_OVER);
         canvas.drawBitmap(youAreHere, null, dst, youAreHerePaint);
 
-        drawLayoutPoints(canvas);
+        //drawLayoutPoints(canvas);
+        //drawGrid(canvas, (int) gridspace);
     }
 }

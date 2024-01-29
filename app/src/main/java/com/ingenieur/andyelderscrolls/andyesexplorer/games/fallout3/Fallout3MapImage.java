@@ -16,7 +16,7 @@ import bsaio.BsaUtils;
 
 public class Fallout3MapImage extends MapFragment.MapImageInterface {
 
-    Paint defaultPaint = new Paint();
+    private int gridspace = 180;
 
     public Fallout3MapImage(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
         super(context, scrollsExplorer, textureSource);
@@ -28,12 +28,20 @@ public class Fallout3MapImage extends MapFragment.MapImageInterface {
         // don't go too far out
         setMinZoom(3);
         banner = 0;
-        margin = 320;
 
-        xMin = -1700;
-        xMax = 1280;
-        yMin = -1700;
-        yMax = 1050;// map grids are about 160? each 17grid up/down = 3400, min = -1750?
+        // map grids are about 180 each 17grid up/down
+        margin = (int) (gridspace * 2.2f);
+
+
+        //zero is offset by 1.5 and 1.75 grids worth
+        float xoff = 1.5f*gridspace;
+        float yoff = 1.75f*gridspace;
+
+
+        xMin = -(gridspace*8.5f) - xoff;
+        xMax = (gridspace*8.5f) - xoff;
+        yMin = -(gridspace*8.5f) - yoff;
+        yMax = (gridspace*8.5f) - yoff;
 
         // for glowing background
         //https://medium.com/@yuriyskul/different-ways-to-create-glowing-shapes-in-android-canvas-8b73010411fe
@@ -53,7 +61,8 @@ public class Fallout3MapImage extends MapFragment.MapImageInterface {
         canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
         canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
-        drawLayoutPoints(canvas);
+        //drawLayoutPoints(canvas);
+        //drawGrid(canvas, gridspace);
     }
 
 
