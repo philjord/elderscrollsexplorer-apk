@@ -57,8 +57,8 @@ public class FalloutNVMapImage extends MapFragment.MapImageInterface {
         canvas.drawLine(p.x - 20, p.y - 20, p.x + 20, p.y + 20, defaultPaint);
         canvas.drawLine(p.x + 20, p.y - 20, p.x - 20, p.y + 20, defaultPaint);
 
-        drawLayoutPoints(canvas);
-        drawGrid(canvas, gridspace);
+        //drawLayoutPoints(canvas);
+        //drawGrid(canvas, gridspace);
     }
 
 

@@ -5,8 +5,6 @@ import java.nio.channels.FileChannel;
 import java.util.zip.DataFormatException;
 
 import esfilemanager.common.PluginException;
-import esfilemanager.common.data.plugin.Master;
-import esfilemanager.loader.ESMManager;
 import tools.io.FileChannelRAF;
 
 /**
@@ -24,14 +22,8 @@ public class MasterFC extends Master {
 
 	@Override
 	public boolean load() throws PluginException, DataFormatException, IOException {
-
 		FileChannelRAF in;
-		if (masterFile.size() > Integer.MAX_VALUE || !ESMManager.USE_FILE_MAPS)
-			in = new FileChannelRAF(masterFile, "r");
-		else
-			in = new FileChannelRAF(masterFile, "r");
-
+		in = new FileChannelRAF(masterFile, "r");
 		return super.load(in);
-
 	}
 }

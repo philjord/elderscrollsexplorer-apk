@@ -21,7 +21,7 @@ import esfilemanager.tes3.ESMManagerTes3Uri;
 public class ESMManagerUri extends ESMManager {
 	public ESMManagerUri(FileChannel fileChannel, String fileName) {
 		try {
-			Master master = new MasterFC(fileChannel, fileName);
+			MasterFC master = new MasterFC(fileChannel, fileName);
 			master.load();
 			addMaster(master);
 		} catch (PluginException e1) {

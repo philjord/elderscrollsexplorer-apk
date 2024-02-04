@@ -101,9 +101,6 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         this.rootDir = rootDir;
         NifToJ3d.SUPPRESS_EXCEPTIONS = false;
         NiGeometryAppearanceShader.OUTPUT_BINDINGS = true;
-        ArchiveFile.USE_FILE_MAPS = false;
-        ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
-        ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
         NiGeometryAppearanceFactoryShader.setAsDefault();
         ShaderSourceIO.ES_SHADERS = true;

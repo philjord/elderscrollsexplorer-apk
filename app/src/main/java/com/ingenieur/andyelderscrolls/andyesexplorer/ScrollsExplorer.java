@@ -98,6 +98,7 @@ import tools3d.camera.Camera;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import tools3d.utils.scenegraph.LocationUpdateListener;
+import tools3d.utils.scenegraph.StructureUpdateBehavior;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
@@ -166,13 +167,7 @@ public class ScrollsExplorer
         Camera.BACK_CLIP = 300f;
         Camera.MIN_FRAME_CYCLE_TIME = 15;
 
-        ESMManager.USE_FILE_MAPS = false;
-        ESMManager.USE_MINI_CHANNEL_MAPS = true;
-        ESMManager.USE_NON_NATIVE_ZIP = false;
-
-        ArchiveFile.USE_FILE_MAPS = false;
-        ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
-        ArchiveFile.USE_NON_NATIVE_ZIP = false;
+        StructureUpdateBehavior.SLOW_TIME_MS = 40;// we have gc of 40ms or so
 
         // only KTX, if DDS is found it will convert ot KTX on the fly
         BsaTextureSource.allowedTextureFormats = BsaTextureSource.AllowedTextureFormats.KTX;
@@ -193,7 +188,7 @@ public class ScrollsExplorer
         J3dNiTriBasedGeom.USE_FIXED_BOUNDS = true;
         NifCharacter.BULK_BUFFER_UPDATES = true;
 
-        MouseOverHandler.MIN_TIME_BETWEEN_STEPS_MS = 500;
+        MouseOverHandler.MIN_TIME_BETWEEN_STEPS_MS = 250;
         MouseOverHandler.MAX_MOUSE_RAY_DIST = 20;
 
         gameConfigToLoad = ElderScrollsActivity.getGameConfig(gameName);
@@ -785,7 +780,7 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
-            BethRenderSettings.setFarLoadGridCount(3);
+            BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
             BethRenderSettings.setObjectFade(80);

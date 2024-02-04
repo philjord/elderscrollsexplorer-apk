@@ -66,9 +66,6 @@ public class JBulletTester {
         this.parentActivity = parentActivity2;
         NifToJ3d.SUPPRESS_EXCEPTIONS = false;
         NiGeometryAppearanceShader.OUTPUT_BINDINGS = true;
-        ArchiveFile.USE_FILE_MAPS = false;
-        ArchiveFile.USE_MINI_CHANNEL_MAPS = true;
-        ArchiveFile.USE_NON_NATIVE_ZIP = false;
 
         NiGeometryAppearanceFactoryShader.setAsDefault();
         ShaderSourceIO.ES_SHADERS = true;
