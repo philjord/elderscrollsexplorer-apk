@@ -179,7 +179,7 @@ public class ScrollsExplorer
 
         BethRenderSettings.setOutlineFocused(true);
         BethRenderSettings.setEnablePlacedLights(true);
-        BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = true;//make false to see the red lines!
+        BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = false;//make false to see the red lines!
         DynamicsEngine.MAX_SUB_STEPS = 3;
         PhysicsSystem.MIN_TIME_BETWEEN_STEPS_MS = 40;
         NiGeometryAppearanceFactoryShader.setAsDefault();
