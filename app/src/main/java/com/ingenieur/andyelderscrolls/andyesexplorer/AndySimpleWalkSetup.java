@@ -8,7 +8,6 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.opengl.GLStateKeeper;
 
 import org.jogamp.java3d.AmbientLight;
 import org.jogamp.java3d.BoundingSphere;
@@ -400,7 +399,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         if(enable)
             setMaxFrameRate(0);
         else
-            setMaxFrameRate(5);
+            setMaxFrameRate(20);
 
         if (enable != enabled) {
             System.out.println("Setting Enabled " + enable);

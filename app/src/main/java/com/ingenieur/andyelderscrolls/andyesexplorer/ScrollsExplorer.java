@@ -736,9 +736,12 @@ public class ScrollsExplorer
         String charTex = null;
 
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
-            BethRenderSettings.setFarLoadGridCount(8);
             BethRenderSettings.setNearLoadGridCount(2);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(32);
+            BethRenderSettings.setFarLoadGridCount(8);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(256);// costs nothing
+            //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(150);
             BethRenderSettings.setItemFade(120);
             BethRenderSettings.setActorFade(50);
@@ -759,9 +762,12 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.equals("OblivionFolder")) {
-            BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setNearLoadGridCount(2);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setFarLoadGridCount(4);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(256);// costs nothing
+            //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(5000);
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(100);
             BethRenderSettings.setItemFade(80);
             BethRenderSettings.setActorFade(40);
@@ -780,9 +786,11 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut3")) {
-            BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setNearLoadGridCount(1);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setFarLoadGridCount(4);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
             BethRenderSettings.setActorFade(35);
@@ -802,9 +810,11 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("FalloutNV")) {
-            BethRenderSettings.setFarLoadGridCount(3);
             BethRenderSettings.setNearLoadGridCount(1);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            BethRenderSettings.setFarLoadGridCount(3);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
             BethRenderSettings.setActorFade(35);
@@ -823,9 +833,11 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("Skyrim")) {
-            BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setNearLoadGridCount(1);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setFarLoadGridCount(2);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
@@ -844,8 +856,8 @@ public class ScrollsExplorer
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
-            BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
@@ -864,8 +876,8 @@ public class ScrollsExplorer
                 }
             });
         }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
-            BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
