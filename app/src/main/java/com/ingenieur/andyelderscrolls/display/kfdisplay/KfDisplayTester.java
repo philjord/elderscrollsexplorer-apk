@@ -47,7 +47,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
                 bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
                     @Override
                     public boolean accept(ArchiveEntry ae) {
-                        return ae.getFileName().contains("skeleton.nif");
+                        return ae.getFileName().contains("skeleton");
                     }
                 });
                 bsaArchiveFileChooser.setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
