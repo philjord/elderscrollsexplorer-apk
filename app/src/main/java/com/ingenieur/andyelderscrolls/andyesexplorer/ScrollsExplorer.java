@@ -737,10 +737,10 @@ public class ScrollsExplorer
 
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
             BethRenderSettings.setNearLoadGridCount(2);
-            BethRenderSettings.setFarLoadGridCount(8);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(256);// costs nothing
+            BethRenderSettings.setFarLoadGridCount(32);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(-1);// morrowin has no LOD only far
             //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(2000); // morrowind is +1300Z South and -2500z North =3800 so half way is plenty
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(150);
             BethRenderSettings.setItemFade(120);
@@ -766,7 +766,7 @@ public class ScrollsExplorer
             BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(256);// costs nothing
             //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(5000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000); // about half
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(100);
             BethRenderSettings.setItemFade(80);
@@ -789,7 +789,7 @@ public class ScrollsExplorer
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
@@ -813,7 +813,7 @@ public class ScrollsExplorer
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(3);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
@@ -836,7 +836,7 @@ public class ScrollsExplorer
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(4000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
@@ -858,7 +858,7 @@ public class ScrollsExplorer
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(64);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
