@@ -37,6 +37,11 @@ public class ESMCellChooser {
         this.activity = activity;
         this.esmManager = esmManager;
     }
+    public ESMCellChooser(FragmentActivity activity, IESMManager esmManager, ESMArchiveFileChooserFilter esmArchiveFileChooserFilter) {
+        this.activity = activity;
+        this.esmManager = esmManager;
+        this.esmArchiveFileChooserFilter = esmArchiveFileChooserFilter;
+    }
 
     public void setFilter(ESMArchiveFileChooserFilter esmArchiveFileChooserFilter) {
         this.esmArchiveFileChooserFilter = esmArchiveFileChooserFilter;

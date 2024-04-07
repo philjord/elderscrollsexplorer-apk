@@ -87,7 +87,7 @@ public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter
             }
         });
 
-        BgsmSource.setBgsmSource(meshSource);
+        BgsmSource.setBgsmSource(materialsSource);
         //System.out.println("displayNif selected file: " + archiveEntry);
         display(NifToJ3d.loadNif(archiveEntry.toString(), meshSource, textureSource));
     }

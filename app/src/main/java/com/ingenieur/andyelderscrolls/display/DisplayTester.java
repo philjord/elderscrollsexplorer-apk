@@ -34,12 +34,14 @@ import org.jogamp.vecmath.Vector3f;
 
 import java.util.LinkedList;
 
+import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaTextureSource;
 import bsaio.ArchiveEntry;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
+import nif.BgsmSource;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.particles.tes3.J3dNiParticles;
@@ -93,6 +95,7 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
     protected BSArchiveSet bsaFileSet;
     protected MeshSource meshSource = null;
     protected TextureSource textureSource = null;
+    protected BgsmSource materialsSource = null;
 
     protected String rootDir;
 
@@ -213,6 +216,7 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
                 bsaFileSet = new BSArchiveSetUri(DisplayTester.this.parentActivity, BSARoots, true);
                 meshSource = new BsaMeshSource(bsaFileSet);
                 textureSource = new BsaTextureSource(bsaFileSet);
+                materialsSource = new BsaMaterialsSource(bsaFileSet);
                 loaded();
             }
         };

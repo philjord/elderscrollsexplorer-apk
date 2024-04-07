@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
+import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
@@ -62,6 +63,7 @@ import bsaio.BSArchiveSetUri;
 import bsaio.BsaUtils;
 import bsaio.DBException;
 import esfilemanager.common.data.plugin.PluginGroup;
+import esfilemanager.common.data.plugin.PluginRecord;
 import esfilemanager.common.data.record.Record;
 import esfilemanager.loader.ESMManager;
 import esfilemanager.loader.ESMManagerUri;
@@ -116,6 +118,7 @@ public class ScrollsExplorer
     private SimpleBethCellManager simpleBethCellManager;
 
     private ESMCellChooser esmCellChooser;
+    private ESMCellChooser.ESMArchiveFileChooserFilter esmArchiveFileChooserFilter;// set if a game wants to filter the cells
 
     public AndySimpleWalkSetup simpleWalkSetup;
 
@@ -344,10 +347,6 @@ public class ScrollsExplorer
                     IDashboard.dashboard.setEsmLoading(-1);
 
                     if (esmManager != null) {
-                        new EsmSoundKeyToName(esmManager);
-                        MeshSource meshSource;
-                        BsaTextureSource textureSource;
-                        SoundSource soundSource;
 
                         if (bsaFileSet == null) {
                             bsaFileSet = new BSArchiveSetUri(parentActivity, selectedGameConfig.scrollsFolder, false);
@@ -360,14 +359,15 @@ public class ScrollsExplorer
                             return;
                         }
 
-                        meshSource = new BsaMeshSource(bsaFileSet);
-                        textureSource = new BsaTextureSource(bsaFileSet);
+                        MeshSource meshSource = new BsaMeshSource(bsaFileSet);
+                        BsaTextureSource textureSource = new BsaTextureSource(bsaFileSet);
 
                         //TODO: Morrowind appears to have sound and music as a separate gosh darned file system system! not in a bsa
-                        soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
-
+                        new EsmSoundKeyToName(esmManager);
+                        SoundSource soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
+                        BgsmSource materialsSource = new BsaMaterialsSource(bsaFileSet);
                         //Just for the crazy new fallout 4 system
-                        BgsmSource.setBgsmSource(meshSource);
+                        BgsmSource.setBgsmSource(materialsSource);
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
@@ -438,7 +438,7 @@ public class ScrollsExplorer
         // display the cell picker and create a start location from the selected cell
         parentActivity.runOnUiThread(new Runnable() {
             public void run() {
-                esmCellChooser = new ESMCellChooser(parentActivity, esmManager).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
+                esmCellChooser = new ESMCellChooser(parentActivity, esmManager, esmArchiveFileChooserFilter).setFileListener(new ESMCellChooser.EsmFileSelectedListener() {
                     @Override
                     public boolean onTreeNodeLongClick(TreeNode treeNode, View view) {
                         return true;
@@ -863,6 +863,20 @@ public class ScrollsExplorer
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
             BethRenderSettings.setFogEnabled(false);//lod make this redundant
+
+
+
+            this.esmArchiveFileChooserFilter = new ESMCellChooser.ESMArchiveFileChooserFilter() {
+                @Override
+                public boolean accept(PluginRecord pr) {
+                    if(!pr.getEditorID().equals("")
+                            && !pr.getEditorID().startsWith("COPY")
+                            && !pr.getEditorID().startsWith("PackIn")) {
+                        return true;
+                    }
+                    return false;
+                }
+            };
 
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";

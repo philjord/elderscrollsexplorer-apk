@@ -199,7 +199,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
             NifJ3dSkeletonRoot.showBoneMarkers = true;
             J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
-            BgsmSource.setBgsmSource(meshSource);
+            BgsmSource.setBgsmSource(materialsSource);
             MediaSources mediaSources = new MediaSources(meshSource, textureSource, null);
 
             ArrayList<String> idleAnimations = new ArrayList<String>();
@@ -240,7 +240,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
         NifJ3dSkeletonRoot.showBoneMarkers = true;
         J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
-        BgsmSource.setBgsmSource(meshSource);
+        BgsmSource.setBgsmSource(materialsSource);
         MediaSources mediaSources = new MediaSources(meshSource, textureSource, null);
 
         AttachedParts attachFileNames = new AttachedParts();
