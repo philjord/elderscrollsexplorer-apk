@@ -17,6 +17,7 @@ public class SkyrimMapImage extends MapFragment.MapImageInterface {
 
     public SkyrimMapImage(Context context, ScrollsExplorer scrollsExplorer, BsaTextureSource textureSource) {
         super(context, scrollsExplorer, textureSource);
+        //FIXME: jebus these images are 2Mb on disk but decompressed to 20Mb when used!
         setImageResource(R.drawable.map_mw_map_vvardenfell);
 
         banner = 0;
