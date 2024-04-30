@@ -125,7 +125,7 @@ public class BsaUtils {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == DialogInterface.BUTTON_POSITIVE) {
-                        Thread t = new Thread() {
+                        Thread t = new Thread("BSA dds to ktx conversion") {
                             public void run() {
                                 for (String ktxArchiveName : neededBsas.keySet()) {
                                     ArchiveFile ddsArchive = neededBsas.get(ktxArchiveName);

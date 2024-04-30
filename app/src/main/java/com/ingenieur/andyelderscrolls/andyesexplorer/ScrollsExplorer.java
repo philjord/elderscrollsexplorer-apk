@@ -241,7 +241,7 @@ public class ScrollsExplorer
         // closing time has to kill it
         // the real solution is to find out why jogl doesn't provide a non daemon EDT thread for GLWindow seems strange
 
-        Thread newtKeepAliveThread = new Thread() {
+        Thread newtKeepAliveThread = new Thread("newtKeepAliveThread") {
             @Override
             public void run() {
                 while (stayAlive) {
@@ -322,7 +322,7 @@ public class ScrollsExplorer
         selectedGameConfig = newGameConfig;
         simpleWalkSetup.getAvatarCollisionInfo().setAvatarYHeight(selectedGameConfig.avatarYHeight);
 
-        Thread t = new Thread() {
+        Thread t = new Thread("Selected Game Config Loader") {
             public void run() {
                 synchronized (selectedGameConfig) {
                     //FIXME: this is how you get more debug info out from this non close called issue
