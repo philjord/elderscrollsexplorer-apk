@@ -24,6 +24,7 @@ import com.ingenieur.andyelderscrolls.R;
 import java.util.List;
 
 import bsaio.ArchiveEntry;
+import bsaio.displayables.Displayable;
 
 
 public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.OnTreeNodeClickListener, TreeViewAdapter.OnTreeNodeLongClickListener {
@@ -215,8 +216,8 @@ public class BsaTreeFragment extends DialogFragment implements TreeViewAdapter.O
             super.bindTreeNode(node);
 
             String fileNameStr = node.getValue().toString();
-            if (node.getValue() instanceof ArchiveEntry)
-                fileNameStr = ((ArchiveEntry) node.getValue()).getFileName();
+            if (node.getValue() instanceof Displayable)
+                fileNameStr = ((Displayable) node.getValue()).getFileName();
 
             fileName.setText(fileNameStr);
 

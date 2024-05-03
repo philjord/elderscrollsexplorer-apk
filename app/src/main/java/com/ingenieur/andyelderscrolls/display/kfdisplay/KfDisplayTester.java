@@ -19,6 +19,7 @@ import org.jogamp.java3d.Node;
 import java.util.ArrayList;
 
 import bsaio.ArchiveEntry;
+import bsaio.displayables.Displayable;
 import nif.BgsmSource;
 import nif.character.AttachedParts;
 import nif.character.NifCharacter;
@@ -47,7 +48,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
                 bsaArchiveFileChooser.setFilter(new BSAArchiveFileChooser.BSAArchiveFileChooserFilter() {
                     @Override
                     public boolean accept(ArchiveEntry ae) {
-                        return ae.getFileName().contains("skeleton");
+                        return ((Displayable)ae).getFileName().contains("skeleton");
                     }
                 });
                 bsaArchiveFileChooser.setFileListener(new BSAArchiveFileChooser.BsaFileSelectedListener() {
@@ -209,7 +210,8 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
             }
 
             // now add the root to the scene so the controller sequence is live
-            NifCharacter nifCharacter = new NifCharacter(skeletonNifModelFile.toString(), skinNifFiles, mediaSources, idleAnimations);
+            NifCharacter nifCharacter = new NifCharacter(skeletonNifModelFile.toString(), skinNifFiles, mediaSources);
+            nifCharacter.setIdleAnimations(idleAnimations);
             nifCharacter.setCapability(Node.ALLOW_BOUNDS_READ);
             bg.addChild(nifCharacter);
 

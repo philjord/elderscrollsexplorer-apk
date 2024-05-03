@@ -134,8 +134,11 @@ public class BSAArchiveFileChooser {
                     parentNode = archiveFileRoot;
 
                     //only process the ones we want
-                    if (extension != null && !entry.getFileName().endsWith(extension))
-                        continue;
+                    if (extension != null){
+                        String name = ((Displayable)entry).getFileName();
+                        if(name == null || !name.endsWith(extension))
+                            continue;
+                    }
                     if (bsaArchiveFileChooserFilter != null && !bsaArchiveFileChooserFilter.accept(entry))
                         continue;
 
@@ -196,13 +199,13 @@ public class BSAArchiveFileChooser {
                     }
 
                     int count = parentNode.getChildren().size();
-                    String name = entry.getFileName();
+                    String name = ((Displayable)entry).getFileName();
                     int index2;
                     for (index2 = 0; index2 < count; index2++) {
                         TreeNode compare = parentNode.getChildren().get(index2);
                         if (compare instanceof FolderNode)
                             continue;
-                        if (name.compareTo(((ArchiveEntry) compare.getValue()).getFileName()) < 0)
+                        if (name.compareTo(((Displayable) compare.getValue()).getFileName()) < 0)
                             break;
                     }
                     TreeNode fileNode = new TreeNode(entry, R.layout.list_item_file);
