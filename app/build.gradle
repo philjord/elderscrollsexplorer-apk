@@ -10,12 +10,12 @@ android {
             keyPassword '****'
         }
     }*/
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.ingenieur.ese.eseandroid"
         minSdkVersion 30
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         multiDexEnabled true
         ndk {
@@ -36,13 +36,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            zipAlignEnabled true
         }
         debug {
             minifyEnabled false
             //see ${sdk.dir}/ic_tools/proguard/proguard-android-optimize.txt
             //proguardFiles 'proguard-rules-debug.pro'
-            zipAlignEnabled true
         }
     }
 
@@ -67,6 +65,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'com.ingenieur.andyelderscrolls'
+    buildFeatures {
+        buildConfig true
+    }
 }
 configurations.all {
     // Check for updates every build
@@ -75,7 +76,7 @@ configurations.all {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     // I should just use play biling
     //implementation 'org.sufficientlysecure:donations:2.5'
 
@@ -90,8 +91,9 @@ dependencies {
 
 
     // all firebase libs versions must match
-    implementation platform('com.google.firebase:firebase-bom:28.4.0')// and this does that thing
-    implementation 'com.google.firebase:firebase-core'
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')// and this does that thing
+    // but now I have to put the version on here, where there were none before, so who knows...
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-config'
     releaseImplementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
