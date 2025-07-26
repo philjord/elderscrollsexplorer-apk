@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "com.ingenieur.ese.eseandroid"
         minSdkVersion 30
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         multiDexEnabled true
         ndk {
@@ -91,7 +91,7 @@ dependencies {
 
 
     // all firebase libs versions must match
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')// and this does that thing
+    implementation platform('com.google.firebase:firebase-bom:34.0.0')// and this does that thing
     // but now I have to put the version on here, where there were none before, so who knows...
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-config'
@@ -101,12 +101,12 @@ dependencies {
     //cos SAF is a bit brokeny
     //DocumentFile.getUri() randomly returns the parent folder without this special include
     //https://stackoverflow.com/questions/43071570/how-to-get-a-documentcontract-using-android-storage-access-framework
-    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.documentfile:documentfile:1.1.0'
 
     //for BSA trees
     implementation "androidx.recyclerview:recyclerview:"
     // For control over item selection of both touch and mouse driven selection
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.2.0"
 
     implementation ('org.jogamp.java3d:java3d-core-and:1.7.2') { changing = true }
     implementation ('org.jogamp.java3d:java3d-utils-and:1.7.2') { changing =  true }
