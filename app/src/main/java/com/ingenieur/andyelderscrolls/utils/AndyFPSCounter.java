@@ -51,7 +51,7 @@ public class AndyFPSCounter
 		{
 			this.fpsLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(fpsLabel);
-			this.fpsLabel.setEnabled(true);
+			this.fpsLabel.setVisible(true);
 			this.fpsLabel.moveTo(-0.95F, 0.95F, 0.0F);
 			this.fpsLabel.setColor(1.0F, 1.0F, 0.0F, 1.0F);
 		}

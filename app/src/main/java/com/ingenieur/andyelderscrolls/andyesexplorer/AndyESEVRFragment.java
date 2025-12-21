@@ -124,12 +124,12 @@ public class AndyESEVRFragment extends NewtBaseFragment
 					{
 						debuglabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 						canvas3D2D.addUIShape(debuglabel);
-						debuglabel.setEnabled(true);
+						debuglabel.setVisible(true);
 						debuglabel.moveTo(-0.9F, 0F, 0f);
 						debuglabel.setColor(1f, 1f, 1f, 0.85f);
 						debuglabel2 = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 						canvas3D2D.addUIShape(debuglabel2);
-						debuglabel2.setEnabled(true);
+						debuglabel2.setVisible(true);
 						debuglabel2.moveTo(-0.9F, 0.2F, 0f);
 						debuglabel2.setColor(1f, 1f, 1f, 0.85f);
 

@@ -34,13 +34,13 @@ public class AndyHUDCompass implements LocationUpdateListener
 		{
 			textElementBear = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementBear);
-			textElementBear.setEnabled(true);
+			textElementBear.setVisible(true);
 			textElementBear.moveTo(-1F, 0.80F, 0f);
 			textElementBear.setColor(0.3f, 0f, 0.3f, 0.85f);
 
 			textElementAzi = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas.addUIShape(textElementAzi);
-			textElementAzi.setEnabled(true);
+			textElementAzi.setVisible(true);
 			textElementAzi.moveTo(-1f, 0.75f, 0f);
 			textElementAzi.setColor(0.3f, 0f, 0.3f, 0.85f);
 

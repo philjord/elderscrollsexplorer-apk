@@ -36,6 +36,7 @@ import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
 import scrollsexplorer.simpleclient.mouseover.AdminMouseOverHandler;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.scenegraph.LoadingInfoBehavior;
+import tools3d.camera.Camera;
 import tools3d.camera.CameraPanel;
 import tools3d.camera.HeadCamDolly;
 import tools3d.camera.ICameraPanel;
@@ -347,6 +348,11 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             //if HMD fails or not HMD
             if (cameraPanel == null) {
 
+                Camera.NO_SOUND = true; //TODO: joal crashes on mixer.initialize();
+                //I can't get any debug out of openal but something like this should ahve worked
+                //System.setProperty("jogamp.debug.JNILibLoader", "true");
+                //System.setProperty("joal.verbose", "true");
+                //System.setProperty("joal.debug", "true");
                 if (gl_window == null) {
                     cameraPanel = new CameraPanel(universe);
                 } else {

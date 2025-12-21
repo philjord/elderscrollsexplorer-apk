@@ -30,7 +30,7 @@ public class AndyHUDPosition implements LocationUpdateListener
 		{
 			posLabel = new Label(0, FontFactory.get(0).getDefault(), pixelSizeFPS, "");
 			canvas3d2d.addUIShape(posLabel);
-			posLabel.setEnabled(true);
+			posLabel.setVisible(true);
 			posLabel.moveTo(-1F, 0.85F, 0f);
 			posLabel.setColor(0.3f, 0.0f, 0.3f, 0.85f);
 		}
