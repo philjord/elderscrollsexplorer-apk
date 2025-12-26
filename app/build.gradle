@@ -92,5 +92,6 @@ dependencies {
 
     implementation ('org.jogamp.java3d:java3d-core-and:1.7.2') { changing = true }
     implementation ('org.jogamp.java3d:java3d-utils-and:1.7.2') { changing = true }
+    implementation ('org.jogamp.joal:joal-android:2.6.0')// just for the joal 3d sound, which is currently broken in 2.6.0
 }
 
