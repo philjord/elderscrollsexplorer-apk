@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -12,9 +11,6 @@ dependencyResolutionManagement {
         mavenLocal()
         google()
         mavenCentral()
-        maven { url "https://jogamp.org/deployment/maven" }
-        maven { url "https://jogamp.org/deployment/maven-java3d" }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
 include ':app'

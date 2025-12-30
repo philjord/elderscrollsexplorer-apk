@@ -4,6 +4,7 @@ import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.ingenieur.andyelderscrolls.utils.AndyFPSCounter;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDCompass;
 import com.ingenieur.andyelderscrolls.utils.AndyHUDPosition;
+import com.jogamp.newt.Window;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseEvent;
@@ -26,10 +27,12 @@ import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
 
 import esmj3d.j3d.BethRenderSettings;
+import jogamp.newt.driver.android.WindowDriver;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.IDashboard;
+import scrollsexplorer.simpleclient.NewtJumpKeyListener;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
 import scrollsexplorer.simpleclient.mouseover.ActionableMouseOverHandler;
@@ -46,13 +49,20 @@ import tools3d.mixed3d2d.curvehud.elements.HUDCrossHair;
 import tools3d.mixed3d2d.curvehud.elements.HUDText;
 import tools3d.navigation.AvatarCollisionInfo;
 import tools3d.navigation.AvatarLocation;
+
+import com.ingenieur.andyelderscrolls.andyesexplorer.ui.NavigationInputNewtMouseLocked;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+
+import tools3d.navigation.NavigationInputNewtKey;
 import tools3d.navigation.NavigationTemporalBehaviour;
 import tools3d.universe.VisualPhysicalUniverse;
 import utils.source.MeshSource;
 
 /**
  * Created by phil on 3/11/2016.
-
+ * <p>
  * A class to pull the keyboard nav, bullet phys, nif displayable, canvas2d3d overlays,
  * physics display together,
  * <p/>
@@ -84,6 +94,11 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
     private AvatarCollisionInfo avatarCollisionInfo = new AvatarCollisionInfo(avatarLocation, 0.5f, 1.8f, 0.35f, 0.8f);
 
+    //These 3 are only used when a keyboard and mouse are connected
+    private NavigationInputNewtKey keyNavigationInputNewt;
+    private NavigationInputNewtMouseLocked newtMouseInputListener;
+    private NewtJumpKeyListener jumpKeyListener;
+
     private NewtMiscKeyHandler newtMiscKeyHandler = new NewtMiscKeyHandler();
 
     private boolean showHavok = false;
@@ -113,6 +128,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
     private DirectionalLight dirLight = null;
 
+    private ArrayList<MouseLockListener> mouseLockListeners = new ArrayList<MouseLockListener>();
 
     //Can't use as threading causes massive trouble for scene loading
     //	private StructureUpdateBehavior structureUpdateBehavior;
@@ -182,8 +198,20 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         navigationTemporalBehaviour.addNavigationProcessor(navigationProcessor);
         behaviourBranch.addChild(navigationTemporalBehaviour);
 
-        // controls are added externally by the fragment, which requests the navigation processor
+        // touch controls are added externally by the fragment, which requests the navigation processor
 
+        //add mouse and keyboard inputs ************************
+        keyNavigationInputNewt = new NavigationInputNewtKey(navigationProcessor);
+        NavigationInputNewtKey.VERTICAL_RATE = 50f;
+
+        newtMouseInputListener = new NavigationInputNewtMouseLocked();
+        newtMouseInputListener.setNavigationProcessor(navigationProcessor);
+
+        // dont' start mouse locked as its a pain
+        //mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+
+        //add jump key and vis/phy toggle key listeners for fun ************************
+        jumpKeyListener = new NewtJumpKeyListener(nbccProvider);
 
         //some hud gear
         fpsCounter = new AndyFPSCounter();
@@ -374,6 +402,8 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             cameraPanel.getDolly().locationUpdated(avatarLocation.get(new Quat4f()), avatarLocation.get(new Vector3f()));
 
             Canvas3D2D canvas3D2D = cameraPanel.getCanvas3D2D();
+            canvas3D2D.getGLWindow().addKeyListener(keyNavigationInputNewt);
+            canvas3D2D.getGLWindow().addKeyListener(jumpKeyListener);
             canvas3D2D.getGLWindow().addKeyListener(newtMiscKeyHandler);
 
             fpsCounter.addToCanvas(canvas3D2D);
@@ -402,7 +432,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
     @Override
     public void setEnabled(boolean enable) {
         // make the load screen a slow un
-        if(enable)
+        if (enable)
             setMaxFrameRate(0);
         else
             setMaxFrameRate(20);
@@ -438,6 +468,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         if (physicsSystem.getNBControlledChar() != null) {
             physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
         }
+        keyNavigationInputNewt.setAllowVerticalMovement(ff);
     }
 
     public NavigationProcessorBullet getNavigationProcessor() {
@@ -546,8 +577,24 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
     }
 
     @Override
-    public void setAzerty(boolean b) {
-        //Nothing!
+    public void setAzerty(boolean a) {
+        if (a) {
+            NavigationInputNewtKey.FORWARD_KEY = KeyEvent.VK_Z;
+            //NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
+            //NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
+            NavigationInputNewtKey.LEFT_KEY = KeyEvent.VK_Q;
+            //NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
+            NavigationInputNewtKey.UP_KEY = KeyEvent.VK_A;
+            NavigationInputNewtKey.DOWN_KEY = KeyEvent.VK_W;
+        } else {
+            NavigationInputNewtKey.FORWARD_KEY = KeyEvent.VK_W;
+            //NavigationInputAWTKey.FAST_KEY = KeyEvent.VK_E;
+            //NavigationInputAWTKey.BACK_KEY = KeyEvent.VK_S;
+            NavigationInputNewtKey.LEFT_KEY = KeyEvent.VK_A;
+            //NavigationInputAWTKey.RIGHT_KEY = KeyEvent.VK_D;
+            NavigationInputNewtKey.UP_KEY = KeyEvent.VK_Q;
+            NavigationInputNewtKey.DOWN_KEY = KeyEvent.VK_Z;
+        }
     }
 
     /**
@@ -555,22 +602,57 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      */
     public void setMaxFrameRate(int fps) {
         long minFrame = 20;// 50 fps is plenty thanks, on a phone
-        if(fps>0&&fps <= 50) {
+        if (fps > 0 && fps <= 50) {
             minFrame = 1000 / fps;
         }
         cameraPanel.getCanvas3D2D().getView().setMinimumFrameCycleTime(minFrame);
     }
+
     /* (non-Javadoc)
      * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#setMouseLock(boolean)
      */
     @Override
     public void setMouseLock(boolean mouseLock) {
 
+        // grab or release pointer capture first
+        final Window delegateWindow = cameraPanel.getCanvas3D2D().getGLWindow().getDelegatedWindow();
+        if (delegateWindow instanceof WindowDriver) {
+            WindowDriver wd = (WindowDriver) delegateWindow;
+            if (wd.getAndroidView().requestFocus()) {
+                if (!mouseLock) {
+                    wd.getAndroidView().releasePointerCapture();
+                } else {
+                    wd.getAndroidView().requestPointerCapture();
+                }
+            }
+        }
+
+        if (!mouseLock) {
+            newtMouseInputListener.setWindow(null);
+        } else {
+            newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
+        }
+        //tell listeners
+        for (MouseLockListener mouseLockListener : mouseLockListeners)
+            mouseLockListener.mouseLockSet(mouseLock);
+
     }
 
     @Override
     public boolean isTrailorCam() {
         return TRAILER_CAM;
+    }
+
+    public void addMouseLockListener(MouseLockListener mouseLockListener) {
+        mouseLockListeners.add(mouseLockListener);
+    }
+
+    public void removeMouseLockListener(MouseLockListener mouseLockListener) {
+        mouseLockListeners.remove(mouseLockListener);
+    }
+
+    public interface MouseLockListener {
+        public void mouseLockSet(boolean set);
     }
 
     private class NewtMiscKeyHandler implements KeyListener {
@@ -585,6 +667,16 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             } else if (e.getKeyCode() == KeyEvent.VK_F) {
                 freefly = !freefly;
                 setFreeFly(freefly);
+            } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                if (newtMouseInputListener.hasGLWindow()) {
+                    setMouseLock(false);
+                } else {
+                    setMouseLock(true);
+                }
+
+            } else if (e.getKeyCode() == KeyEvent.VK_I) {
+                // simpleInventorySystem has a listener for the mouse lock
+                System.out.println("Need a new inventory system");
             }
         }
 

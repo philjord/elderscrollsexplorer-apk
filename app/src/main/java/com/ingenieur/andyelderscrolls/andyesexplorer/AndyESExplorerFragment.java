@@ -31,8 +31,8 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
     private ScrollsExplorer scrollsExplorer;
     private boolean scrollsExplorerInitCalled = false;
 
-    private GLWindowOverLay moveNavigationPanel;
-    private GLWindowOverLay lookNavigationPanel;
+    private MoveNavigationView moveNavigationPanel;
+    private LookNavigationView lookNavigationPanel;
     private GLWindowOverLay characterSheetOverlay;
     private GLWindowOverLay inventoryOverlay;
     private GLWindowOverLay mapOverlay;
@@ -119,10 +119,19 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
 
                     moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
                     lookNavigationPanel = new LookNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+                    scrollsExplorer.simpleWalkSetup.addMouseLockListener(new AndySimpleWalkSetup.MouseLockListener() {
+                        @Override
+                        public void mouseLockSet(boolean set) {
+                            // visually remove our 2 circles when mouse lock set
+                            moveNavigationPanel.setVisible(!set);
+                            lookNavigationPanel.setVisible(!set);
+                        }
+                    });
+
                     lookNavigationPanel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(scrollsExplorer.simpleWalkSetup != null && scrollsExplorer.simpleWalkSetup.getCameraMouseOver() != null)
+                            if (scrollsExplorer.simpleWalkSetup != null && scrollsExplorer.simpleWalkSetup.getCameraMouseOver() != null)
                                 scrollsExplorer.simpleWalkSetup.getCameraMouseOver().doClick();
                         }
                     });
@@ -251,9 +260,11 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
     public GLWindowOverLay getCharacterSheetOverlay() {
         return characterSheetOverlay;
     }
+
     public GLWindowOverLay getInventoryOverlay() {
         return inventoryOverlay;
     }
+
     public GLWindowOverLay getMapOverlay() {
         return mapOverlay;
     }

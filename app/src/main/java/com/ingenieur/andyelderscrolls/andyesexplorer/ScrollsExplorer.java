@@ -387,7 +387,7 @@ public class ScrollsExplorer
 
                         });
                         J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
-                        simpleWalkSetup.setMouseLock(true);// auto press teh tab key
+                        //no no auto press too confusing simpleWalkSetup.setMouseLock(true);// auto press teh tab key
 
                         // I could use the j3dcellfactory now? with the cached cell records?
                         simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);

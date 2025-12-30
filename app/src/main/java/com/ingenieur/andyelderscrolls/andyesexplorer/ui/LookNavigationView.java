@@ -1,6 +1,8 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer.ui;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,17 +16,26 @@ public class LookNavigationView extends GLWindowOverLay {
 
     private View.OnClickListener onClickListener;
     private final float SCROLL_THRESHOLD = 2;
-    private View button;
+    private View looky;
 
     public LookNavigationView(Context context, View parent, NavigationProcessorBullet npb) {
         super(context, parent, R.layout.navigationpanellookpopup, Gravity.RIGHT | Gravity.BOTTOM);
-        button = getButton(R.id.looky);
-        button.setOnTouchListener(new DragOrTouchListener(npb));
+        looky = getButton(R.id.looky);
+        looky.setOnTouchListener(new DragOrTouchListener(npb));
     }
 
     @Override
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public void setVisible(boolean vis) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            public void run() {
+                int newVis = vis ? View.VISIBLE : View.INVISIBLE;// because we are used for captured mouse pointers for the locked version
+                looky.setVisibility(newVis);
+            }
+        });
     }
 
     private class DragOrTouchListener implements View.OnTouchListener {
