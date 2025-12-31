@@ -26,10 +26,10 @@
 
         <activity
             android:name=".ElderScrollsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="Call of Red Mountain"
             android:exported="true"
-            >
+            ><!--https://stackoverflow.com/questions/25735227/bluetooth-keyboard-will-cause-activity-destroy-and-recreate/27238892-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -39,7 +39,7 @@
 
         <activity
             android:name=".MorrowindActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:exported="false"
             >
             <intent-filter>
@@ -48,7 +48,7 @@
         </activity>
         <activity
             android:name=".display.nifdisplay.NifDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="Nif Display"
             android:parentActivityName=".ElderScrollsActivity"
             >
@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:name=".display.jbullet.JBulletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="JBullet"
             android:parentActivityName=".ElderScrollsActivity"
             >
@@ -68,7 +68,7 @@
         </activity>
         <activity
             android:name=".display.kfdisplay.KfDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="KfDisplayActivity"
             android:parentActivityName=".ElderScrollsActivity"
             >
@@ -78,7 +78,7 @@
         </activity>
         <activity
             android:name=".display.texdisplay.TexDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="Texture Display"
             android:parentActivityName=".ElderScrollsActivity"
             >
@@ -88,10 +88,9 @@
         </activity>
         <activity
             android:name=".andyesexplorer.AndyESExplorerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:label="ESExplorer"
             android:parentActivityName=".ElderScrollsActivity"
-            android:screenOrientation="sensorLandscape"
             android:noHistory="true"
             >
             <meta-data

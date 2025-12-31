@@ -1,6 +1,7 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -117,50 +118,54 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                     scrollsExplorer = new ScrollsExplorer(activity, gl_window, activity.gameName, activity.gameConfigId, AndyESExplorerFragment.this);
                     activity.scrollsExplorer = scrollsExplorer;
 
-                    moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
-                    lookNavigationPanel = new LookNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
-                    scrollsExplorer.simpleWalkSetup.addMouseLockListener(new AndySimpleWalkSetup.MouseLockListener() {
-                        @Override
-                        public void mouseLockSet(boolean set) {
-                            // visually remove our 2 circles when mouse lock set
-                            moveNavigationPanel.setVisible(!set);
-                            lookNavigationPanel.setVisible(!set);
-                        }
-                    });
-
-                    lookNavigationPanel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (scrollsExplorer.simpleWalkSetup != null && scrollsExplorer.simpleWalkSetup.getCameraMouseOver() != null)
-                                scrollsExplorer.simpleWalkSetup.getCameraMouseOver().doClick();
-                        }
-                    });
-
-                    // notice the top right is always offset by the width of the overlay so as to no go offscreen (it's a bit odd)
-                    characterSheetOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.charactersheetoverlay, Gravity.RIGHT | Gravity.TOP, true, 50, 0);
-                    characterSheetOverlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            activity.mViewPager.setCurrentItem(0, true);
-                        }
-                    });
-                    inventoryOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.inventoryoverlay, Gravity.RIGHT | Gravity.TOP, true, 100, 0);
-                    inventoryOverlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            activity.mViewPager.setCurrentItem(3, true);
-                        }
-                    });
-                    mapOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.mapoverlay, Gravity.RIGHT | Gravity.TOP, true, 150, 0);
-                    mapOverlay.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            activity.mViewPager.setCurrentItem(2, true);
-                        }
-                    });
-                    // showing the nav panel can only be done on the UI thread
+                    //UI elements must be created on the lopper so they can be modified later by using the looper
+                    // right now I'm on "Selected Game Config Loader" thread that ends shortly
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
+                            moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+                            lookNavigationPanel = new LookNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+                            scrollsExplorer.simpleWalkSetup.addMouseLockListener(new AndySimpleWalkSetup.MouseLockListener() {
+                                @Override
+                                public void mouseLockSet(boolean set) {
+                                    // visually remove our 2 circles when mouse lock set
+                                    moveNavigationPanel.setVisible(!set);
+                                    lookNavigationPanel.setVisible(!set);
+                                }
+                            });
+
+
+                            lookNavigationPanel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (scrollsExplorer.simpleWalkSetup != null && scrollsExplorer.simpleWalkSetup.getCameraMouseOver() != null)
+                                        scrollsExplorer.simpleWalkSetup.getCameraMouseOver().doClick();
+                                }
+                            });
+
+
+                            // notice the top right is always offset by the width of the overlay so as to no go offscreen (it's a bit odd)
+                            characterSheetOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.charactersheetoverlay, Gravity.RIGHT | Gravity.TOP, true, 50, 0);
+                            characterSheetOverlay.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    activity.mViewPager.setCurrentItem(0, true);
+                                }
+                            });
+                            inventoryOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.inventoryoverlay, Gravity.RIGHT | Gravity.TOP, true, 100, 0);
+                            inventoryOverlay.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    activity.mViewPager.setCurrentItem(3, true);
+                                }
+                            });
+                            mapOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.mapoverlay, Gravity.RIGHT | Gravity.TOP, true, 150, 0);
+                            mapOverlay.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    activity.mViewPager.setCurrentItem(2, true);
+                                }
+                            });
+
                             moveNavigationPanel.showTooltip();
                             lookNavigationPanel.showTooltip();
                             characterSheetOverlay.showTooltip();

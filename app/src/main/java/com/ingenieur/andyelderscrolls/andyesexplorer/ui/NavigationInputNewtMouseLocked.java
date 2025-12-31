@@ -1,11 +1,11 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer.ui;
 
+import android.util.Log;
+import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.jogamp.newt.Window;
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
 
 import jogamp.newt.driver.android.WindowDriver;
@@ -13,7 +13,8 @@ import tools.WeakListenerList;
 import tools3d.navigation.NavigationProcessorInterface;
 import tools3d.navigation.NavigationRotationStateListener;
 
-public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerListener {
+public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerListener,
+        View.OnClickListener {
 
     public static float MOUSE_SENSITIVITY = 1f;
 
@@ -31,13 +32,27 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
 
     private NavigationProcessorInterface navigationProcesor;
 
-    //private Point previousMouseLocation = new Point();
-
-    //private Point centerLocation = new Point();
-
-    //boolean isRecentering = false;
-
     private WeakListenerList<NavigationRotationStateListener> navigationRotationStateListeners = new WeakListenerList<NavigationRotationStateListener>();
+
+
+    //https://developer.android.com/games/playgames/input-mouse
+    enum MouseButton {
+        LEFT,
+        RIGHT,
+        MIDDLE,
+        UNKNOWN;
+        static MouseButton fromMotionEvent(MotionEvent motionEvent) {
+            switch (motionEvent.getActionButton()) {
+                case MotionEvent.BUTTON_PRIMARY:
+                    return MouseButton.LEFT;
+                case MotionEvent.BUTTON_SECONDARY:
+                    return MouseButton.RIGHT;
+                default:
+                    return MouseButton.UNKNOWN;
+            }
+        }
+    }
+
 
     public NavigationInputNewtMouseLocked() {
 
@@ -56,7 +71,6 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
     }
 
     private void fireListeners(boolean turnLeft, boolean turnRight, boolean turnUp, boolean turnDown) {
-        // tell the listeners
         for (NavigationRotationStateListener nrsl : navigationRotationStateListeners) {
             nrsl.inputStateChanged(turnLeft, turnRight, turnUp, turnDown);
         }
@@ -83,6 +97,35 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
                 WindowDriver wd = (WindowDriver) delegateWindow;
                 // ready to grab locked pointer events
                 wd.getAndroidView().setOnCapturedPointerListener(this);
+                //click listener
+                wd.getAndroidView().setOnGenericMotionListener((view, motionEvent) -> {
+                    if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+                        switch (motionEvent.getAction()) {
+                            case MotionEvent.ACTION_BUTTON_PRESS:
+                                Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " pressed at " + motionEvent.getX() + ", " + motionEvent.getY());
+                                break;
+                            case MotionEvent.ACTION_BUTTON_RELEASE:
+                                Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " released at " + motionEvent.getX() + ", " + motionEvent.getY());
+                                break;
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+                //scroll listener
+                wd.getAndroidView().setOnGenericMotionListener((view, motionEvent) -> {
+                    if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+                        switch (motionEvent.getAction()) {
+                            case MotionEvent.ACTION_SCROLL:
+                                float scrollX = motionEvent.getAxisValue(MotionEvent.AXIS_HSCROLL);
+                                float scrollY = motionEvent.getAxisValue(MotionEvent.AXIS_VSCROLL);
+                                Log.d("MA", "Mouse scrolled " + scrollX + ", " + scrollY);
+                                break;
+                        }
+                        return true;
+                    }
+                    return false;
+                });
             }
         }
     }
@@ -91,21 +134,10 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
         return glWindow != null;
     }
 
-    private void recenterMouse() {
-        if (glWindow != null) {
-            // work out where the mouse should be
-            glWindow.warpPointer(glWindow.getWidth() / 2, glWindow.getHeight() / 2);
-        }
-    }
-
     @Override
-    public boolean onCapturedPointer(View view, MotionEvent e) {
-        // Get the coordinates required by your app.
-        float horizontalOffset = e.getX();
-        System.err.println("Hi it's me, I've just seen a thing-> " + horizontalOffset);
-
-        float dx = e.getX();
-        float dy = e.getY();
+    public boolean onCapturedPointer(View view, MotionEvent motionEvent) {
+        float dx = motionEvent.getX();
+        float dy = motionEvent.getY();
 
         if (dx != 0 || dy != 0) {
             double scaledDeltaX = (double) dx * FREE_LOOK_GROSS_ROTATE_FACTOR * MOUSE_SENSITIVITY;
@@ -124,10 +156,26 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
         //TODO: but how do I send all stopped messages? I'm on a move listener.
         fireListeners(dx < 0, dx > 0, dy > 0, dy < 0);
 
-
-        // Use the coordinates to update your view and return true if the event is
-        // successfully processed.
+        if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_BUTTON_PRESS:
+                    Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " pressed at " + motionEvent.getX() + ", " + motionEvent.getY() + "********************************************************");
+                    break;
+                case MotionEvent.ACTION_BUTTON_RELEASE:
+                    Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " released at " + motionEvent.getX() + ", " + motionEvent.getY());
+                    break;
+            }
+            return true;
+        }
+        // Use the coordinates to update your view and return true if the event is successfully processed.
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        System.err.println("************************************* click");
+        System.err.println("************************************* click");
+        System.err.println("************************************* click");
     }
 }
 

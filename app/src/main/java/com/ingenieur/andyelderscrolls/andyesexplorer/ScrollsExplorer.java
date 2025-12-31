@@ -4,12 +4,15 @@ import static scrollsexplorer.GameConfig.allGameConfigs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.hardware.input.InputManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
+import android.view.InputDevice;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -387,7 +390,10 @@ public class ScrollsExplorer
 
                         });
                         J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
-                        //no no auto press too confusing simpleWalkSetup.setMouseLock(true);// auto press teh tab key
+
+
+
+
 
                         // I could use the j3dcellfactory now? with the cached cell records?
                         simpleBethCellManager.setSources(selectedGameConfig, esmManager, mediaSources);
@@ -667,6 +673,16 @@ public class ScrollsExplorer
         Vector3f t = simpleWalkSetup.getAvatarLocation().get(new Vector3f());
         Quat4f r = simpleWalkSetup.getAvatarLocation().get(new Quat4f());
         simpleBethCellManager.setCurrentCellFormId(cellformid, t, r);
+
+        //if we have a mouse connected then let's flip to mouse lock for fun
+        InputManager inputManager = (InputManager)
+                parentActivity.getSystemService(Context.INPUT_SERVICE);
+        for( int id : inputManager.getInputDeviceIds()) {
+            InputDevice inputDevice = inputManager.getInputDevice(id);
+            if((inputDevice.getSources() & inputDevice.SOURCE_MOUSE) != 0 ) {
+                simpleWalkSetup.setMouseLock(true);// auto press the tab key
+            }
+        }
     }
 
     public SimpleBethCellManager getSimpleBethCellManager() {
