@@ -52,7 +52,6 @@ import tools3d.navigation.AvatarLocation;
 
 import com.ingenieur.andyelderscrolls.andyesexplorer.ui.NavigationInputNewtMouseLocked;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 import tools3d.navigation.NavigationInputNewtKey;
@@ -204,11 +203,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         keyNavigationInputNewt = new NavigationInputNewtKey(navigationProcessor);
         NavigationInputNewtKey.VERTICAL_RATE = 50f;
 
-        newtMouseInputListener = new NavigationInputNewtMouseLocked();
-        newtMouseInputListener.setNavigationProcessor(navigationProcessor);
-
-        // dont' start mouse locked as its a pain
-        //mouseInputListener.setCanvas(cameraPanel.getCanvas3D2D());
+        newtMouseInputListener = new NavigationInputNewtMouseLocked(this, navigationProcessor);
 
         //add jump key and vis/phy toggle key listeners for fun ************************
         jumpKeyListener = new NewtJumpKeyListener(nbccProvider);
@@ -343,6 +338,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
         IDashboard.dashboard.setPhysicSystem(physicsSystem);
 
+        //TODO: this might be the clicky click? no clickage
         cameraMouseOver = new ActionableMouseOverHandler(physicsSystem, simpleBethCellManager, true) {
             // only allow clicks in top half of screen for interaction
             public void doMouseReleased(MouseEvent e) {
@@ -613,7 +609,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      */
     @Override
     public void setMouseLock(boolean mouseLock) {
-
         // grab or release pointer capture first
         final Window delegateWindow = cameraPanel.getCanvas3D2D().getGLWindow().getDelegatedWindow();
         if (delegateWindow instanceof WindowDriver) {
@@ -621,21 +616,24 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             if (wd.getAndroidView().requestFocus()) {
                 if (!mouseLock) {
                     wd.getAndroidView().releasePointerCapture();
+                    newtMouseInputListener.setWindow(null);
                 } else {
                     wd.getAndroidView().requestPointerCapture();
+                    newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
                 }
             }
+            //tell listeners
+            for (MouseLockListener mouseLockListener : mouseLockListeners)
+                mouseLockListener.mouseLockSet(mouseLock);
         }
+    }
 
-        if (!mouseLock) {
-            newtMouseInputListener.setWindow(null);
-        } else {
-            newtMouseInputListener.setWindow(cameraPanel.getCanvas3D2D().getGLWindow());
-        }
-        //tell listeners
-        for (MouseLockListener mouseLockListener : mouseLockListeners)
-            mouseLockListener.mouseLockSet(mouseLock);
+    public void toggleMouseLock() {
+        setMouseLock(!isMouseLock());
+    }
 
+    public boolean isMouseLock() {
+        return newtMouseInputListener.hasGLWindow();
     }
 
     @Override
@@ -650,6 +648,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
     public void removeMouseLockListener(MouseLockListener mouseLockListener) {
         mouseLockListeners.remove(mouseLockListener);
     }
+
 
     public interface MouseLockListener {
         public void mouseLockSet(boolean set);
@@ -668,15 +667,7 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
                 freefly = !freefly;
                 setFreeFly(freefly);
             } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                if (newtMouseInputListener.hasGLWindow()) {
-                    setMouseLock(false);
-                } else {
-                    setMouseLock(true);
-                }
-
-            } else if (e.getKeyCode() == KeyEvent.VK_I) {
-                // simpleInventorySystem has a listener for the mouse lock
-                System.out.println("Need a new inventory system");
+                toggleMouseLock();
             }
         }
 

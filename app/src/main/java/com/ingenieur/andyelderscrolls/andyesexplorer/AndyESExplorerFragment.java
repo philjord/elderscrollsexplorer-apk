@@ -26,7 +26,10 @@ import jogamp.newt.WindowImpl;
 import jogamp.newt.driver.android.NewtBaseFragment;
 import jogamp.newt.driver.android.WindowDriver;
 
-
+/**
+ * This class owns the 4 views, but is in fact itself the main walk view, but it does engotiation
+ * with it's activity parent to swpa to the other 3 views and back
+ */
 public class AndyESExplorerFragment extends NewtBaseFragment {
     private GLWindow gl_window;
     private ScrollsExplorer scrollsExplorer;
@@ -38,6 +41,9 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
     private GLWindowOverLay inventoryOverlay;
     private GLWindowOverLay mapOverlay;
 
+    // used to keep track on what the simple walk is set to, so wehn other screens ar shown
+    // it can swithc back correctly
+    private boolean simpleWalkMouseLockState = false;
 
     @Override
     public void onCreate(final Bundle state) {
@@ -133,7 +139,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                                 }
                             });
 
-
+                            //TODO the mouse locked click is no going, here is the unlocked clicker
                             lookNavigationPanel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -148,24 +154,25 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                             characterSheetOverlay.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    activity.mViewPager.setCurrentItem(0, true);
+                                    showCharacterSheet();
                                 }
                             });
                             inventoryOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.inventoryoverlay, Gravity.RIGHT | Gravity.TOP, true, 100, 0);
                             inventoryOverlay.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    activity.mViewPager.setCurrentItem(3, true);
+                                    showInventory();
                                 }
                             });
                             mapOverlay = new GLWindowOverLay(getContext(), getView(), R.layout.mapoverlay, Gravity.RIGHT | Gravity.TOP, true, 150, 0);
                             mapOverlay.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    activity.mViewPager.setCurrentItem(2, true);
+                                    showMap();
                                 }
                             });
 
+                            //make these UI items visible on top of the gl window
                             moveNavigationPanel.showTooltip();
                             lookNavigationPanel.showTooltip();
                             characterSheetOverlay.showTooltip();
@@ -272,5 +279,148 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
 
     public GLWindowOverLay getMapOverlay() {
         return mapOverlay;
+    }
+
+    /**
+     * Make sure you un mouse lock before switching pages
+     */
+    public void showCharacterSheet() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                activity.mViewPager.setCurrentItem(0, true);
+            }
+        });
+    }
+
+    /**
+     * If CharacterSheet is showing flip back to the main screen
+     */
+    public void toggleCharacterSheet() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+
+        // if we are map go back to walk
+        if (currentItem == 0) {
+            showSimpleWalk();
+        } else {
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    scrollsExplorer.simpleWalkSetup.setMouseLock(false);
+                    activity.mViewPager.setCurrentItem(0, true);
+                }
+            });
+        }
+    }
+
+    /**
+     * Make sure you un mouse lock before switching pages
+     */
+    public void showInventory() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                scrollsExplorer.simpleWalkSetup.setMouseLock(false);
+                activity.mViewPager.setCurrentItem(3, true);
+            }
+        });
+    }
+
+    /**
+     * If Inventory is showing flip back to the main screen
+     */
+    public void toggleInventory() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+
+        // if we are map go back to walk
+        if (currentItem == 3) {
+            showSimpleWalk();
+        } else {
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    scrollsExplorer.simpleWalkSetup.setMouseLock(false);
+                    activity.mViewPager.setCurrentItem(3, true);
+                }
+            });
+        }
+    }
+
+    /**
+     * Make sure you un mouse lock before switching pages
+     */
+    public void showMap() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                scrollsExplorer.simpleWalkSetup.setMouseLock(false);
+                activity.mViewPager.setCurrentItem(2, true);
+            }
+        });
+    }
+
+    /**
+     * If map is showing flip back to the main screen
+     */
+    public void toggleMap() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        int currentItem = activity.mViewPager.getCurrentItem();
+
+        if (currentItem == 1) {
+            // remember mouse lock state state for when we untoggle back to it
+            simpleWalkMouseLockState = scrollsExplorer.simpleWalkSetup.isMouseLock();
+        }
+
+        // if we are map go back to walk
+        if (currentItem == 2) {
+            showSimpleWalk();
+        } else {
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    scrollsExplorer.simpleWalkSetup.setMouseLock(false);
+                    activity.mViewPager.setCurrentItem(2, true);
+                }
+            });
+        }
+    }
+
+    public void showSimpleWalk() {
+        AndyESExplorerActivity activity = (AndyESExplorerActivity) this.getActivity();
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                activity.mViewPager.setCurrentItem(1, true);
+                scrollsExplorer.simpleWalkSetup.setMouseLock(simpleWalkMouseLockState);
+            }
+        });
     }
 }

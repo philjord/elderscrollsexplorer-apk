@@ -2,19 +2,15 @@ package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import static scrollsexplorer.GameConfig.allGameConfigs;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.hardware.input.InputManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Looper;
-import android.os.ParcelFileDescriptor;
 import android.view.InputDevice;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -47,28 +43,18 @@ import org.jogamp.vecmath.Quat4f;
 import org.jogamp.vecmath.Vector3f;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
 
 import bsa.source.BsaMaterialsSource;
 import bsa.source.BsaMeshSource;
 import bsa.source.BsaSoundSource;
 import bsa.source.BsaTextureSource;
-import bsa.source.DDSToKTXBsaConverter;
-import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
 import bsaio.BsaUtils;
-import bsaio.DBException;
 import esfilemanager.common.data.plugin.PluginGroup;
 import esfilemanager.common.data.plugin.PluginRecord;
 import esfilemanager.common.data.record.Record;
-import esfilemanager.loader.ESMManager;
 import esfilemanager.loader.ESMManagerUri;
 import esfilemanager.loader.IESMManager;
 import esfilemanager.utils.ESMUtils;
@@ -109,35 +95,38 @@ import utils.source.MeshSource;
 import utils.source.SoundSource;
 
 /**
- * Created by phil on 3/10/2016.
+ * Scrolls explorer is the top of game play, it is given an enclosing activity and also an instatied set of pager windows called AndyESExplorerFragment
+ * then organises all the
+ * bsa files esm files for the game config it has been given to load
+ * It shows the cell picker to the users finds a door an so forth
+ * It has a pointer to AndyESExplorerFragment which holds the multiple views, walk, inventory, map  (not options that a dialog)
+ * It creates and holds the AndySimpleWalk which manages the main walky screen, has mouse loc, run the navigation adn physic etc
  */
-
-public class ScrollsExplorer
-        //TODO: extends ScrollsExplorerNewt
-        implements BethRenderSettings.UpdateListener, LocationUpdateListener, DragMouseAdapter.Listener {
+// extends ScrollsExplorerNewt but looks like that's never going to happen due to android specifics
+public class ScrollsExplorer implements BethRenderSettings.UpdateListener, LocationUpdateListener, DragMouseAdapter.Listener {
     //I think this auto installs itself
     public DashboardNewt dashboardNewt = new DashboardNewt();
+
+    public AndyESExplorerFragment esExplorerFragment;
+
+    public AndySimpleWalkSetup simpleWalkSetup;
+
+    public IESMManager esmManager;
 
     private SimpleBethCellManager simpleBethCellManager;
 
     private ESMCellChooser esmCellChooser;
     private ESMCellChooser.ESMArchiveFileChooserFilter esmArchiveFileChooserFilter;// set if a game wants to filter the cells
 
-    public AndySimpleWalkSetup simpleWalkSetup;
-
     private MediaSources mediaSources;
 
-    public IESMManager esmManager;
-
-    public BSArchiveSet bsaFileSet;
+    private BSArchiveSet bsaFileSet;
 
     private GameConfig selectedGameConfig = null;
 
     private DragMouseAdapter dragMouseAdapter = new DragMouseAdapter();
 
     private FragmentActivity parentActivity;
-
-    private AndyESExplorerFragment parentFragment;
 
     private GameConfig gameConfigToLoad;
 
@@ -160,12 +149,12 @@ public class ScrollsExplorer
         }
     }
 
-    public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId, AndyESExplorerFragment parentFragment) {
+    public ScrollsExplorer(FragmentActivity parentActivity2, GLWindow gl_window, String gameName, int gameConfigId, AndyESExplorerFragment esExplorerFragment) {
 
         System.out.println("ONE ScrollsExplorer CREATED");
 
         this.parentActivity = parentActivity2;
-        this.parentFragment = parentFragment;
+        this.esExplorerFragment = esExplorerFragment;
 
         progressBar = (ProgressBar) parentActivity.findViewById(R.id.progressBar);
 
@@ -228,7 +217,11 @@ public class ScrollsExplorer
 
         dragMouseAdapter.setListener(this);
 
-       // start the actual game up!
+        ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setScrollsExplorer(this);
+        ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getInventoryFragment().setScrollsExplorer(this);
+        ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getCharacterFragment().setScrollsExplorer(this);
+
+        // start the actual game up!
         if (hasESMAndBSAFiles(gameConfigToLoad)) {
             setSelectedGameConfig(gameConfigToLoad);
         } else {
@@ -259,6 +252,44 @@ public class ScrollsExplorer
         newtKeepAliveThread.setDaemon(false);// in case a daemon parent
         newtKeepAliveThread.setName("Newt Keep Alive Thread");
         newtKeepAliveThread.start();
+
+
+        //listener for keyboard disconnects and auto call setMouseLock false so we can't lose the tab key option easily
+        InputManager inputManager = (InputManager)
+                parentActivity.getSystemService(Context.INPUT_SERVICE);
+        inputManager.registerInputDeviceListener(new InputManager.InputDeviceListener() {
+            int lastChangedId = -1;
+            boolean lastChangedInputDeviceWasKeyBoard = false;
+
+            @Override
+            public void onInputDeviceAdded(int deviceId) {
+                //Toast.makeText(parentActivity2, "InputDeviceAdded: " + deviceId + " " + inputManager.getInputDevice(deviceId), Toast.LENGTH_SHORT)
+                //        .show();
+            }
+
+            @Override
+            public void onInputDeviceRemoved(int deviceId) {
+                //Toast.makeText(parentActivity2, "InputDeviceRemoved: " + deviceId + " " + inputManager.getInputDevice(deviceId), Toast.LENGTH_SHORT)
+                //        .show();
+                // I get a changed called, but when the removed comes through I can't get details,
+                if (deviceId == lastChangedId && lastChangedInputDeviceWasKeyBoard) {
+                    simpleWalkSetup.setMouseLock(false);// auto press the tab key
+                }
+            }
+
+            @Override
+            public void onInputDeviceChanged(int deviceId) {
+                // I get a changed called, but when the removed comes through I can't get details, so grab the last changed
+                //Toast.makeText(parentActivity2, "InputDeviceChanged: " + deviceId + " " + inputManager.getInputDevice(deviceId), Toast.LENGTH_SHORT)
+                //        .show();
+                lastChangedId = deviceId;
+                InputDevice inde = inputManager.getInputDevice(deviceId);
+                lastChangedInputDeviceWasKeyBoard = inde != null && (inde.getSources() & InputDevice.SOURCE_KEYBOARD) != 0;
+
+            }
+        }, new Handler(Looper.getMainLooper()));
+
+
     }
 
 
@@ -287,7 +318,7 @@ public class ScrollsExplorer
         // setting things to null will cause many NPE
         // also I want this destroy to stop the work being done by the loady up thread to avoid OOMs
 
-        if(simpleWalkSetup != null)
+        if (simpleWalkSetup != null)
             simpleWalkSetup.destroy();
         // our anonymous class holds a reference to this instance
         SimpleSounds.mp3SystemMediaPlayer = null;
@@ -377,7 +408,6 @@ public class ScrollsExplorer
                         sortoutGameSpecificConfig(textureSource);
 
 
-
                         simpleWalkSetup.configure(meshSource, simpleBethCellManager);
 
                         simpleWalkSetup.getWindow().addKeyListener(new KeyHandler());
@@ -390,9 +420,6 @@ public class ScrollsExplorer
 
                         });
                         J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
-
-
-
 
 
                         // I could use the j3dcellfactory now? with the cached cell records?
@@ -439,7 +466,6 @@ public class ScrollsExplorer
     }
 
 
-
     public void showCellPicker() {
         // display the cell picker and create a start location from the selected cell
         parentActivity.runOnUiThread(new Runnable() {
@@ -462,7 +488,7 @@ public class ScrollsExplorer
                             int cellFormId = ((Record) treeNode.getValue()).getFormID();
 
                             //-1 is load previous
-                            if( cellFormId == -1 ) {
+                            if (cellFormId == -1) {
 
                                 yp = YawPitch.parse(PropertyLoader.properties.getProperty("YawPitch" + esmManager.getName(), selectedGameConfig.startYP.toString()));
                                 trans = PropertyCodec.vector3fOut(PropertyLoader.properties.getProperty("Trans" + esmManager.getName(),
@@ -471,7 +497,7 @@ public class ScrollsExplorer
                                 cellFormId = Integer.parseInt(PropertyLoader.properties.getProperty("CellId" + esmManager.getName(), "-1"));
 
                                 // no cell means ignore the click
-                                if(cellFormId == -1)
+                                if (cellFormId == -1)
                                     return;
 
                             } else {
@@ -552,7 +578,7 @@ public class ScrollsExplorer
             if (selectedGameConfig.gameName != "TESIII: Morrowind") {
                 // if SimpleBethCellManager.setSources has been called the persistent children will have been loaded
                 PluginGroup cellChildGroups = j3dCellFactory.getPersistentChildrenOfCell(formToLoad);
-                if(cellChildGroups != null) {
+                if (cellChildGroups != null) {
                     for (Record record : cellChildGroups.getRecordList()) {
                         // is this a door way?
                         if (record.getRecordType().equals("REFR")) {
@@ -658,6 +684,9 @@ public class ScrollsExplorer
                     trans.set(t);
                     yp.set(r);
                 }
+            } else {
+                //TODO: where have my oblivion doors gone?? what did I break I wonder?
+                Toast.makeText(parentActivity, "Trouble, definately, no doors!", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -677,12 +706,19 @@ public class ScrollsExplorer
         //if we have a mouse connected then let's flip to mouse lock for fun
         InputManager inputManager = (InputManager)
                 parentActivity.getSystemService(Context.INPUT_SERVICE);
-        for( int id : inputManager.getInputDeviceIds()) {
+
+        boolean hasMouse = false; // need both to press tab and have mouse
+        boolean hasKeyboard = false;
+        for (int id : inputManager.getInputDeviceIds()) {
             InputDevice inputDevice = inputManager.getInputDevice(id);
-            if((inputDevice.getSources() & inputDevice.SOURCE_MOUSE) != 0 ) {
-                simpleWalkSetup.setMouseLock(true);// auto press the tab key
-            }
+            if ((inputDevice.getSources() & inputDevice.SOURCE_MOUSE) != 0)
+                hasMouse = true;
+            if ((inputDevice.getSources() & inputDevice.SOURCE_KEYBOARD) != 0)
+                hasKeyboard = true;
         }
+        if (hasMouse && hasKeyboard)
+            simpleWalkSetup.setMouseLock(true);// auto press the tab key
+
     }
 
     public SimpleBethCellManager getSimpleBethCellManager() {
@@ -720,17 +756,21 @@ public class ScrollsExplorer
         public KeyHandler() {
         }
 
-        public void keyPressed(KeyEvent e) {
+        public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_1) {
-                BethRenderSettings.setOutlineFocused(!BethRenderSettings.isOutlineFocused());
+                BethRenderSettings.setEnablePlacedLights(!BethRenderSettings.isEnablePlacedLights());
             } else if (e.getKeyCode() == KeyEvent.VK_2) {
-                BethRenderSettings.setOutlineChars(!BethRenderSettings.isOutlineChars());
+                BethRenderSettings.setOutlineLights(!BethRenderSettings.isOutlineLights());
             } else if (e.getKeyCode() == KeyEvent.VK_3) {
-                BethRenderSettings.setOutlineConts(!BethRenderSettings.isOutlineConts());
+                BethRenderSettings.setOutlineChars(!BethRenderSettings.isOutlineChars());
             } else if (e.getKeyCode() == KeyEvent.VK_4) {
                 BethRenderSettings.setOutlineDoors(!BethRenderSettings.isOutlineDoors());
             } else if (e.getKeyCode() == KeyEvent.VK_5) {
+                BethRenderSettings.setOutlineConts(!BethRenderSettings.isOutlineConts());
+            } else if (e.getKeyCode() == KeyEvent.VK_6) {
                 BethRenderSettings.setOutlineParts(!BethRenderSettings.isOutlineParts());
+            } else if (e.getKeyCode() == KeyEvent.VK_7) {
+                BethRenderSettings.setOutlineFocused(!BethRenderSettings.isOutlineFocused());
             } else if (e.getKeyCode() == KeyEvent.VK_O) {
                 parentActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -739,11 +779,15 @@ public class ScrollsExplorer
                         od.display();
                     }
                 });
+            } else if (e.getKeyCode() == KeyEvent.VK_M) {
+                esExplorerFragment.toggleMap();
+            } else if (e.getKeyCode() == KeyEvent.VK_I) {
+                esExplorerFragment.toggleInventory();
+            } else if (e.getKeyCode() == KeyEvent.VK_C) {
+                esExplorerFragment.toggleCharacterSheet();
             }
         }
     }
-
-
 
 
     private void sortoutGameSpecificConfig(BsaTextureSource textureSource) {
@@ -773,7 +817,7 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new MorrowindMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
 
@@ -796,8 +840,8 @@ public class ScrollsExplorer
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    map = new OblivionMapImage(parentActivity,ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    map = new OblivionMapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
 
@@ -821,7 +865,7 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new Fallout3MapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
 
@@ -844,7 +888,7 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new FalloutNVMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
 
@@ -867,7 +911,7 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new SkyrimMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
 
@@ -881,11 +925,10 @@ public class ScrollsExplorer
             BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
 
-
             this.esmArchiveFileChooserFilter = new ESMCellChooser.ESMArchiveFileChooserFilter() {
                 @Override
                 public boolean accept(PluginRecord pr) {
-                    if(!pr.getEditorID().equals("")
+                    if (!pr.getEditorID().equals("")
                             && !pr.getEditorID().startsWith("COPY")
                             && !pr.getEditorID().startsWith("PackIn")) {
                         return true;
@@ -902,10 +945,10 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
-        }  else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
+        } else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
@@ -922,11 +965,10 @@ public class ScrollsExplorer
                 @Override
                 public void run() {
                     map = new StarfieldMapImage(parentActivity, ScrollsExplorer.this, textureSource);
-                    ((AndyESExplorerActivity)parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
             });
         }
-
 
 
         Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
@@ -937,11 +979,11 @@ public class ScrollsExplorer
             @Override
             public void run() {
                 if (mapBitmap != null)
-                    parentFragment.getMapOverlay().setBitMap(mapBitmap);
+                    esExplorerFragment.getMapOverlay().setBitMap(mapBitmap);
                 if (invBitmap != null)
-                    parentFragment.getInventoryOverlay().setBitMap(invBitmap);
+                    esExplorerFragment.getInventoryOverlay().setBitMap(invBitmap);
                 if (charBitmap != null)
-                    parentFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
+                    esExplorerFragment.getCharacterSheetOverlay().setBitMap(charBitmap);
             }
         });
     }

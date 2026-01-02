@@ -1,10 +1,10 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer.ui;
 
-import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ingenieur.andyelderscrolls.andyesexplorer.AndySimpleWalkSetup;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.opengl.GLWindow;
 
@@ -13,8 +13,7 @@ import tools.WeakListenerList;
 import tools3d.navigation.NavigationProcessorInterface;
 import tools3d.navigation.NavigationRotationStateListener;
 
-public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerListener,
-        View.OnClickListener {
+public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerListener {
 
     public static float MOUSE_SENSITIVITY = 1f;
 
@@ -32,6 +31,8 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
 
     private NavigationProcessorInterface navigationProcesor;
 
+    private AndySimpleWalkSetup simpleWalkSetup; // needed to fire clicks when the mouse is captured
+
     private WeakListenerList<NavigationRotationStateListener> navigationRotationStateListeners = new WeakListenerList<NavigationRotationStateListener>();
 
 
@@ -41,6 +42,7 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
         RIGHT,
         MIDDLE,
         UNKNOWN;
+
         static MouseButton fromMotionEvent(MotionEvent motionEvent) {
             switch (motionEvent.getActionButton()) {
                 case MotionEvent.BUTTON_PRIMARY:
@@ -54,8 +56,9 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
     }
 
 
-    public NavigationInputNewtMouseLocked() {
-
+    public NavigationInputNewtMouseLocked(AndySimpleWalkSetup simpleWalkSetup, NavigationProcessorInterface navigationProcesor) {
+        this.simpleWalkSetup = simpleWalkSetup;
+        this.navigationProcesor = navigationProcesor;
     }
 
     public void addNavigationRotationStateListener(NavigationRotationStateListener navigationRotationStateListener) {
@@ -64,10 +67,6 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
 
     public void removeNavigationRotationStateListener(NavigationRotationStateListener navigationRotationStateListener) {
         navigationRotationStateListeners.remove(navigationRotationStateListener);
-    }
-
-    public void setNavigationProcessor(NavigationProcessorInterface navigationProcesor) {
-        this.navigationProcesor = navigationProcesor;
     }
 
     private void fireListeners(boolean turnLeft, boolean turnRight, boolean turnUp, boolean turnDown) {
@@ -97,23 +96,9 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
                 WindowDriver wd = (WindowDriver) delegateWindow;
                 // ready to grab locked pointer events
                 wd.getAndroidView().setOnCapturedPointerListener(this);
-                //click listener
-                wd.getAndroidView().setOnGenericMotionListener((view, motionEvent) -> {
-                    if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
-                        switch (motionEvent.getAction()) {
-                            case MotionEvent.ACTION_BUTTON_PRESS:
-                                Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " pressed at " + motionEvent.getX() + ", " + motionEvent.getY());
-                                break;
-                            case MotionEvent.ACTION_BUTTON_RELEASE:
-                                Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " released at " + motionEvent.getX() + ", " + motionEvent.getY());
-                                break;
-                        }
-                        return true;
-                    }
-                    return false;
-                });
-                //scroll listener
-                wd.getAndroidView().setOnGenericMotionListener((view, motionEvent) -> {
+
+                //scroll listener but not for captured mice
+              /*  wd.getAndroidView().setOnGenericMotionListener((view, motionEvent) -> {
                     if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
                         switch (motionEvent.getAction()) {
                             case MotionEvent.ACTION_SCROLL:
@@ -125,7 +110,7 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
                         return true;
                     }
                     return false;
-                });
+                });*/
             }
         }
     }
@@ -156,26 +141,21 @@ public class NavigationInputNewtMouseLocked implements View.OnCapturedPointerLis
         //TODO: but how do I send all stopped messages? I'm on a move listener.
         fireListeners(dx < 0, dx > 0, dy > 0, dy < 0);
 
-        if (motionEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+        //notice this is a bit different from general answer on teh web about motion events as capture is different
+        if (motionEvent.isFromSource(InputDevice.SOURCE_MOUSE_RELATIVE)) {
             switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_BUTTON_PRESS:
-                    Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " pressed at " + motionEvent.getX() + ", " + motionEvent.getY() + "********************************************************");
+                case MotionEvent.ACTION_DOWN:
                     break;
-                case MotionEvent.ACTION_BUTTON_RELEASE:
-                    Log.d("MA", MouseButton.fromMotionEvent(motionEvent) + " released at " + motionEvent.getX() + ", " + motionEvent.getY());
+                case MotionEvent.ACTION_UP:
+                    if (simpleWalkSetup != null && simpleWalkSetup.getCameraMouseOver() != null)
+                        simpleWalkSetup.getCameraMouseOver().doClick();
                     break;
             }
             return true;
         }
-        // Use the coordinates to update your view and return true if the event is successfully processed.
+
         return true;
     }
 
-    @Override
-    public void onClick(View v) {
-        System.err.println("************************************* click");
-        System.err.println("************************************* click");
-        System.err.println("************************************* click");
-    }
 }
 

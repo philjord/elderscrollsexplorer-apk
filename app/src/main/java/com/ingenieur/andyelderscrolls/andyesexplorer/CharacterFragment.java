@@ -1,6 +1,7 @@
 package com.ingenieur.andyelderscrolls.andyesexplorer;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,19 +27,25 @@ import tools3d.utils.loader.PropertyCodec;
 public class CharacterFragment extends Fragment {
     private View rootView;
 
+    private ScrollsExplorer scrollsExplorer;
+    private View.OnKeyListener keyListener;
+
+
+    public void setScrollsExplorer(ScrollsExplorer scrollsExplorer) {
+        this.scrollsExplorer = scrollsExplorer;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.character_panel, container, false);
 
-
         // make the close work
         ImageButton closeCS = (ImageButton) rootView.findViewById(R.id.closeCharacterSheet);
         closeCS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AndyESExplorerActivity) getActivity()).mViewPager.setCurrentItem(1, true);
+                scrollsExplorer.esExplorerFragment.showSimpleWalk();
             }
         });
         final ToggleButton freeflybutton = (ToggleButton) rootView.findViewById(R.id.freeflybutton);
@@ -46,7 +53,7 @@ public class CharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 freeflybutton.setChecked(freeflybutton.isChecked());
-                ((AndyESExplorerActivity) getActivity()).scrollsExplorer.simpleWalkSetup.setFreeFly(freeflybutton.isChecked());
+                scrollsExplorer.simpleWalkSetup.setFreeFly(freeflybutton.isChecked());
             }
         });
 
@@ -55,14 +62,14 @@ public class CharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showphysicsbutton.setChecked(showphysicsbutton.isChecked());
-                ((AndyESExplorerActivity) getActivity()).scrollsExplorer.simpleWalkSetup.toggleHavok();
+                scrollsExplorer.simpleWalkSetup.toggleHavok();
 
                 // this will make the next cell load load up physics colors
                 BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = showphysicsbutton.isChecked();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "Next cell load will "+(showphysicsbutton.isChecked() ? "" : "not ") + "display physics", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Next cell load will " + (showphysicsbutton.isChecked() ? "" : "not ") + "display physics", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -72,7 +79,7 @@ public class CharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showvisualsbutton.setChecked(showvisualsbutton.isChecked());
-                ((AndyESExplorerActivity) getActivity()).scrollsExplorer.simpleWalkSetup.toggleVisual();
+                scrollsExplorer.simpleWalkSetup.toggleVisual();
             }
         });
 
@@ -80,8 +87,7 @@ public class CharacterFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity) getActivity()).scrollsExplorer;
-                if (scrollsExplorer != null &&scrollsExplorer.esmManager != null) {
+                if (scrollsExplorer != null && scrollsExplorer.esmManager != null) {
                     PropertyLoader.properties.setProperty("YawPitch" + scrollsExplorer.esmManager.getName(),
                             new YawPitch(scrollsExplorer.simpleWalkSetup.getAvatarLocation().getTransform()).toString());
                     PropertyLoader.properties.setProperty("Trans" + scrollsExplorer.esmManager.getName(),
@@ -96,9 +102,8 @@ public class CharacterFragment extends Fragment {
         changeCellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity) getActivity()).scrollsExplorer;
                 if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null) {
-                    ((AndyESExplorerActivity) getActivity()).mViewPager.setCurrentItem(1, true);
+                    scrollsExplorer.esExplorerFragment.showSimpleWalk();
                     scrollsExplorer.showCellPicker();
                 } else {
                     System.out.println("changeCellButton failed " + scrollsExplorer + " " + scrollsExplorer.simpleWalkSetup);
@@ -109,7 +114,6 @@ public class CharacterFragment extends Fragment {
         changeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity) getActivity()).scrollsExplorer;
                 if (scrollsExplorer != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -124,24 +128,51 @@ public class CharacterFragment extends Fragment {
         });
 
 
-
         final Button optionsbutton = (Button) rootView.findViewById(R.id.optionsbutton);
         optionsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollsExplorer scrollsExplorer = ((AndyESExplorerActivity) getActivity()).scrollsExplorer;
                 if (scrollsExplorer != null && scrollsExplorer.simpleWalkSetup != null) {
-                    OptionsDialog od = new OptionsDialog(((AndyESExplorerActivity) getActivity()), scrollsExplorer.simpleWalkSetup);
+                    OptionsDialog od = new OptionsDialog(getActivity(), scrollsExplorer.simpleWalkSetup);
                     od.display();
                 } else {
-                    OptionsDialog od = new OptionsDialog(((AndyESExplorerActivity) getActivity()), null);
+                    OptionsDialog od = new OptionsDialog(getActivity(), null);
                     od.display();
                 }
             }
         });
 
-
-
+        keyListener = new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // M sends us back
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_C) {
+                    scrollsExplorer.esExplorerFragment.showSimpleWalk();
+                    return true;
+                }
+                return false;
+            }
+        };
+        //TODO: this doesn't work, sad :(
+        //View charBackground = rootView.findViewById(R.id.charBackground);
+        //charBackground.setOnKeyListener(keyListener);
+        rootView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // we get a key code even if we aren't displayed, so only when we have focus do we start listening
+                if (hasFocus) {
+                    // need to invoke later or it will catch the currently being process M key
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            rootView.setOnKeyListener(keyListener);
+                        }
+                    });
+                } else {
+                    rootView.setOnKeyListener(null);
+                }
+            }
+        });
 
         return rootView;
     }
