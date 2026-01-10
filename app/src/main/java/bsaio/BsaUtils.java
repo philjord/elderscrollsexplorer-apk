@@ -162,8 +162,8 @@ public class BsaUtils {
 
                                             ParcelFileDescriptor ddsPFD = parentActivity.getContentResolver().openFileDescriptor(ddsUri, "r");
                                             fis = new ParcelFileDescriptor.AutoCloseInputStream(ddsPFD);
-                                            ArchiveFile archiveFile = ArchiveFile.createArchiveFile(fis.getChannel(), ddsArchiveName);
-                                            archiveFile.load(true);//blocking call
+                                            ArchiveFile archiveFile = ArchiveFile.createArchiveFile(true, fis.getChannel(), ddsArchiveName);
+                                            archiveFile.load();//blocking call
                                             System.out.println("loaded as displayable " + ddsUri + " in " + (System.currentTimeMillis() - tstart2));
                                             //converting
                                             final long tstart = System.currentTimeMillis();
