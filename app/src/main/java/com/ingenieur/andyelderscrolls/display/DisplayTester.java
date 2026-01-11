@@ -41,7 +41,6 @@ import bsaio.ArchiveEntry;
 import bsaio.ArchiveFile;
 import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
-import nif.BgsmSource;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.j3d.particles.tes3.J3dNiParticles;
@@ -51,6 +50,7 @@ import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
 import tools3d.utils.scenegraph.SpinTransform;
+import utils.source.BgsmSource;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 

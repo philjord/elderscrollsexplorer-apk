@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import bsaio.ArchiveEntry;
-import nif.BgsmSource;
 import nif.NifJ3dVisPhysRoot;
 import nif.NifToJ3d;
 import nif.character.NifJ3dSkeletonRoot;
@@ -30,6 +29,7 @@ import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.NiToJ3dData;
 import nif.niobject.NiNode;
 import utils.PerFrameUpdateBehavior;
+import utils.source.BgsmSource;
 
 public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter.Listener {
 

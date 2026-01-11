@@ -20,13 +20,13 @@ import java.util.ArrayList;
 
 import bsaio.ArchiveEntry;
 import bsaio.displayables.Displayable;
-import nif.BgsmSource;
 import nif.character.AttachedParts;
 import nif.character.NifCharacter;
 import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
+import utils.source.BgsmSource;
 import utils.source.MediaSources;
 
 public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.Listener {
