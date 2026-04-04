@@ -32,7 +32,17 @@ public class OptionsDialog extends Dialog
 
 		this.setTitle("Options");
 
-
+		CheckBox optionsMouseLock = (CheckBox)rootView.findViewById(R.id.optionsMouseLock);
+		optionsMouseLock.setChecked(simpleWalkSetup.isMouseLock());
+		optionsMouseLock.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				AndyESExplorerActivity.logFireBaseContent("optionsMouseLock", ""+ ((CheckBox)v).isChecked());
+				simpleWalkSetup.setMouseLock(((CheckBox)v).isChecked());
+			}
+		});
 
 		SeekBar optionsFarLoadGridCount = (SeekBar)rootView.findViewById(R.id.optionsFarLoadGridCount);
 		optionsFarLoadGridCount.setProgress(BethRenderSettings.getFarLoadGridCount());

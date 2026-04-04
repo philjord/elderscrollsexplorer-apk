@@ -707,16 +707,20 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         InputManager inputManager = (InputManager)
                 parentActivity.getSystemService(Context.INPUT_SERVICE);
 
-        boolean hasMouse = false; // need both to press tab and have mouse
-        boolean hasKeyboard = false;
+        boolean hasExternalMouse = false; // need both to press tab and have mouse
+        boolean hasExternalKeyboard = false;
         for (int id : inputManager.getInputDeviceIds()) {
             InputDevice inputDevice = inputManager.getInputDevice(id);
-            if ((inputDevice.getSources() & inputDevice.SOURCE_MOUSE) != 0)
-                hasMouse = true;
-            if ((inputDevice.getSources() & inputDevice.SOURCE_KEYBOARD) != 0)
-                hasKeyboard = true;
+
+            // look for external and enabled devices only
+            if(inputDevice.isExternal() && inputDevice.isEnabled()) {
+                if ((inputDevice.getSources() & inputDevice.SOURCE_MOUSE) != 0)
+                    hasExternalMouse = true;
+                if ((inputDevice.getSources() & inputDevice.SOURCE_KEYBOARD) != 0)
+                    hasExternalKeyboard = true;
+            }
         }
-        if (hasMouse && hasKeyboard)
+        if (hasExternalMouse && hasExternalKeyboard)
             simpleWalkSetup.setMouseLock(true);// auto press the tab key
 
     }

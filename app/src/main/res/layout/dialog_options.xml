@@ -13,6 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/optionsMouseLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mouse Lock"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
