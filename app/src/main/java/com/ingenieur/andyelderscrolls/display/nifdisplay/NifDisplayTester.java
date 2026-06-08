@@ -29,7 +29,7 @@ import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.NiToJ3dData;
 import nif.niobject.NiNode;
 import utils.PerFrameUpdateBehavior;
-import utils.source.BgsmSource;
+import utils.source.MaterialsSource;
 
 public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter.Listener {
 
@@ -87,7 +87,7 @@ public class NifDisplayTester  extends DisplayTester implements DragMouseAdapter
             }
         });
 
-        BgsmSource.setBgsmSource(materialsSource);
+        MaterialsSource.setBgsmSource(materialsSource);
         //System.out.println("displayNif selected file: " + archiveEntry);
         display(NifToJ3d.loadNif(archiveEntry.toString(), meshSource, textureSource));
     }

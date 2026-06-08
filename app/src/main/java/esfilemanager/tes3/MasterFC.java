@@ -14,7 +14,7 @@ import tools.io.FileChannelRAF;
  */
 public class MasterFC extends Master {
 	public MasterFC(FileChannel masterFile, String fileName) throws IOException {
-		super(new FileChannelRAF(masterFile, "r"), fileName);
+		super(new FileChannelRAF(masterFile), fileName);
 	}
 
 }

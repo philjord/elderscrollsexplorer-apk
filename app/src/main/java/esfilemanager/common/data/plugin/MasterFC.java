@@ -23,7 +23,7 @@ public class MasterFC extends Master {
 	@Override
 	public boolean load() throws PluginException, DataFormatException, IOException {
 		FileChannelRAF in;
-		in = new FileChannelRAF(masterFile, "r");
+		in = new FileChannelRAF(masterFile);
 		return super.load(in);
 	}
 }

@@ -3,8 +3,6 @@ package com.ingenieur.andyelderscrolls.display.kfdisplay;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.amrdeveloper.treeview.TreeNode;
 import com.ingenieur.andyelderscrolls.display.DisplayActivity;
 import com.ingenieur.andyelderscrolls.display.DisplayTester;
@@ -26,7 +24,7 @@ import nif.character.NifCharacterTes3;
 import nif.character.NifJ3dSkeletonRoot;
 import nif.j3d.J3dNiSkinInstance;
 import nif.j3d.animation.tes3.J3dNiSequenceStreamHelper;
-import utils.source.BgsmSource;
+import utils.source.MaterialsSource;
 import utils.source.MediaSources;
 
 public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.Listener {
@@ -200,7 +198,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
             NifJ3dSkeletonRoot.showBoneMarkers = true;
             J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
-            BgsmSource.setBgsmSource(materialsSource);
+            MaterialsSource.setBgsmSource(materialsSource);
             MediaSources mediaSources = new MediaSources(meshSource, textureSource, null);
 
             ArrayList<String> idleAnimations = new ArrayList<String>();
@@ -242,7 +240,7 @@ public class KfDisplayTester extends DisplayTester implements DragMouseAdapter.L
         NifJ3dSkeletonRoot.showBoneMarkers = true;
         J3dNiSkinInstance.showSkinBoneMarkers = false;//TODO: this doesn't show anything?
 
-        BgsmSource.setBgsmSource(materialsSource);
+        MaterialsSource.setBgsmSource(materialsSource);
         MediaSources mediaSources = new MediaSources(meshSource, textureSource, null);
 
         AttachedParts attachFileNames = new AttachedParts();

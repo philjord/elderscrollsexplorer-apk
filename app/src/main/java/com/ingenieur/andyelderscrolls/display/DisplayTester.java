@@ -50,7 +50,7 @@ import tools3d.camera.simple.SimpleCameraHandler;
 import tools3d.mixed3d2d.Canvas3D2D;
 import tools3d.utils.Utils3D;
 import tools3d.utils.scenegraph.SpinTransform;
-import utils.source.BgsmSource;
+import utils.source.MaterialsSource;
 import utils.source.MeshSource;
 import utils.source.TextureSource;
 
@@ -95,7 +95,7 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
     protected BSArchiveSet bsaFileSet;
     protected MeshSource meshSource = null;
     protected TextureSource textureSource = null;
-    protected BgsmSource materialsSource = null;
+    protected MaterialsSource materialsSource = null;
 
     protected String rootDir;
 

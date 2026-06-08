@@ -89,7 +89,7 @@ import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 import tools3d.utils.scenegraph.LocationUpdateListener;
 import tools3d.utils.scenegraph.StructureUpdateBehavior;
-import utils.source.BgsmSource;
+import utils.source.MaterialsSource;
 import utils.source.MediaSources;
 import utils.source.MeshSource;
 import utils.source.SoundSource;
@@ -399,9 +399,9 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                         //TODO: Morrowind appears to have sound and music as a separate gosh darned file system system! not in a bsa
                         new EsmSoundKeyToName(esmManager);
                         SoundSource soundSource = new BsaSoundSource(bsaFileSet, null);//new EsmSoundKeyToName(esmManager));
-                        BgsmSource materialsSource = new BsaMaterialsSource(bsaFileSet);
+                        MaterialsSource materialsSource = new BsaMaterialsSource(bsaFileSet);
                         //Just for the crazy new fallout 4 system
-                        BgsmSource.setBgsmSource(materialsSource);
+                        MaterialsSource.setBgsmSource(materialsSource);
 
                         mediaSources = new MediaSources(meshSource, textureSource, soundSource);
 
