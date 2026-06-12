@@ -752,6 +752,13 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         simpleWalkSetup.startRenderer(gl_window);
     }
 
+    public void setFreeFly(boolean ff) {
+        simpleWalkSetup.setFreeFly(ff);
+        if (esExplorerFragment != null && esExplorerFragment.moveNavigationPanel != null) {
+            esExplorerFragment.moveNavigationPanel.setAllowVerticalMovement(ff);
+        }
+    }
+
 
     /**
      * left here as a key press example, for desktop (not lean back) style I guess
@@ -799,17 +806,40 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         String invTex = null;
         String charTex = null;
 
+        // all games get the same cell name clean up now
+        this.esmArchiveFileChooserFilter = new ESMCellChooser.ESMArchiveFileChooserFilter() {
+            @Override
+            public boolean accept(PluginRecord pr) {
+                if (pr.getEditorID().startsWith("COPY") || pr.getEditorID().startsWith("PackIn"))
+                    return false;;
+
+                //Fallout76
+                if (pr.getEditorID().length() == 0	|| pr.getEditorID().startsWith("Test")
+                        || pr.getEditorID().startsWith("TEST") || pr.getEditorID().startsWith("Debug")
+                        || pr.getEditorID().startsWith("zCUT"))
+                    return false;;
+
+                //Starfield
+                if (pr.getEditorID().startsWith("OE") || pr.getEditorID().startsWith("Overlay"))
+                    return false;;
+                return true;
+            }
+        };
+
+        BethRenderSettings.setFogEnabled(false);//lod make this redundant, only morrowind would consider this
+
+
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
             BethRenderSettings.setNearLoadGridCount(2);
             BethRenderSettings.setFarLoadGridCount(32);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(-1);// morrowin has no LOD only far
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(-1);// morrowind has no LOD only far
             //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(2000); // morrowind is +1300Z South and -2500z North =3800 so half way is plenty
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(1000); // morrowind is +1300Z South and -2500z North =3800 1000 is way beyond 32 grids worth
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(150);
             BethRenderSettings.setItemFade(120);
             BethRenderSettings.setActorFade(50);
-            BethRenderSettings.setFogEnabled(false);
+            //BethRenderSettings.setFogEnabled(true); // nay no point just heaps of far
             //BethWorldVisualBranch.FOG_START = 100;
             //BethWorldVisualBranch.FOG_END = 250;
 
@@ -830,12 +860,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(256);// costs nothing
             //https://community.khronos.org/t/back-front-cliping-plane-ratio/42948
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000); // about half
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(1000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(100);
             BethRenderSettings.setItemFade(80);
             BethRenderSettings.setActorFade(40);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
             mapTex = "textures/menus/map/map_icon_tab_world_map.ktx";
             invTex = "textures/menus/inventory/inv_icon_tab_all.ktx";
@@ -853,13 +882,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(4);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(1000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
             BethRenderSettings.setActorFade(35);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
-
 
             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
@@ -877,12 +904,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(3);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(1000);
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(80);
             BethRenderSettings.setItemFade(70);
             BethRenderSettings.setActorFade(35);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
@@ -900,12 +926,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(128);
-            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(3000);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(1000);//1000 is plenty of the low res distant lods
             simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
             mapTex = "interface/exported/m.png.ktx";
             invTex = "interface/exported/i.png.ktx";
@@ -923,23 +948,32 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(64);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(500);//let's start small shall we
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
+            mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
+            invTex = "textures/interface/note/parchment_d.ktx";
+            charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
 
-            this.esmArchiveFileChooserFilter = new ESMCellChooser.ESMArchiveFileChooserFilter() {
+            parentActivity.runOnUiThread(new Runnable() {
                 @Override
-                public boolean accept(PluginRecord pr) {
-                    if (!pr.getEditorID().equals("")
-                            && !pr.getEditorID().startsWith("COPY")
-                            && !pr.getEditorID().startsWith("PackIn")) {
-                        return true;
-                    }
-                    return false;
+                public void run() {
+                    map = new Fallout4MapImage(parentActivity, ScrollsExplorer.this, textureSource);
+                    ((AndyESExplorerActivity) parentActivity).mPagerAdapter.getMapFragment().setUpMap(map);
                 }
-            };
+            });
+        } else if (gameConfigToLoad.folderKey.startsWith("FallOut76")) {
+            BethRenderSettings.setNearLoadGridCount(1);
+            BethRenderSettings.setFarLoadGridCount(2);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(64);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(200);//let's start small shall we
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
+            BethRenderSettings.setObjectFade(50);
+            BethRenderSettings.setItemFade(50);
+            BethRenderSettings.setActorFade(35);
 
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";
@@ -955,11 +989,12 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         } else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
-            BethRenderSettings.setLOD_LOAD_DIST_MAX(12);
+            BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
+            simpleWalkSetup.getCanvas2D3D().getView().setBackClipDistance(100);//let's start small shall we
+            simpleWalkSetup.getCanvas2D3D().getView().setFrontClipDistance(0.10f);
             BethRenderSettings.setObjectFade(50);
             BethRenderSettings.setItemFade(50);
             BethRenderSettings.setActorFade(35);
-            BethRenderSettings.setFogEnabled(false);//lod make this redundant
 
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";
@@ -973,7 +1008,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                 }
             });
         }
-
 
         Bitmap mapBitmap = BsaUtils.getBitmapFromTextureSource(mapTex, textureSource);
         Bitmap invBitmap = BsaUtils.getBitmapFromTextureSource(invTex, textureSource);

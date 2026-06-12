@@ -95,7 +95,7 @@ public class BsaUtils {
             String ddsArchiveName = ddsArchive.getName();
             String ext = ddsArchiveName.substring(ddsArchiveName.lastIndexOf("."));
             String ktxArchiveName = ddsArchiveName.substring(0, ddsArchiveName.lastIndexOf("."));
-            ktxArchiveName = ktxArchiveName + "_ktx" + ext;
+            ktxArchiveName = ktxArchiveName + "_ktx.bsa"; // notice the format output is bsa not ba2 so don't use the ext
             boolean found = false;
             for (ArchiveFile ktxArchive : bsaFileSet) {
                 //TODO: should see  if it's got ktx in it, but for now let's just prey

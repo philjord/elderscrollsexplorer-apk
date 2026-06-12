@@ -17,18 +17,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
+            <ImageButton
+                android:id="@+id/navPanelFastButton"
+                android:scaleX="0.5"
+                android:scaleY="0.75"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/go_up" />
 
             <ImageButton
                 android:id="@+id/navPanelForwardButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:src="@drawable/go_up"/>
+                android:src="@drawable/go_up" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

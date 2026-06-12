@@ -35,7 +35,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
     private ScrollsExplorer scrollsExplorer;
     private boolean scrollsExplorerInitCalled = false;
 
-    private MoveNavigationView moveNavigationPanel;
+    MoveNavigationView moveNavigationPanel;
     private LookNavigationView lookNavigationPanel;
     private GLWindowOverLay characterSheetOverlay;
     private GLWindowOverLay inventoryOverlay;
@@ -128,7 +128,7 @@ public class AndyESExplorerFragment extends NewtBaseFragment {
                     // right now I'm on "Selected Game Config Loader" thread that ends shortly
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
+                            moveNavigationPanel = new MoveNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup);
                             lookNavigationPanel = new LookNavigationView(getContext(), getView(), scrollsExplorer.simpleWalkSetup.getNavigationProcessor());
                             scrollsExplorer.simpleWalkSetup.addMouseLockListener(new AndySimpleWalkSetup.MouseLockListener() {
                                 @Override

@@ -53,7 +53,7 @@ public class CharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 freeflybutton.setChecked(freeflybutton.isChecked());
-                scrollsExplorer.simpleWalkSetup.setFreeFly(freeflybutton.isChecked());
+                scrollsExplorer.setFreeFly(freeflybutton.isChecked());
             }
         });
 
