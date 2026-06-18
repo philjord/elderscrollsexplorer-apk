@@ -70,6 +70,7 @@ import javaawt.imageio.VMImageIO;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nif.character.NifCharacter;
 import nif.j3d.J3dNiTriBasedGeom;
+import nif.j3d.particles.J3dNiParticleSystem;
 import nif.j3d.particles.tes3.J3dNiParticles;
 import nif.shader.ShaderSourceIO;
 import scrollsexplorer.DashboardNewt;
@@ -416,11 +417,11 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                         simpleWalkSetup.getWindow().addWindowListener(new WindowAdapter() {
                             @Override
                             public void windowResized(final WindowEvent e) {
-                                J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
+                                J3dNiParticleSystem.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
                             }
 
                         });
-                        J3dNiParticles.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
+                        J3dNiParticleSystem.setScreenWidth(simpleWalkSetup.getWindow().getWidth());
 
 
                         // I could use the j3dcellfactory now? with the cached cell records?

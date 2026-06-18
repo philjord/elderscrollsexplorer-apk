@@ -43,6 +43,7 @@ import bsaio.BSArchiveSet;
 import bsaio.BSArchiveSetUri;
 import nif.NifToJ3d;
 import nif.appearance.NiGeometryAppearanceFactoryShader;
+import nif.j3d.particles.J3dNiParticleSystem;
 import nif.j3d.particles.tes3.J3dNiParticles;
 import nif.shader.NiGeometryAppearanceShader;
 import nif.shader.ShaderSourceIO;
@@ -115,10 +116,10 @@ public abstract class DisplayTester implements DragMouseAdapter.Listener {
         canvas3D2D.getGLWindow().addWindowListener(new WindowAdapter() {
             @Override
             public void windowResized(final WindowEvent e) {
-                J3dNiParticles.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
+                J3dNiParticleSystem.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
             }
         });
-        J3dNiParticles.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
+        J3dNiParticleSystem.setScreenWidth(canvas3D2D.getGLWindow().getWidth());
 
         simpleUniverse = new SimpleUniverse(canvas3D2D);
         CompressedTextureLoader.setAnisotropicFilterDegree(8);
