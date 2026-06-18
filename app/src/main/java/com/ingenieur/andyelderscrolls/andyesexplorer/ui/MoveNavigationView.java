@@ -11,8 +11,6 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndySimpleWalkSetup;
 
-import nifbullet.NavigationProcessorBullet;
-import tools3d.navigation.NavigationProcessorInterface;
 import tools3d.navigation.twocircles.NavigationInputNewtMove;
 
 public class MoveNavigationView extends GLWindowOverLay {
@@ -46,6 +44,8 @@ public class MoveNavigationView extends GLWindowOverLay {
 
     public static int DOWN_KEY = 6;
 
+    public static int FREE_FLY_KEY = 7;
+
     // My extra key pushing bits
     private boolean walkHeldDown = false;
 
@@ -73,6 +73,8 @@ public class MoveNavigationView extends GLWindowOverLay {
         new MoveNavigationButton(RIGHT_KEY, getButton(R.id.navPanelRightButton));
         new MoveNavigationButton(UP_KEY, getButton(R.id.navPanelUpButton));
         new MoveNavigationButton(DOWN_KEY, getButton(R.id.navPanelDownButton));
+        new MoveNavigationButton(FREE_FLY_KEY, getButton(R.id.navPanelFreeFlyButton));
+
     }
 
     public void setVisible(boolean vis) {
@@ -85,6 +87,7 @@ public class MoveNavigationView extends GLWindowOverLay {
                 getButton(R.id.navPanelRightButton).setVisibility(newVis);
                 getButton(R.id.navPanelUpButton).setVisibility(newVis);
                 getButton(R.id.navPanelDownButton).setVisibility(newVis);
+                getButton(R.id.navPanelFreeFlyButton).setVisibility(newVis);
             }
         });
     }
@@ -116,6 +119,7 @@ public class MoveNavigationView extends GLWindowOverLay {
             downHeldDown = true;
             setTranslationChange();
         }
+
     }
 
     public void keyReleased(int keyCode) {
@@ -134,7 +138,11 @@ public class MoveNavigationView extends GLWindowOverLay {
         } else if (keyCode == RIGHT_KEY) {
             strafRightHeldDown = false;
             setTranslationChange();
+        } else if (keyCode == FREE_FLY_KEY) {
+            simpleWalkSetup.toggleFreeFly();
+            setAllowVerticalMovement(simpleWalkSetup.isFreeFly());
         }
+
 
         if (isAllowVerticalMovement()) {
             if (keyCode == UP_KEY) {

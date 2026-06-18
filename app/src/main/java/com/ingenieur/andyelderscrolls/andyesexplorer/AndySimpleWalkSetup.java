@@ -461,10 +461,20 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      */
     @Override
     public void setFreeFly(boolean ff) {
+        isFreeFly = ff;
         if (physicsSystem.getNBControlledChar() != null) {
             physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
         }
+        // note MoveNavigationView also has a setAllowVerticalMovement that needs to be called
+        //esExplorerFragment.moveNavigationPanel.setAllowVerticalMovement(ff);
         keyNavigationInputNewt.setAllowVerticalMovement(ff);
+    }
+    public boolean isFreeFly() {
+        return isFreeFly;
+    }
+    private boolean isFreeFly = false;
+    public void toggleFreeFly() {
+        setFreeFly(!isFreeFly);
     }
 
     public NavigationProcessorBullet getNavigationProcessor() {

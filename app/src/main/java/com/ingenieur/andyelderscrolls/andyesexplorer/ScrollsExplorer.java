@@ -83,6 +83,7 @@ import scrollsexplorer.simpleclient.mouseover.MouseOverHandler;
 import scrollsexplorer.simpleclient.physics.DynamicsEngine;
 import scrollsexplorer.simpleclient.physics.PhysicsSystem;
 import scrollsexplorer.simpleclient.tes3.Tes3Extensions;
+import texture.CompressedTextureLoaderExt;
 import tools3d.audio.SimpleSounds;
 import tools3d.camera.Camera;
 import tools3d.utils.YawPitch;
@@ -828,7 +829,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
 
         BethRenderSettings.setFogEnabled(false);//lod make this redundant, only morrowind would consider this
 
-
+        CompressedTextureLoaderExt.DROP_0_MIP = false;//might be updated below
         if (gameConfigToLoad.folderKey.equals("MorrowindFolder")) {
             BethRenderSettings.setNearLoadGridCount(2);
             BethRenderSettings.setFarLoadGridCount(32);
@@ -945,6 +946,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             });
 
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut4")) {
+            CompressedTextureLoaderExt.DROP_0_MIP = true;
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(64);
@@ -966,6 +968,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                 }
             });
         } else if (gameConfigToLoad.folderKey.startsWith("FallOut76")) {
+            CompressedTextureLoaderExt.DROP_0_MIP = true;
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(64);
@@ -987,6 +990,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
                 }
             });
         } else if (gameConfigToLoad.folderKey.startsWith("Starfield")) {
+            CompressedTextureLoaderExt.DROP_0_MIP = true;
             BethRenderSettings.setNearLoadGridCount(1);
             BethRenderSettings.setFarLoadGridCount(2);
             BethRenderSettings.setLOD_LOAD_DIST_MAX(24);
