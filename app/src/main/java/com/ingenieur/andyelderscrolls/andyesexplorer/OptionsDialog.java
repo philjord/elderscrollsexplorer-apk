@@ -16,12 +16,30 @@ import com.ingenieur.andyelderscrolls.R;
 import org.jogamp.vecmath.Vector3f;
 
 import esmj3d.j3d.BethRenderSettings;
+import scrollsexplorer.simpleclient.GlobalGameSettings;
 
-public class OptionsDialog extends Dialog
+public class OptionsDialog extends Dialog implements BethRenderSettings.UpdateListener, GlobalGameSettings.UpdateListener
 {
 	protected Activity activity;
 	protected ViewGroup rootView;
 	protected Button closeButton;
+	CheckBox optionsMouseLock;
+	SeekBar optionsFarLoadGridCount;
+	SeekBar optionsNearLoadGridCount;
+	SeekBar optionsObjectFadeDistance;
+	CheckBox optionsShowPathGrid;
+	CheckBox optionsFogEnabled;
+	SeekBar optionsAmbientLightLevel;
+	SeekBar optionsDirectionalLightLevel;
+	CheckBox optionsPlacedLightsEnabled;
+	CheckBox optionsLightOutlines;
+	CheckBox optionsCharacterOutlines;
+	CheckBox optionsDoorOutlines;
+	CheckBox optionsContainerOutlines;
+	CheckBox optionsParticlesOutlines;
+	CheckBox optionsFocusedObjectOutlines;
+
+
 
 	public OptionsDialog(final Activity activity, final AndySimpleWalkSetup simpleWalkSetup)
 	{
@@ -32,79 +50,67 @@ public class OptionsDialog extends Dialog
 
 		this.setTitle("Options");
 
-		CheckBox optionsMouseLock = (CheckBox)rootView.findViewById(R.id.optionsMouseLock);
+		optionsMouseLock = (CheckBox)rootView.findViewById(R.id.optionsMouseLock);
 		optionsMouseLock.setChecked(simpleWalkSetup.isMouseLock());
-		optionsMouseLock.setOnClickListener(new View.OnClickListener()
-		{
+		optionsMouseLock.setOnClickListener(new View.OnClickListener(){
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("optionsMouseLock", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				simpleWalkSetup.setMouseLock(((CheckBox)v).isChecked());
 			}
 		});
 
-		SeekBar optionsFarLoadGridCount = (SeekBar)rootView.findViewById(R.id.optionsFarLoadGridCount);
+		optionsFarLoadGridCount = (SeekBar)rootView.findViewById(R.id.optionsFarLoadGridCount);
 		optionsFarLoadGridCount.setProgress(BethRenderSettings.getFarLoadGridCount());
 		optionsFarLoadGridCount.setOnSeekBarChangeListener(new OnSeekBarChangeAdapter()
 		{
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				AndyESExplorerActivity.logFireBaseContent("setFarLoadGridCount", ""+ progress);
 				BethRenderSettings.setFarLoadGridCount(progress);
 			}
 		});
 
 
-		SeekBar optionsNearLoadGridCount = (SeekBar)rootView.findViewById(R.id.optionsNearLoadGridCount);
+		optionsNearLoadGridCount = (SeekBar)rootView.findViewById(R.id.optionsNearLoadGridCount);
 		optionsNearLoadGridCount.setProgress(BethRenderSettings.getNearLoadGridCount());
 		optionsNearLoadGridCount.setOnSeekBarChangeListener(new OnSeekBarChangeAdapter()
 		{
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				AndyESExplorerActivity.logFireBaseContent("setNearLoadGridCount", ""+ progress);
 				BethRenderSettings.setNearLoadGridCount(progress);
 			}
 		});
-		SeekBar optionsObjectFadeDistance = (SeekBar)rootView.findViewById(R.id.optionsObjectFadeDistance);
+		optionsObjectFadeDistance = (SeekBar)rootView.findViewById(R.id.optionsObjectFadeDistance);
 		optionsObjectFadeDistance.setProgress(BethRenderSettings.getObjectFade());
 		optionsObjectFadeDistance.setOnSeekBarChangeListener(new OnSeekBarChangeAdapter()
 		{
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				AndyESExplorerActivity.logFireBaseContent("setObjectFade", ""+ progress);
 				BethRenderSettings.setObjectFade(progress);
 			}
 		});
-		CheckBox optionsShowPathGrid = (CheckBox)rootView.findViewById(R.id.optionsShowPathGrid);
+		optionsShowPathGrid = (CheckBox)rootView.findViewById(R.id.optionsShowPathGrid);
 		optionsShowPathGrid.setChecked(BethRenderSettings.isShowPathGrid());
-		optionsShowPathGrid.setOnClickListener(new View.OnClickListener()
-		{
+		optionsShowPathGrid.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setShowPathGrid", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setShowPathGrid(((CheckBox)v).isChecked());
 			}
 		});
 
 
-		CheckBox optionsFogEnabled = (CheckBox)rootView.findViewById(R.id.optionsFogEnabled);
+		optionsFogEnabled = (CheckBox)rootView.findViewById(R.id.optionsFogEnabled);
 		optionsFogEnabled.setChecked(BethRenderSettings.isFogEnabled());
-		optionsFogEnabled.setOnClickListener(new View.OnClickListener()
-		{
+		optionsFogEnabled.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setFogEnabled", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setFogEnabled(((CheckBox)v).isChecked());
 			}
 		});
 
-		SeekBar optionsAmbientLightLevel = (SeekBar)rootView.findViewById(R.id.optionsAmbientLightLevel);
+		optionsAmbientLightLevel = (SeekBar)rootView.findViewById(R.id.optionsAmbientLightLevel);
 		optionsAmbientLightLevel.setProgress((int)(BethRenderSettings.getGlobalAmbLightLevel()* 100));
 		optionsAmbientLightLevel.setOnSeekBarChangeListener(new OnSeekBarChangeAdapter()
 		{
@@ -116,7 +122,7 @@ public class OptionsDialog extends Dialog
 					simpleWalkSetup.setGlobalAmbLightLevel(progress / 100f);
 			}
 		});
-		SeekBar optionsDirectionalLightLevel = (SeekBar)rootView.findViewById(R.id.optionsDirectionalLightLevel);
+		optionsDirectionalLightLevel = (SeekBar)rootView.findViewById(R.id.optionsDirectionalLightLevel);
 		optionsDirectionalLightLevel.setProgress((int)(BethRenderSettings.getGlobalDirLightLevel()* 100));
 		optionsDirectionalLightLevel.setOnSeekBarChangeListener(new OnSeekBarChangeAdapter()
 		{
@@ -128,93 +134,105 @@ public class OptionsDialog extends Dialog
 					simpleWalkSetup.setGlobalDirLightLevel(progress / 100f);
 			}
 		});
-		CheckBox optionsPlacedLightsEnabled = (CheckBox)rootView.findViewById(R.id.optionsPlacedLightsEnabled);
+		optionsPlacedLightsEnabled = (CheckBox)rootView.findViewById(R.id.optionsPlacedLightsEnabled);
 		optionsPlacedLightsEnabled.setChecked(BethRenderSettings.isEnablePlacedLights());
-		optionsPlacedLightsEnabled.setOnClickListener(new View.OnClickListener()
-		{
+		optionsPlacedLightsEnabled.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setEnablePlacedLights", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setEnablePlacedLights(((CheckBox)v).isChecked());
 			}
 		});
 
 
-		CheckBox optionsLightOutlines = (CheckBox)rootView.findViewById(R.id.optionsLightOutlines);
+		optionsLightOutlines = (CheckBox)rootView.findViewById(R.id.optionsLightOutlines);
 		optionsLightOutlines.setChecked(BethRenderSettings.isOutlineLights());
-		optionsLightOutlines.setOnClickListener(new View.OnClickListener()
-		{
+		optionsLightOutlines.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineLights", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setOutlineLights(((CheckBox)v).isChecked());
 			}
 		});
-		CheckBox optionsCharacterOutlines = (CheckBox)rootView.findViewById(R.id.optionsCharacterOutlines);
+		optionsCharacterOutlines = (CheckBox)rootView.findViewById(R.id.optionsCharacterOutlines);
 		optionsCharacterOutlines.setChecked(BethRenderSettings.isOutlineChars());
 		optionsCharacterOutlines.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineChars", ""+ ((CheckBox)v).isChecked());
 				BethRenderSettings.setOutlineChars(((CheckBox)v).isChecked());
 			}
 		});
-		CheckBox optionsDoorOutlines = (CheckBox)rootView.findViewById(R.id.optionsDoorOutlines);
+		optionsDoorOutlines = (CheckBox)rootView.findViewById(R.id.optionsDoorOutlines);
 		optionsDoorOutlines.setChecked(BethRenderSettings.isOutlineDoors());
-		optionsDoorOutlines.setOnClickListener(new View.OnClickListener()
-		{
+		optionsDoorOutlines.setOnClickListener(new View.OnClickListener(){
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineDoors", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v){
 				BethRenderSettings.setOutlineDoors(((CheckBox)v).isChecked());
 			}
 		});
-		CheckBox optionsContainerOutlines = (CheckBox)rootView.findViewById(R.id.optionsContainerOutlines);
+		optionsContainerOutlines = (CheckBox)rootView.findViewById(R.id.optionsContainerOutlines);
 		optionsContainerOutlines.setChecked(BethRenderSettings.isOutlineConts());
-		optionsContainerOutlines.setOnClickListener(new View.OnClickListener()
-		{
+		optionsContainerOutlines.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineConts", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v)	{
 				BethRenderSettings.setOutlineConts(((CheckBox)v).isChecked());
 			}
 		});
-		CheckBox optionsParticlesOutlines = (CheckBox)rootView.findViewById(R.id.optionsParticlesOutlines);
+		optionsParticlesOutlines = (CheckBox)rootView.findViewById(R.id.optionsParticlesOutlines);
 		optionsParticlesOutlines.setChecked(BethRenderSettings.isOutlineParts());
-		optionsParticlesOutlines.setOnClickListener(new View.OnClickListener()
-		{
+		optionsParticlesOutlines.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineParts", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setOutlineParts(((CheckBox)v).isChecked());
 			}
 		});
-		CheckBox optionsFocusedObjectOutlines = (CheckBox)rootView.findViewById(R.id.optionsFocusedObjectOutlines);
+		optionsFocusedObjectOutlines = (CheckBox)rootView.findViewById(R.id.optionsFocusedObjectOutlines);
 		optionsFocusedObjectOutlines.setChecked(BethRenderSettings.isOutlineFocused());
-		optionsFocusedObjectOutlines.setOnClickListener(new View.OnClickListener()
-		{
+		optionsFocusedObjectOutlines.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				AndyESExplorerActivity.logFireBaseContent("setOutlineFocused", ""+ ((CheckBox)v).isChecked());
+			public void onClick(View v) {
 				BethRenderSettings.setOutlineFocused(((CheckBox)v).isChecked());
 			}
 		});
 		this.closeButton = (Button) rootView.findViewById(R.id.optionsClose);
-		closeButton.setOnClickListener(new View.OnClickListener()
-		{
+		closeButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view)
 			{
 				dismiss();
 			}
 		});
+
+		// listen out for render setting changes
+		BethRenderSettings.addUpdateListener(this);
+		GlobalGameSettings.addUpdateListener(this);
+	}
+
+
+	@Override
+	public void renderSettingsUpdated() {
+		 //TODO:
+
+		/*
+		optionsFarLoadGridCount.setProgress(BethRenderSettings.isEnableDirLight());
+		optionsNearLoadGridCount.setProgress(BethRenderSettings.isEnableDirLight());
+		optionsObjectFadeDistance.setProgress(BethRenderSettings.isEnableDirLight());
+		optionsShowPathGrid.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsFogEnabled.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsAmbientLightLevel.setProgress(BethRenderSettings.isEnableDirLight());
+		optionsDirectionalLightLevel.setProgress(BethRenderSettings.isEnableDirLight());
+		optionsPlacedLightsEnabled.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsLightOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsCharacterOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsDoorOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsContainerOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsParticlesOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+		optionsFocusedObjectOutlines.setChecked(BethRenderSettings.isEnableDirLight());
+
+		 */
+	}
+
+	@Override
+	public void gameSettingsUpdated() {
 	}
 
 

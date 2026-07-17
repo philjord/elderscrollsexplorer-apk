@@ -11,9 +11,10 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.ingenieur.andyelderscrolls.R;
 import com.ingenieur.andyelderscrolls.andyesexplorer.AndySimpleWalkSetup;
 
+import scrollsexplorer.simpleclient.GlobalGameSettings;
 import tools3d.navigation.twocircles.NavigationInputNewtMove;
 
-public class MoveNavigationView extends GLWindowOverLay {
+public class MoveNavigationView extends GLWindowOverLay implements GlobalGameSettings.UpdateListener  {
 
 
     public final static float FORWARD_RATE = 8.0f;
@@ -75,6 +76,12 @@ public class MoveNavigationView extends GLWindowOverLay {
         new MoveNavigationButton(DOWN_KEY, getButton(R.id.navPanelDownButton));
         new MoveNavigationButton(FREE_FLY_KEY, getButton(R.id.navPanelFreeFlyButton));
 
+        GlobalGameSettings.addUpdateListener(this);
+    }
+
+    @Override
+    public void gameSettingsUpdated() {
+        setAllowVerticalMovement(GlobalGameSettings.isFreeFly());
     }
 
     public void setVisible(boolean vis) {
@@ -139,8 +146,7 @@ public class MoveNavigationView extends GLWindowOverLay {
             strafRightHeldDown = false;
             setTranslationChange();
         } else if (keyCode == FREE_FLY_KEY) {
-            simpleWalkSetup.toggleFreeFly();
-            setAllowVerticalMovement(simpleWalkSetup.isFreeFly());
+            GlobalGameSettings.setIsFreeFly(!GlobalGameSettings.isFreeFly());
         }
 
 
@@ -260,11 +266,11 @@ public class MoveNavigationView extends GLWindowOverLay {
 
     }
 
-    public boolean isAllowVerticalMovement() {
+    private boolean isAllowVerticalMovement() {
         return allowVerticalMovement;
     }
 
-    public void setAllowVerticalMovement(boolean allowVerticalMovement) {
+    private void setAllowVerticalMovement(boolean allowVerticalMovement) {
         this.allowVerticalMovement = allowVerticalMovement;
     }
 

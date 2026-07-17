@@ -32,6 +32,7 @@ import nif.appearance.NiGeometryAppearanceFactoryShader;
 import nifbullet.NavigationProcessorBullet;
 import nifbullet.cha.NBControlledChar;
 import scrollsexplorer.IDashboard;
+import scrollsexplorer.simpleclient.GlobalGameSettings;
 import scrollsexplorer.simpleclient.NewtJumpKeyListener;
 import scrollsexplorer.simpleclient.SimpleBethCellManager;
 import scrollsexplorer.simpleclient.SimpleWalkSetupInterface;
@@ -69,7 +70,7 @@ import utils.source.MeshSource;
  *
  * @author philip
  */
-public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
+public class AndySimpleWalkSetup implements SimpleWalkSetupInterface, BethRenderSettings.UpdateListener, GlobalGameSettings.UpdateListener {
     public static boolean TRAILER_CAM = false;
     private boolean enabled = false;
 
@@ -120,8 +121,6 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
     private ActionableMouseOverHandler cameraMouseOver;
 
     private AdminMouseOverHandler cameraAdminMouseOverHandler;
-
-    private boolean freefly = false;
 
     private AmbientLight ambLight = null;
 
@@ -175,12 +174,14 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         //ambLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
         ambLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
         ambLight.setCapability(Light.ALLOW_COLOR_WRITE);
+        ambLight.setCapability(Light.ALLOW_STATE_WRITE);
         float dirl = BethRenderSettings.getGlobalDirLightLevel();
         Color3f dirColor = new Color3f(dirl, dirl, dirl);
         dirLight = new DirectionalLight(true, dirColor, new Vector3f(0f, -1f, 0f));
         //dirLight.setCapability(Light.ALLOW_INFLUENCING_BOUNDS_WRITE);
         dirLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.POSITIVE_INFINITY));
         dirLight.setCapability(Light.ALLOW_COLOR_WRITE);
+        dirLight.setCapability(Light.ALLOW_STATE_WRITE);
         BranchGroup lightsBG = new BranchGroup();
         lightsBG.addChild(ambLight);
         lightsBG.addChild(dirLight);
@@ -237,6 +238,11 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
 
         this.cameraPanel.getCanvas3D2D().addNotify();
         this.cameraPanel.startRendering();
+
+
+        // listen out for render setting changes
+        BethRenderSettings.addUpdateListener(this);
+        GlobalGameSettings.addUpdateListener(this);
     }
 
     public void startRenderer(GLWindow gl_window) {
@@ -310,19 +316,29 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
         }
     }
 
-    /* (non-Javadoc)
-     * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#setGlobalAmbLightLevel(float)
-     */
     @Override
+    public void gameSettingsUpdated() {
+        setFreeFly(GlobalGameSettings.isFreeFly());
+    }
+
+    @Override
+    public void renderSettingsUpdated() {
+        setGlobalDirLightEnabled(BethRenderSettings.isEnableDirLight());
+        setGlobalDirLightLevel(BethRenderSettings.getGlobalDirLightLevel());
+        setGlobalAmbLightLevel(BethRenderSettings.getGlobalAmbLightLevel());
+
+        setShowHavok(BethRenderSettings.isShowPhysic());
+    }
+
     public void setGlobalAmbLightLevel(float f) {
         Color3f alColor = new Color3f(f, f, f);
         ambLight.setColor(alColor);
     }
 
-    /* (non-Javadoc)
-     * @see scrollsexplorer.simpleclient.SimpleWalkSetupInterface#setGlobalDirLightLevel(float)
-     */
-    @Override
+    private void setGlobalDirLightEnabled(boolean enabled) {
+        dirLight.setEnable(enabled);
+    }
+
     public void setGlobalDirLightLevel(float f) {
         Color3f dirColor = new Color3f(f, f, f);
         dirLight.setColor(dirColor);
@@ -461,20 +477,12 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
      */
     @Override
     public void setFreeFly(boolean ff) {
-        isFreeFly = ff;
         if (physicsSystem.getNBControlledChar() != null) {
             physicsSystem.getNBControlledChar().getCharacterController().setFreeFly(ff);
         }
         // note MoveNavigationView also has a setAllowVerticalMovement that needs to be called
         //esExplorerFragment.moveNavigationPanel.setAllowVerticalMovement(ff);
         keyNavigationInputNewt.setAllowVerticalMovement(ff);
-    }
-    public boolean isFreeFly() {
-        return isFreeFly;
-    }
-    private boolean isFreeFly = false;
-    public void toggleFreeFly() {
-        setFreeFly(!isFreeFly);
     }
 
     public NavigationProcessorBullet getNavigationProcessor() {
@@ -515,6 +523,23 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             modelGroup.addChild(physicsGroup);
         } else if (!showHavok && physicsGroup.getParent() != null) {
             physicsGroup.detach();
+        }
+    }
+
+    @Override
+    public void setShowHavok(boolean setShowHavok) {
+        if (setShowHavok != showHavok) {
+            showHavok = setShowHavok;
+            if (showHavok && !physicsGroup.isLive()) {
+                try {
+                    modelGroup.addChild(physicsGroup);
+                } catch (Exception e) {
+                    //TODO: I'm getting index out of bounds, but possibly cause physic is loaded poorly for fo4
+                    e.printStackTrace();
+                }
+            } else if (!showHavok && physicsGroup.isLive()) {
+                physicsGroup.detach();
+            }
         }
     }
 
@@ -674,9 +699,11 @@ public class AndySimpleWalkSetup implements SimpleWalkSetupInterface {
             } else if (e.getKeyCode() == KeyEvent.VK_L) {
                 toggleVisual();
             } else if (e.getKeyCode() == KeyEvent.VK_F) {
-                freefly = !freefly;
-                setFreeFly(freefly);
-            } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                // same
+                //freefly = !freefly;
+                //setFreeFly(freefly);
+                GlobalGameSettings.setIsFreeFly(!GlobalGameSettings.isFreeFly());
+            }  else if (e.getKeyCode() == KeyEvent.VK_TAB) {
                 toggleMouseLock();
             }
         }

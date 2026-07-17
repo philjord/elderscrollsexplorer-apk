@@ -19,17 +19,21 @@ import androidx.fragment.app.Fragment;
 
 import org.jogamp.vecmath.Vector3f;
 
+import esmj3d.j3d.BethRenderSettings;
 import scrollsexplorer.PropertyLoader;
 import scrollsexplorer.simpleclient.BethWorldVisualBranch;
+import scrollsexplorer.simpleclient.GlobalGameSettings;
 import tools3d.utils.YawPitch;
 import tools3d.utils.loader.PropertyCodec;
 
-public class CharacterFragment extends Fragment {
+public class CharacterFragment extends Fragment implements BethRenderSettings.UpdateListener, GlobalGameSettings.UpdateListener {
     private View rootView;
 
     private ScrollsExplorer scrollsExplorer;
     private View.OnKeyListener keyListener;
 
+    private ToggleButton freeflybutton;
+    private ToggleButton showphysicsbutton;
 
     public void setScrollsExplorer(ScrollsExplorer scrollsExplorer) {
         this.scrollsExplorer = scrollsExplorer;
@@ -41,40 +45,32 @@ public class CharacterFragment extends Fragment {
         rootView = inflater.inflate(R.layout.character_panel, container, false);
 
         // make the close work
-        ImageButton closeCS = (ImageButton) rootView.findViewById(R.id.closeCharacterSheet);
+        ImageButton closeCS = rootView.findViewById(R.id.closeCharacterSheet);
         closeCS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 scrollsExplorer.esExplorerFragment.showSimpleWalk();
             }
         });
-        final ToggleButton freeflybutton = (ToggleButton) rootView.findViewById(R.id.freeflybutton);
+
+        freeflybutton = rootView.findViewById(R.id.freeflybutton);
         freeflybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                freeflybutton.setChecked(freeflybutton.isChecked());
-                scrollsExplorer.setFreeFly(freeflybutton.isChecked());
+                // via listener freeflybutton.setChecked(freeflybutton.isChecked());
+                GlobalGameSettings.setIsFreeFly(!GlobalGameSettings.isFreeFly());
             }
         });
 
-        final ToggleButton showphysicsbutton = (ToggleButton) rootView.findViewById(R.id.showphysicsbutton);
+        showphysicsbutton = rootView.findViewById(R.id.showphysicsbutton);
         showphysicsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showphysicsbutton.setChecked(showphysicsbutton.isChecked());
-                scrollsExplorer.simpleWalkSetup.toggleHavok();
-
-                // this will make the next cell load load up physics colors
-                BethWorldVisualBranch.LOAD_PHYS_FROM_VIS = showphysicsbutton.isChecked();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "Next cell load will " + (showphysicsbutton.isChecked() ? "" : "not ") + "display physics", Toast.LENGTH_LONG).show();
-                    }
-                });
+                // done via listener showphysicsbutton.setChecked(showphysicsbutton.isChecked());
+                BethRenderSettings.setShowPhysics(!BethRenderSettings.isShowPhysic());
             }
         });
-        final ToggleButton showvisualsbutton = (ToggleButton) rootView.findViewById(R.id.showvisualsbutton);
+        final ToggleButton showvisualsbutton = rootView.findViewById(R.id.showvisualsbutton);
         showvisualsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +79,7 @@ public class CharacterFragment extends Fragment {
             }
         });
 
-        final Button saveButton = (Button) rootView.findViewById(R.id.savebutton);
+        final Button saveButton = rootView.findViewById(R.id.savebutton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +94,7 @@ public class CharacterFragment extends Fragment {
             }
         });
 
-        final Button changeCellButton = (Button) rootView.findViewById(R.id.changecellbutton);
+        final Button changeCellButton = rootView.findViewById(R.id.changecellbutton);
         changeCellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +106,7 @@ public class CharacterFragment extends Fragment {
                 }
             }
         });
-        final Button changeLocationButton = (Button) rootView.findViewById(R.id.changelocationbutton);
+        final Button changeLocationButton = rootView.findViewById(R.id.changelocationbutton);
         changeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +124,7 @@ public class CharacterFragment extends Fragment {
         });
 
 
-        final Button optionsbutton = (Button) rootView.findViewById(R.id.optionsbutton);
+        final Button optionsbutton = rootView.findViewById(R.id.optionsbutton);
         optionsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +170,10 @@ public class CharacterFragment extends Fragment {
             }
         });
 
+        // listen out for render setting changes
+        BethRenderSettings.addUpdateListener(this);
+        GlobalGameSettings.addUpdateListener(this);
+
         return rootView;
     }
 
@@ -210,5 +210,15 @@ public class CharacterFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void renderSettingsUpdated() {
+        showphysicsbutton.setChecked(BethRenderSettings.isShowPhysic());
+    }
+
+    @Override
+    public void gameSettingsUpdated() {
+        freeflybutton.setChecked(GlobalGameSettings.isFreeFly());
     }
 }

@@ -754,14 +754,6 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
         simpleWalkSetup.startRenderer(gl_window);
     }
 
-    public void setFreeFly(boolean ff) {
-        simpleWalkSetup.setFreeFly(ff);
-        if (esExplorerFragment != null && esExplorerFragment.moveNavigationPanel != null) {
-            esExplorerFragment.moveNavigationPanel.setAllowVerticalMovement(ff);
-        }
-    }
-
-
     /**
      * left here as a key press example, for desktop (not lean back) style I guess
      */
