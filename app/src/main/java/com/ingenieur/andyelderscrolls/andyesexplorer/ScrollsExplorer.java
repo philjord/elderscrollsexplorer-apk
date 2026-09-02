@@ -64,6 +64,7 @@ import esmj3d.data.shared.subrecords.XTEL;
 import esmj3d.j3d.BethRenderSettings;
 import esmj3d.j3d.cell.J3dICellFactory;
 import esmj3d.j3d.j3drecords.inst.J3dLAND;
+import esmj3d.j3d.j3drecords.type.J3dGeneralLIGH;
 import javaawt.VMEventQueue;
 import javaawt.image.VMBufferedImage;
 import javaawt.imageio.VMImageIO;
@@ -841,6 +842,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             invTex = "levelup/agent.ktx";
             charTex = "textures/tex_menutest.ktx";
 
+
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -885,7 +887,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
             charTex = "textures/interface/icons/message icons/glow_message_vaultboy_neutral.ktx";
-
+            J3dGeneralLIGH.lightsFlicker = false;
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -907,7 +909,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             mapTex = "textures/interface/icons/message icons/glow_message_map.ktx";
             invTex = "textures/interface/icons/message icons/glow_message_giftbox.ktx";
             charTex = "textures/interface/icons/message icons/glow_message_vaultboy_brotherhood.ktx";
-
+            J3dGeneralLIGH.lightsFlicker = false;
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -952,7 +954,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";
             charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
-
+            J3dGeneralLIGH.lightsFlicker = false;
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -974,7 +976,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";
             charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
-
+            J3dGeneralLIGH.lightsFlicker = false;
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -996,7 +998,7 @@ public class ScrollsExplorer implements BethRenderSettings.UpdateListener, Locat
             mapTex = "textures/interface/pip-boy/worldmap_d.ktx";
             invTex = "textures/interface/note/parchment_d.ktx";
             charTex = "textures/interface/pip-boy/pipscreen01_d.ktx";
-
+            J3dGeneralLIGH.lightsFlicker = false;
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
